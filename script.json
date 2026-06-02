@@ -1,0 +1,24 @@
+{
+  "name": "Trinkets and Trackers",
+  "script": "TrinketsAndTrackers.js",
+  "version": "1.2.0",
+  "previousversions": [],
+  "description": "Trinkets and Trackers is an interactive Roll20 Mod/API script for Dungeons & Dragons games. It helps GMs and players manage shops, character inventory, item transfers, currency, item catalog searches, healing consumables, and token-based item actions.\n\nCommands:\n!tnt or !tntHelp -- Shows the command help menu.\n!tntToken init -- Creates token actions for the selected character token.\n!tntShop menu -- Opens the GM shop administration menu.\n!tntItem search ?{Item Name|} -- Searches the item catalog.\n!tntItem list -- Shows the full item catalog to the GM.\n\nThis script is designed to make inventory, shop, item usage, and loot-related interactions faster, cleaner, and more immersive inside Roll20.",
+  "authors": "AmadeusVF",
+  "roll20userid": "AmadeusVF",
+  "useroptions": [],
+  "dependencies": [],
+  "modifies": {
+    "state": "read,write",
+    "campaign": "read",
+    "graphic": "read,write",
+    "page": "read",
+    "character": "read,write",
+    "attribute": "read,write",
+    "ability": "read,write",
+    "handout": "read,write",
+    "player": "read",
+    "chat:message": "read,write"
+  },
+  "conflicts": []
+}
