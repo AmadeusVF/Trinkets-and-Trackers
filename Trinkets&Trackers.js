@@ -1,10 +1,10 @@
 /**
  * =========================================================
- * @File        TrinketsAndTrackers.js
+ * @File        Trinkets&Trackers.js
  * @Project     Trinkets and Trackers (T&T)
  * @Description Professional base prototype for commands, cards and helpers.
  * @Author      AmadeusVF
- * @Version     1.2.0
+ * @Version     1.2.2
  * =========================================================
  */
 const TnT = (() => {
@@ -18,7 +18,7 @@ const TnT = (() => {
         DEVELOPER: 'AmadeusVF',
         SHORT_NAME: 'T&T',
         LOG_NAME: 'T&T',
-        VERSION: '1.2.0',
+        VERSION: '1.2.2',
         STATE_KEY: 'TRINKETS_AND_TRACKERS',
         SCHEMA_VERSION: 2
     });
@@ -74,7 +74,7 @@ const TnT = (() => {
         CURRENCY: Object.freeze(['give', 'take']),
         SHOP: Object.freeze(['get', 'list', 'buy', 'create', 'add', 'remove', 'delete', 'open', 'close', 'hide', 'reveal', 'toggle', 'blacklist', 'config', 'load', 'reload', 'export', 'menu', 'detail', 'stockmode', 'rollprice', 'price', 'stock']),
         ITEM: Object.freeze(['list', 'rawlist', 'search', 'details', 'create', 'remove', 'reload']),
-        TOKEN: Object.freeze(['init'])
+        TOKEN: Object.freeze(['init', 'clear', 'attacks', 'refreshattacks', 'refreshspells', 'roll'])
     });
     const PUBLIC_ACTIONS = Object.freeze({
         INVENTORY: Object.freeze(['get', 'remove', 'give', 'use', 'discard']),
@@ -86,7 +86,7 @@ const TnT = (() => {
         INVENTORY: Object.freeze(['add']),
         SHOP: Object.freeze(['create', 'add', 'remove', 'delete', 'open', 'close', 'hide', 'reveal', 'toggle', 'blacklist', 'config', 'load', 'reload', 'export', 'menu', 'detail', 'stockmode', 'rollprice', 'price', 'stock']),
         ITEM: Object.freeze(['list', 'rawlist', 'create', 'remove', 'reload']),
-        TOKEN: Object.freeze(['init'])
+        TOKEN: Object.freeze(['init', 'clear', 'attacks', 'refreshattacks', 'refreshspells'])
     });
 
     const CURRENCY_TYPES = Object.freeze(['cp', 'sp', 'gp']);
@@ -529,6 +529,74 @@ const TnT = (() => {
             return id ? getObj('graphic', id) : null;
         },
 
+        parseTokenRef(tokenRef = '') {
+            const parts = String(tokenRef || '').trim().split('|');
+            return {
+                tokenId: String(parts[0] || '').trim(),
+                characterId: String(parts[1] || '').trim(),
+                pageId: String(parts[2] || '').trim()
+            };
+        },
+
+        makeTokenRef(token) {
+            if (!token) return '';
+            const tokenId = String(token.id || '').trim();
+            const characterId = String(token.get('represents') || '').trim();
+            const pageId = String(token.get('_pageid') || token.get('pageid') || '').trim();
+            return [tokenId, characterId, pageId].filter((value) => value !== '').join('|');
+        },
+
+        findTokenByCharacterId(characterId = '', pageId = '') {
+            const safeCharacterId = String(characterId || '').trim();
+            const safePageId = String(pageId || '').trim();
+            if (!safeCharacterId) return null;
+
+            const tokens = findObjs({ _type: 'graphic' })
+                .filter((token) => {
+                    if (!token) return false;
+                    if (String(token.get('represents') || '').trim() !== safeCharacterId) return false;
+                    if (safePageId) {
+                        const tokenPageId = String(token.get('_pageid') || token.get('pageid') || '').trim();
+                        if (tokenPageId !== safePageId) return false;
+                    }
+                    return true;
+                });
+
+            return tokens[0] || null;
+        },
+
+        resolveTokenRef(tokenRef = '') {
+            const parsed = this.parseTokenRef(tokenRef);
+            let token = this.getTokenById(parsed.tokenId);
+            let resolvedByCharacter = false;
+
+            if (!token && parsed.characterId) {
+                token = this.findTokenByCharacterId(parsed.characterId, parsed.pageId);
+                resolvedByCharacter = !!token;
+            }
+
+            const character = this.getCharacterFromToken(token) ||
+                (parsed.characterId ? getObj('character', parsed.characterId) : null);
+            const tokenName = String(
+                (token && token.get('name')) ||
+                (character && character.get('name')) ||
+                parsed.tokenId ||
+                tokenRef ||
+                'Unknown'
+            ).trim();
+
+            return {
+                token,
+                character,
+                tokenName,
+                tokenId: token ? String(token.id || '').trim() : parsed.tokenId,
+                characterId: character ? String(character.id || '').trim() : parsed.characterId,
+                pageId: token ? String(token.get('_pageid') || token.get('pageid') || '').trim() : parsed.pageId,
+                originalRef: String(tokenRef || '').trim(),
+                resolvedByCharacter
+            };
+        },
+
         parsePlayerAccessList(value) {
             return String(value || '')
                 .split(',')
@@ -575,11 +643,11 @@ const TnT = (() => {
         },
 
         getSourceTokenAccess({ sourceTokenId = '', playerId = '', isGM = false } = {}) {
-            const token = this.getTokenById(sourceTokenId);
-            const character = this.getCharacterFromToken(token);
+            const resolved = this.resolveTokenRef(sourceTokenId);
+            const token = resolved.token;
+            const character = resolved.character;
             const tokenName = String(
-                (token && token.get('name')) ||
-                (character && character.get('name')) ||
+                resolved.tokenName ||
                 sourceTokenId ||
                 'Unknown'
             ).trim();
@@ -589,6 +657,10 @@ const TnT = (() => {
                 token,
                 character,
                 tokenName,
+                tokenId: resolved.tokenId,
+                characterId: resolved.characterId,
+                pageId: resolved.pageId,
+                resolvedByCharacter: resolved.resolvedByCharacter,
                 ...access
             };
         },
@@ -668,11 +740,11 @@ const TnT = (() => {
         },
 
         getTokenContext(tokenId = '', fallbackName = '') {
-            const token = this.getTokenById(tokenId);
-            const character = this.getCharacterFromToken(token);
+            const resolved = this.resolveTokenRef(tokenId);
+            const token = resolved.token;
+            const character = resolved.character;
             const tokenName = String(
-                (token && token.get('name')) ||
-                (character && character.get('name')) ||
+                resolved.tokenName ||
                 fallbackName ||
                 tokenId
             ).trim();
@@ -680,6 +752,8 @@ const TnT = (() => {
             return {
                 token,
                 character,
+                tokenId: resolved.tokenId,
+                characterId: resolved.characterId,
                 tokenName,
                 controllerNames: this.getControllerDisplayNames(character)
             };
@@ -1348,8 +1422,10 @@ const TnT = (() => {
                 return { ok: false, distanceFt: 0, maxDistanceFt: maxDistance, message: 'Missing source or target token.' };
             }
 
-            const sourceToken = getObj('graphic', sourceId);
-            const targetToken = getObj('graphic', targetId);
+            const sourceResolved = R20.resolveTokenRef(sourceId);
+            const targetResolved = R20.resolveTokenRef(targetId);
+            const sourceToken = sourceResolved.token;
+            const targetToken = targetResolved.token;
             if (!sourceToken || !targetToken) {
                 return { ok: false, distanceFt: 0, maxDistanceFt: maxDistance, message: 'Source or target token was not found.' };
             }
@@ -1372,10 +1448,6 @@ const TnT = (() => {
             const distanceCells = Math.max(dxCells, dyCells);
             const distanceFt = distanceCells * feetPerCell;
 
-            const targetInfo = R20.getSourceTokenAccess({
-                sourceTokenId: targetTokenId
-            });
-
             return {
                 ok: distanceFt <= maxDistance,
                 distanceFt,
@@ -1383,7 +1455,7 @@ const TnT = (() => {
                 message: (distanceFt <= maxDistance)
                     ? 'Target is within range.'
                     : Html.span(
-                        Utils.escapeHtml(String(targetInfo.tokenName || 'Target')),
+                        Utils.escapeHtml(String(targetResolved.tokenName || 'Target')),
                         'color:' + CONFIG.DEFAULT_TEXT_CHARACTER_COLOR + ';font-weight:700;'
                     ) + ' is not within range for this action.'
             };
@@ -1935,14 +2007,29 @@ const TnT = (() => {
                 const keys = Object.keys(node);
                 for (let i = 0; i < keys.length; i += 1) {
                     const key = keys[i];
-                    if (String(key || '').trim().toLowerCase() === 'sourceid') {
-                        const oldId = String(node[key] || '').trim();
+                    const mappedKey = Object.prototype.hasOwnProperty.call(sourceIdMap, key)
+                        ? sourceIdMap[key]
+                        : key;
+                    if (mappedKey !== key) {
+                        node[mappedKey] = node[key];
+                        delete node[key];
+                    }
+
+                    const currentKey = mappedKey;
+                    if (
+                        typeof node[currentKey] === 'string' &&
+                        Object.prototype.hasOwnProperty.call(sourceIdMap, node[currentKey])
+                    ) {
+                        node[currentKey] = sourceIdMap[node[currentKey]];
+                    }
+                    if (String(currentKey || '').trim().toLowerCase() === 'sourceid') {
+                        const oldId = String(node[currentKey] || '').trim();
                         if (oldId && Object.prototype.hasOwnProperty.call(sourceIdMap, oldId)) {
-                            node[key] = sourceIdMap[oldId];
+                            node[currentKey] = sourceIdMap[oldId];
                         }
                         continue;
                     }
-                    walk(node[key]);
+                    walk(node[currentKey]);
                 }
             };
 
@@ -2258,13 +2345,14 @@ const TnT = (() => {
             }
 
             const sourceToken = sourceAccessResult.access.token;
-            const targetToken = getObj('graphic', targetId);
+            const targetResolved = R20.resolveTokenRef(targetId);
+            const targetToken = targetResolved.token;
             if (!targetToken) {
                 return { ok: false, message: 'Target token was not found.' };
             }
 
             const sourceCharId = String(sourceAccessResult.access.character.id || sourceToken.get('represents') || '').trim();
-            const targetCharId = String(targetToken.get('represents') || '').trim();
+            const targetCharId = String(targetResolved.characterId || targetToken.get('represents') || '').trim();
             if (!sourceCharId || !targetCharId) {
                 return { ok: false, message: 'Source or target token is not linked to a character.' };
             }
@@ -2424,9 +2512,6 @@ const TnT = (() => {
                 actionLabel: safeAction === 'take' ? 'take currency with' : 'transfer currency from'
             });
             const sourceAccess = sourceAccessResult.access;
-            if (!sourceAccess.token || !sourceAccess.character) {
-                return { ok: false, message: 'Source token is not linked to a character.' };
-            }
             if (!sourceAccessResult.ok) {
                 return {
                     ok: false,
@@ -2434,12 +2519,16 @@ const TnT = (() => {
                     sourceAccess
                 };
             }
+            if (!sourceAccess.token || !sourceAccess.character) {
+                return { ok: false, message: 'Source token is not linked to a character.' };
+            }
 
-            const targetToken = getObj('graphic', targetId);
+            const targetResolved = R20.resolveTokenRef(targetId);
+            const targetToken = targetResolved.token;
             if (!targetToken) {
                 return { ok: false, message: 'Target token was not found.' };
             }
-            const targetCharacter = R20.getCharacterFromToken(targetToken);
+            const targetCharacter = targetResolved.character || R20.getCharacterFromToken(targetToken);
             if (!targetCharacter) {
                 return { ok: false, message: 'Target token is not linked to a character.' };
             }
@@ -2752,9 +2841,6 @@ const TnT = (() => {
                 actionLabel: 'use items from'
             });
             const sourceAccess = sourceAccessResult.access;
-            if (!sourceAccess.token || !sourceAccess.character) {
-                return { ok: false, message: 'Source token is not linked to a character.' };
-            }
             if (!sourceAccessResult.ok) {
                 return {
                     ok: false,
@@ -2762,12 +2848,16 @@ const TnT = (() => {
                     sourceAccess
                 };
             }
+            if (!sourceAccess.token || !sourceAccess.character) {
+                return { ok: false, message: 'Source token is not linked to a character.' };
+            }
 
-            const targetToken = getObj('graphic', targetId);
+            const targetResolved = R20.resolveTokenRef(targetId);
+            const targetToken = targetResolved.token;
             if (!targetToken) {
                 return { ok: false, message: 'Target token was not found.' };
             }
-            const targetCharacterId = String(targetToken.get('represents') || '').trim();
+            const targetCharacterId = String(targetResolved.characterId || targetToken.get('represents') || '').trim();
             if (!targetCharacterId) {
                 return { ok: false, message: 'Target token is not linked to a character.' };
             }
@@ -2861,7 +2951,7 @@ const TnT = (() => {
                 effectResult,
                 useRangeFt: maxUseDistanceFt,
                 distanceFt: inRange.distanceFt,
-                targetTokenId: targetId,
+                targetTokenId: targetResolved.tokenId || targetId,
                 sourceAccess
             };
         },
@@ -4684,6 +4774,253 @@ const TnT = (() => {
             });
         },
 
+        formatAttackBonus(value = '') {
+            const raw = String(value === undefined || value === null ? '' : value).trim();
+            if (!raw) return '';
+            const firstNumber = raw.match(/[+-]?\d+/);
+            if (!firstNumber) return raw;
+            const bonus = Utils.toInt(firstNumber[0], 0);
+            return bonus >= 0 ? ('+' + String(bonus)) : String(bonus);
+        },
+
+        formatAttackDamage(attack = {}) {
+            const safeAttack = attack || {};
+            const dmgBase = String(safeAttack.dmgBase || safeAttack.damageBase || safeAttack.damage || '').trim();
+            const dmgModRaw = String(safeAttack.dmgMod || safeAttack.damageMod || '').trim();
+            const dmgMod = this.formatAttackBonus(dmgModRaw);
+            if (!dmgBase && !dmgMod) return '';
+            if (!dmgBase) return this.compactDamageText(dmgMod);
+            if (!dmgMod || dmgMod === '+0') return this.compactDamageText(dmgBase);
+            return this.compactDamageText(dmgBase + (dmgMod.charAt(0) === '-' ? '-' + dmgMod.slice(1) : '+' + dmgMod.replace(/^\+/, '')));
+        },
+
+        compactDamageText(value = '') {
+            return String(value || '').trim().replace(/\s*([+-])\s*/g, '$1');
+        },
+
+        tokenAttackDamageHtml(attack = {}) {
+            const damageText = this.formatAttackDamage(attack);
+            if (!damageText) return '';
+
+            const damageType = String(attack.dmgType || attack.damageType || '').trim();
+            const damageHtml = '<span style="margin-left:5px;color:rgb(215,47,47);font-weight:700;">' +
+                Utils.escapeHtml(damageText) +
+                '</span>';
+
+            return damageType ? Html.tooltip(damageHtml, Utils.escapeHtml(damageType)) : damageHtml;
+        },
+
+        tokenAttackBaseDamageHtml(attack = {}) {
+            const safeAttack = attack || {};
+            const dmgBase = String(safeAttack.dmgBase || safeAttack.damageBase || safeAttack.damage || '').trim();
+            if (!dmgBase) return '';
+
+            const damageType = String(safeAttack.dmgType || safeAttack.damageType || '').trim();
+            const damageHtml = '<span style="margin-left:5px;color:rgb(215,47,47);font-weight:700;">' +
+                Utils.escapeHtml(dmgBase) +
+                '</span>';
+
+            return damageType ? Html.tooltip(damageHtml, Utils.escapeHtml(damageType)) : damageHtml;
+        },
+
+        isPositiveFlag(value = '') {
+            const raw = String(value || '').trim().toLowerCase();
+            if (!raw) return false;
+            if (['1', 'true', 'yes', 'y', 'on'].includes(raw)) return true;
+            return Utils.toInt(raw, 0) > 0;
+        },
+
+        formatSaveAttributeButtonText(attack = {}) {
+            const safeAttack = attack || {};
+            const saveFlag = safeAttack.saveFlag || safeAttack.saveflag || safeAttack.save_flag || '';
+            if (!this.isPositiveFlag(saveFlag)) return '';
+
+            const saveAttr = String(safeAttack.saveAttr || safeAttack.saveattr || safeAttack.save_attr || '').trim();
+            if (!saveAttr) return 'SAVE';
+            return saveAttr.slice(0, 3).toUpperCase();
+        },
+
+        tokenAttackDamageButton(attack = {}, characterId = '') {
+            const safeAttack = attack || {};
+            const safeCharacterId = String(characterId || '').trim();
+            const safeAttackId = String(safeAttack.attackId || safeAttack.id || '')
+                .trim()
+                .replace(/"/g, '')
+                .replace(/[^A-Za-z0-9_-]/g, '');
+            const damageText = this.formatAttackDamage(safeAttack);
+            const damageType = String(safeAttack.dmgType || safeAttack.damageType || '').trim();
+            if (!safeCharacterId || !safeAttackId || !damageText) return '';
+
+            return this.inRowButtonHtml({
+                text: damageText,
+                textColor: 'rgb(255,255,255)',
+                backgroundColor: 'rgba(120, 40, 40, 0.95)',
+                borderColor: 'rgb(255,255,255)',
+                width: 46,
+                height: 15,
+                fontSize: 12,
+                uppercase: false,
+                tooltip: 'Roll ' + damageType + ' Damage.',
+                callback: '~' + safeCharacterId + '|repeating_attack("' + safeAttackId + '", "attack", "dmg")'
+            });
+        },
+
+        cleanRepeatingActionId(value = '') {
+            return String(value || '')
+                .trim()
+                .replace(/"/g, '')
+                .replace(/[^A-Za-z0-9_-]/g, '');
+        },
+
+        tokenActionButton({
+            text = 'Run',
+            command = '',
+            tooltip = '',
+            backgroundColor = 'rgba(150,20,20,0.92)',
+            width = 30
+        } = {}) {
+            if (!String(command || '').trim()) return '';
+            return this.inRowButtonHtml({
+                text,
+                textColor: 'rgb(255,255,255)',
+                backgroundColor,
+                borderColor: 'rgb(255,255,255)',
+                width,
+                height: 15,
+                fontSize: 9,
+                uppercase: false,
+                tooltip,
+                callback: command
+            });
+        },
+
+        tokenAttackButton(attack = {}, characterId = '') {
+            const safeAttack = attack || {};
+            const safeCharacterId = String(characterId || '').trim();
+            const safeAttackId = String(safeAttack.attackId || safeAttack.id || '')
+                .trim()
+                .replace(/"/g, '')
+                .replace(/[^A-Za-z0-9_-]/g, '');
+            const attackBonus = String(safeAttack.attackBonus || safeAttack.atkBonus || '').trim();
+            const saveAttr = this.formatSaveAttributeButtonText(safeAttack);
+            const saveDc = String(safeAttack.saveDc || safeAttack.savedc || safeAttack.save_dc || '').trim();
+            const buttonText = saveAttr
+                ? (saveAttr + (saveDc ? ' ' + saveDc : ''))
+                : ((attackBonus ? this.formatAttackBonus(attackBonus) : '+0') + ' ATK');
+
+            if (!safeCharacterId || !safeAttackId) return '';
+            const isAttack = String(buttonText || '').includes('ATK');
+
+            return this.inRowButtonHtml({
+                text: buttonText,
+                textColor: 'rgb(255,255,255)',
+                backgroundColor: isAttack ? 'rgba(45,45,45,0.95)' : 'rgba(77, 83, 7, 0.95)' ,
+                borderColor: 'rgb(255,255,255)',
+                width: 46,
+                height: 15,
+                fontSize: 12,
+                uppercase: true,
+                tooltip: isAttack ? 'Attack Roll' : 'Saving Throw',
+                callback: '~' + safeCharacterId + '|repeating_attack_' + safeAttackId + '_attack'
+            });
+        },
+
+        tokenAttackRefreshButton(tokenRef = '') {
+            const safeTokenRef = String(tokenRef || '').trim();
+            if (!safeTokenRef) return '';
+
+            return this.inRowButtonHtml({
+                text: 'Refresh',
+                textColor: 'rgb(255,255,255)',
+                backgroundColor: 'rgba(45,45,45,0.95)',
+                borderColor: 'rgb(255,255,255)',
+                width: 54,
+                height: 15,
+                fontSize: 12,
+                uppercase: false,
+                tooltip: 'Refresh attack list',
+                callback: '!tntToken refreshattacks ' + safeTokenRef
+            });
+        },
+
+        tokenSpellRefreshButton(tokenRef = '') {
+            const safeTokenRef = String(tokenRef || '').trim();
+            if (!safeTokenRef) return '';
+
+            return this.inRowButtonHtml({
+                text: 'Refresh',
+                textColor: 'rgb(255,255,255)',
+                backgroundColor: 'rgba(110,45,160,0.95)',
+                borderColor: 'rgb(255,255,255)',
+                width: 54,
+                height: 15,
+                fontSize: 12,
+                uppercase: false,
+                tooltip: 'Refresh spell list',
+                callback: '!tntToken refreshspells ' + safeTokenRef
+            });
+        },
+
+        tokenSpellButton(spell = {}, options = {}) {
+            const safeSpell = spell || {};
+            const safeCharacterId = String(options.characterId || '').trim();
+            const safeSpellId = String(safeSpell.spellId || safeSpell.id || '')
+                .trim()
+                .replace(/"/g, '')
+                .replace(/[^A-Za-z0-9_-]/g, '');
+            const spellLevelKey = TokenService.normalizeSpellLevel(safeSpell.spellLevel || safeSpell.level || '');
+            const attackBonus = String(safeSpell.spellAttackBonus || '').trim();
+            const saveAttr = String(safeSpell.spellSave || safeSpell.spellsave || '').trim();
+            const saveDc = String(safeSpell.spellSaveDc || '').trim();
+            const actionType = String(safeSpell.spellDamageType || '').trim().toLowerCase();
+            const buttonText = actionType === 'spell attack'
+                ? ((attackBonus ? this.formatAttackBonus(attackBonus) : '+0') + ' ATK')
+                : (actionType === 'spell save'
+                    ? ((saveAttr ? saveAttr.slice(0, 3).toUpperCase() : 'SAVE') + (saveDc ? ' ' + saveDc : ''))
+                    : 'Cast');
+
+            if (!safeCharacterId || !safeSpellId) return '';
+            const isSaveSpell = !String(buttonText || '').includes('ATK') && String(buttonText || '').includes('Cast');
+
+            return this.inRowButtonHtml({
+                text: buttonText,
+                textColor: 'rgb(255,255,255)',
+                backgroundColor: isSaveSpell ? 'rgba(110,45,160,0.95)' : 'rgba(45, 51, 160, 0.95)',
+                borderColor: 'rgb(255,255,255)',
+                width: 46,
+                height: 15,
+                fontSize: 12,
+                uppercase: false,
+                tooltip: 'Cast spell',
+                callback: '~' + safeCharacterId + '|repeating_spell-' + spellLevelKey + '("' + safeSpellId + '", "spell")'
+            });
+        },
+
+        tokenSpellDamageButton(spell = {}, characterId = '') {
+            const safeSpell = spell || {};
+            const safeCharacterId = String(characterId || '').trim();
+            const safeSpellId = String(safeSpell.spellId || safeSpell.id || '')
+                .trim()
+                .replace(/"/g, '')
+                .replace(/[^A-Za-z0-9_-]/g, '');
+            const spellLevelKey = TokenService.normalizeSpellLevel(safeSpell.spellLevel || safeSpell.level || '');
+            const damageText = this.compactDamageText(safeSpell.spellDamage || safeSpell.damage || '');
+            if (!safeCharacterId || !safeSpellId || !damageText) return '';
+
+            return this.inRowButtonHtml({
+                text: damageText,
+                textColor: 'rgb(255,255,255)',
+                backgroundColor: 'rgba(120, 40, 40, 0.95)',
+                borderColor: 'rgb(255,255,255)',
+                width: 46,
+                height: 15,
+                fontSize: 12,
+                uppercase: false,
+                tooltip: 'Roll spell damage.',
+                callback: '~' + safeCharacterId + '|repeating_spell-' + spellLevelKey + '("' + safeSpellId + '", "spell", "dmg")'
+            });
+        },
+
         itemRowBuyButton(item, options = {}) {
             const safeItem = item || {};
             const safeShopId = String(options.shopId || '').trim();
@@ -5580,6 +5917,145 @@ const TnT = (() => {
                 body: tableBody,
                 buildOptions: cardBuildOptions
             });
+        },
+
+        tokenActionRow(name, damageHtml, button, width = 50) {
+            return (
+                '<tr style="height:28px;">' +
+                    '<td style="padding:0;text-align:left;vertical-align:middle;white-space:normal;line-height:16px;">' +
+                        '<b>' + Utils.escapeHtml(String(name || '').trim()) + '</b>' +
+                    '</td>' +
+                    '<td style="padding:0 6px 0 4px;text-align:right;vertical-align:middle;white-space:nowrap;width:' + String(width) + 'px;">' +
+                        damageHtml +
+                    '</td>' +
+                    '<td style="padding:0;text-align:right;vertical-align:middle;white-space:nowrap;width:50px;">' +
+                        button +
+                    '</td>' +
+                '</tr>'
+            );
+        },
+
+        tokenActionCardTitle(tokenName = '', label = '', labelColor = 'rgb(215,47,47)') {
+            return Html.span(Utils.escapeHtml(String(tokenName || 'Character')), 'color:' + CONFIG.DEFAULT_TEXT_CHARACTER_COLOR + ';font-weight:700;') +
+                ' ' +
+                Html.span(Utils.escapeHtml(String(label || 'Actions')), 'color:' + labelColor + ';font-weight:700;');
+        },
+
+        showTokenAttackActionCard(attacks = [], options = {}) {
+            const characterId = String(options.characterId || '').trim();
+            const tokenName = String(options.tokenName || options.title || 'Character');
+            const tokenRef = String(options.tokenRef || options.tokenId || '').trim();
+            const rows = (Array.isArray(attacks) ? attacks : [])
+                .filter((attack) => String(attack.atkAttrBase || '').trim().toLowerCase() !== 'spell')
+                .map((attack) => this.tokenActionRow(
+                    attack.attackName || attack.name || 'Attack',
+                    this.tokenAttackDamageButton(attack, characterId),
+                    this.tokenAttackButton(attack, characterId),
+                    78
+                ));
+
+            if (!rows.length) return '';
+            const refreshButton = this.tokenAttackRefreshButton(tokenRef);
+            if (refreshButton) {
+                rows.push(
+                    '<tr style="height:24px;">' +
+                        '<td colspan="3" style="padding:6px 0 0 0;text-align:center;vertical-align:middle;">' +
+                            refreshButton +
+                        '</td>' +
+                    '</tr>'
+                );
+            }
+            return Html.card({
+                title: tokenName + '\'s Attacks',
+                body:
+                    '<table style="width:100%;border-collapse:collapse;table-layout:auto;">' +
+                        '<tbody>' + rows.join('') + '</tbody>' +
+                    '</table>',
+                buildOptions: {
+                    titleHtml: this.tokenActionCardTitle(tokenName, 'Attacks', 'rgb(215,47,47)')
+                }
+            });
+        },
+
+        buildTokenSpellRows(spells = [], options = {}) {
+            const safeSpells = Array.isArray(spells) ? spells : [];
+            const characterId = String(options.characterId || '').trim();
+            const tokenId = String(options.tokenId || '').trim();
+            const tokenRef = String(options.tokenRef || options.tokenId || '').trim();
+            const spellLevelLabel = (level) => {
+                const normalized = TokenService.normalizeSpellLevel(level);
+                return normalized === 'cantrip' ? 'Cantrips' : ('Level ' + normalized);
+            };
+            const rows = [];
+            let lastSpellLevel = null;
+            safeSpells.forEach((spell) => {
+                const spellLevel = TokenService.normalizeSpellLevel(spell.spellLevel || spell.level || '');
+                if (spellLevel !== lastSpellLevel) {
+                    rows.push(
+                        '<tr><td colspan="3" style="padding:5px 0 2px 0;text-align:center;color:rgb(235,235,235);font-size:12px;font-weight:700;">' +
+                            Utils.escapeHtml(spellLevelLabel(spellLevel)) +
+                        '</td></tr>'
+                    );
+                    lastSpellLevel = spellLevel;
+                }
+                rows.push(this.tokenActionRow(
+                    spell.spellName || spell.name || 'Spell',
+                    this.tokenSpellDamageButton(spell, characterId),
+                    this.tokenSpellButton(spell, { characterId, tokenId }),
+                    78
+                ));
+            });
+            const refreshButton = this.tokenSpellRefreshButton(tokenRef);
+            if (refreshButton) {
+                rows.push(
+                    '<tr style="height:24px;">' +
+                        '<td colspan="3" style="padding:6px 0 0 0;text-align:center;vertical-align:middle;">' +
+                            refreshButton +
+                        '</td>' +
+                    '</tr>'
+                );
+            }
+            return rows;
+        },
+
+        showTokenSpellActionCard(spells = [], options = {}) {
+            const tokenName = String(options.tokenName || options.title || 'Character');
+            const rows = this.buildTokenSpellRows(spells, options);
+            if (!rows.length) return '';
+            return Html.card({
+                title: tokenName + ' Spells',
+                body:
+                    '<table style="width:100%;border-collapse:collapse;table-layout:auto;">' +
+                        '<tbody>' + rows.join('') + '</tbody>' +
+                    '</table>',
+                buildOptions: {
+                    titleHtml: this.tokenActionCardTitle(tokenName, 'Spells', 'rgb(150,80,220)')
+                }
+            });
+        },
+
+        showTokenActionList(attacks = [], spells = [], options = {}) {
+            const attackCard = this.showTokenAttackActionCard(attacks, options);
+            const spellCard = this.showTokenSpellActionCard(spells, options);
+            if (attackCard || spellCard) return attackCard + spellCard;
+
+            const title = String(options.title || 'Actions');
+            const rows = '<tr><td style="padding:4px 0;color:rgb(160,160,160);font-size:12px;">No attacks or spells found.</td></tr>';
+            return Html.card({
+                title,
+                body:
+                    '<table style="width:100%;border-collapse:collapse;table-layout:auto;">' +
+                        '<tbody>' + rows + '</tbody>' +
+                    '</table>'
+            });
+        },
+
+        showTokenAttackList(attacks = [], options = {}) {
+            return this.showTokenAttackActionCard(attacks, options);
+        },
+
+        showTokenSpellList(spells = [], options = {}) {
+            return this.showTokenSpellActionCard(spells, options);
         }
     };
 
@@ -5587,23 +6063,1382 @@ const TnT = (() => {
      * @section Token Service
      * --------------------------------------------------------------------- */
     const TokenService = {
-        getInitAbilities() {
+        managedAbilityNames: Object.freeze([
+            'Inventory',
+            'Shop',
+            'Search',
+            'Initiative',
+            'Ability-Check',
+            'Saving-Throw',
+            'Skill-Check',
+            'Attacks'
+        ]),
+
+        repeatingConfigs: Object.freeze({
+            attack: Object.freeze({
+                prefix: 'repeating_attack',
+                nameSuffix: 'atkname',
+                idSuffix: 'id',
+                listAttribute: 'user.T&T_attack_list',
+                nameKey: 'attackName',
+                idKey: 'attackId',
+                extraFields: Object.freeze({
+                    dmgBase: 'dmgbase',
+                    dmgMod: 'dmgmod',
+                    dmgType: 'dmgtype',
+                    atkProfFlag: ['atkprofflag', 'atkprof_flag', 'atk_prof_flag'],
+                    atkAttrBase: 'atkattr_base',
+                    saveFlag: ['saveflag', 'save_flag'],
+                    saveAttr: ['saveattr', 'save_attr']
+                }),
+                fallbackName: 'Attack'
+            }),
+            spell: Object.freeze({
+                prefix: 'repeating_spell',
+                nameSuffix: 'spellname',
+                idSuffix: 'id',
+                listAttribute: 'user.T&T_spell_list',
+                nameKey: 'spellName',
+                idKey: 'spellId',
+                extraFields: Object.freeze({
+                    spellLevel: 'spelllevel',
+                    spellClass: 'spellclass',
+                    spellDamageType: 'spelldamagetype',
+                    spellDamage: 'spelldamage',
+                    spellSave: 'spellsave'
+                }),
+                fallbackName: 'Spell'
+            })
+        }),
+
+        async getInitAbilities(characterId = '', tokenId = '') {
             const abilityCheck =
                 '?{Ability|Strength,%&#123;selected&#124;strength&#125;|Dexterity,%&#123;selected&#124;dexterity&#125;|Constitution,%&#123;selected&#124;constitution&#125;|Intelligence,%&#123;selected&#124;intelligence&#125;|Wisdom,%&#123;selected&#124;wisdom&#125;|Charisma,%&#123;selected&#124;charisma&#125;}';
             const savingThrow =
                 '?{Ability|Strength,%&#123;selected&#124;strength_save&#125;|Dexterity,%&#123;selected&#124;dexterity_save&#125;|Constitution,%&#123;selected&#124;constitution_save&#125;|Intelligence,%&#123;selected&#124;intelligence_save&#125;|Wisdom,%&#123;selected&#124;wisdom_save&#125;|Charisma,%&#123;selected&#124;charisma_save&#125;}';
             const skillCheck =
                 '?{Skill|Acrobatics,%&#123;selected&#124;acrobatics&#125;|Animal Handling,%&#123;selected&#124;animal_handling&#125;|Arcana,%&#123;selected&#124;arcana&#125;|Athletics,%&#123;selected&#124;athletics&#125;|Deception,%&#123;selected&#124;deception&#125;|History,%&#123;selected&#124;history&#125;|Insight,%&#123;selected&#124;insight&#125;|Intimidation,%&#123;selected&#124;intimidation&#125;|Investigation,%&#123;selected&#124;investigation&#125;|Medicine,%&#123;selected&#124;medicine&#125;|Nature,%&#123;selected&#124;nature&#125;|Perception,%&#123;selected&#124;perception&#125;|Performance,%&#123;selected&#124;performance&#125;|Persuasion,%&#123;selected&#124;persuasion&#125;|Religion,%&#123;selected&#124;religion&#125;|Sleight of Hand,%&#123;selected&#124;sleight_of_hand&#125;|Stealth,%&#123;selected&#124;stealth&#125;|Survival,%&#123;selected&#124;survival&#125;}';
-
-            return [
+            const abilities = [
                 { name: 'Inventory', action: '!tntInventory' },
                 { name: 'Shop', action: '!tntShop list' },
                 { name: 'Search', action: '!tntItem search ?{itemname}' },
                 { name: 'Initiative', action: '%{selected|initiative}' },
                 { name: 'Ability-Check', action: abilityCheck },
                 { name: 'Saving-Throw', action: savingThrow },
-                { name: 'Skill-Check', action: skillCheck }
+                { name: 'Skill-Check', action: skillCheck },
+                { name: 'Attacks', action: '!tntToken attacks' }
             ];
+            return abilities;
+        },
+
+        getCharacterAttributes(characterId = '') {
+            const safeCharacterId = String(characterId || '').trim();
+            if (!safeCharacterId) return [];
+            return findObjs({
+                _type: 'attribute',
+                _characterid: safeCharacterId
+            }) || [];
+        },
+
+        getAttributeCurrent(attribute) {
+            if (!attribute || !Utils.isFunction(attribute.get)) return '';
+            return String(attribute.get('current') || '').trim();
+        },
+
+        findCharacterAttribute(characterId = '', attributeName = '') {
+            const safeCharacterId = String(characterId || '').trim();
+            const key = String(attributeName || '').trim().toLowerCase();
+            if (!safeCharacterId || !key) return null;
+
+            const attributes = this.getCharacterAttributes(safeCharacterId);
+            return attributes.find((attribute) => String(attribute.get('name') || '').trim().toLowerCase() === key) || null;
+        },
+
+        getRepeatingConfig(type = '') {            
+            return this.repeatingConfigs[String(type || '').trim().toLowerCase()] || null;
+        },
+
+        buildRepeatingListValue(entries = [], type = '') {
+            const config = this.getRepeatingConfig(type);
+            if (!config) return '';
+
+            const safeEntries = Array.isArray(entries) ? entries : [];
+            const extraFields = config.extraFields || {};
+            const extraKeys = Object.keys(extraFields);
+            return safeEntries
+                .filter((entry) => entry && entry[config.nameKey] && entry[config.idKey])
+                .filter((entry) => type !== 'attack' || String(entry.atkAttrBase || '').trim().toLowerCase() !== 'spell')
+                .map((entry) => {
+                    if (type === 'attack') {
+                        return JSON.stringify(String(entry[config.nameKey])) + ':' +
+                            JSON.stringify(String(entry[config.idKey])) + ':' +
+                            JSON.stringify(this.formatRepeatingAttackDamage(entry)) + ':' +
+                            JSON.stringify(String(entry.dmgType || '')) + ':' +
+                            JSON.stringify(String(entry.attackBonus || '')) + ':' +
+                            JSON.stringify(String(entry.saveFlag || '')) + ':' +
+                            JSON.stringify(String(entry.saveAttr || '')) + ':' +
+                            JSON.stringify(String(entry.atkProfFlag || '')) + ':' +
+                            JSON.stringify(String(entry.saveDc || ''));
+                    }
+
+                    if (type === 'spell') {
+                        return JSON.stringify(String(entry[config.nameKey])) + ':' +
+                            JSON.stringify(String(entry[config.idKey])) + ':' +
+                            JSON.stringify(this.normalizeSpellLevel(entry.spellLevel)) + ':' +
+                            JSON.stringify(String(entry.spellClass || '')) + ':' +
+                            JSON.stringify(String(entry.spellDamageType || '')) + ':' +
+                            JSON.stringify(String(entry.spellDamage || '')) + ':' +
+                            JSON.stringify(String(entry.spellSave || '')) + ':' +
+                            JSON.stringify(String(entry.spellAttackBonus || '')) + ':' +
+                            JSON.stringify(String(entry.spellSaveDc || '')) + ':' +
+                            JSON.stringify(String(entry.spellcastingAbility || '')) + ':' +
+                            JSON.stringify(String(entry.spellcastingMod || ''));
+                    }
+
+                    if (extraKeys.length) {
+                        const payload = {
+                            id: String(entry[config.idKey])
+                        };
+                        for (let i = 0; i < extraKeys.length; i += 1) {
+                            const key = extraKeys[i];
+                            const value = String(entry[key] || '').trim();
+                            if (value) payload[key] = value;
+                        }
+                        return JSON.stringify(String(entry[config.nameKey])) + ':' + JSON.stringify(payload);
+                    }
+
+                    return JSON.stringify(String(entry[config.nameKey])) + ':' + JSON.stringify(String(entry[config.idKey]));
+                })
+                .join(',');
+        },
+
+        formatRepeatingAttackDamage(entry = {}) {
+            const dmgBase = String(entry.dmgBase || '').trim();
+            const dmgMod = this.simplifyModifierExpression(entry.dmgMod || '');
+            if (!dmgBase && !dmgMod) return '';
+            if (!dmgBase) return this.compactDamageText(dmgMod);
+            if (!dmgMod || dmgMod === '0' || dmgMod === '+0') return this.compactDamageText(dmgBase);
+            return this.compactDamageText(dmgBase + (dmgMod.charAt(0) === '-' ? '-' + dmgMod.slice(1) : '+' + dmgMod.replace(/^\+/, '')));
+        },
+
+        compactDamageText(value = '') {
+            return String(value || '').trim().replace(/\s*([+-])\s*/g, '$1');
+        },
+
+        simplifyModifierExpression(value = '') {
+            const raw = String(value || '').trim();
+            if (!raw) return '';
+
+            const numericParts = raw.match(/[+-]?\s*\d+/g);
+            const strippedNumeric = raw.replace(/[+-]?\s*\d+/g, '').replace(/[+\-\s]/g, '');
+            if (numericParts && numericParts.length && !strippedNumeric) {
+                const total = numericParts.reduce((sum, part) => sum + Utils.toInt(String(part).replace(/\s+/g, ''), 0), 0);
+                if (total === 0) return '';
+                return total > 0 ? ('+' + String(total)) : String(total);
+            }
+
+            return raw;
+        },
+
+        normalizeSpellLevel(value = '') {
+            const text = String(value || '').trim().toLowerCase();
+            if (!text) return '1';
+            if (text === '0' || text.indexOf('cantrip') >= 0) return 'cantrip';
+            const numeric = Utils.toInt(text, 1);
+            return String(Utils.clamp(numeric, 1, 9));
+        },
+
+        parseInlineRepeatingTriples(raw = '', type = '') {
+            const config = this.getRepeatingConfig(type);
+            if (!config) return [];
+
+            const source = String(raw || '').trim();
+            if (!source) return [];
+
+            const entries = [];
+            const pattern = /"((?:\\.|[^"\\])*)"\s*:\s*"((?:\\.|[^"\\])*)"\s*:\s*"((?:\\.|[^"\\])*)"(?:\s*:\s*"((?:\\.|[^"\\])*)")?(?:\s*:\s*"((?:\\.|[^"\\])*)")?(?:\s*:\s*"((?:\\.|[^"\\])*)")?(?:\s*:\s*"((?:\\.|[^"\\])*)")?(?:\s*:\s*"((?:\\.|[^"\\])*)")?(?:\s*:\s*"((?:\\.|[^"\\])*)")?(?:\s*:\s*"((?:\\.|[^"\\])*)")?(?:\s*:\s*"((?:\\.|[^"\\])*)")?/g;
+            let match;
+
+            while ((match = pattern.exec(source)) !== null) {
+                let name = '';
+                let id = '';
+                let level = '';
+                let spellClass = '';
+                let spellDamageType = '';
+                let spellDamage = '';
+                let spellSave = '';
+                let spellAttackBonus = '';
+                let spellSaveDc = '';
+                let spellcastingAbility = '';
+                let spellcastingMod = '';
+                try { name = JSON.parse('"' + match[1] + '"'); } catch (error) { name = match[1]; }
+                try { id = JSON.parse('"' + match[2] + '"'); } catch (error) { id = match[2]; }
+                try { level = JSON.parse('"' + match[3] + '"'); } catch (error) { level = match[3]; }
+                if (match[4] !== undefined) {
+                    try { spellClass = JSON.parse('"' + match[4] + '"'); } catch (error) { spellClass = match[4]; }
+                }
+                if (match[5] !== undefined) {
+                    try { spellDamageType = JSON.parse('"' + match[5] + '"'); } catch (error) { spellDamageType = match[5]; }
+                }
+                if (match[6] !== undefined) {
+                    try { spellDamage = JSON.parse('"' + match[6] + '"'); } catch (error) { spellDamage = match[6]; }
+                }
+                if (match[7] !== undefined) {
+                    try { spellSave = JSON.parse('"' + match[7] + '"'); } catch (error) { spellSave = match[7]; }
+                }
+                if (match[8] !== undefined) {
+                    try { spellAttackBonus = JSON.parse('"' + match[8] + '"'); } catch (error) { spellAttackBonus = match[8]; }
+                }
+                if (match[9] !== undefined) {
+                    try { spellSaveDc = JSON.parse('"' + match[9] + '"'); } catch (error) { spellSaveDc = match[9]; }
+                }
+                if (match[10] !== undefined) {
+                    try { spellcastingAbility = JSON.parse('"' + match[10] + '"'); } catch (error) { spellcastingAbility = match[10]; }
+                }
+                if (match[11] !== undefined) {
+                    try { spellcastingMod = JSON.parse('"' + match[11] + '"'); } catch (error) { spellcastingMod = match[11]; }
+                }
+
+                const entry = {};
+                entry[config.nameKey] = String(name || '').trim();
+                entry[config.idKey] = String(id || '').trim();
+                if (type === 'spell') {
+                    entry.spellLevel = this.normalizeSpellLevel(level);
+                    entry.spellClass = String(spellClass || '').trim();
+                    entry.spellDamageType = String(spellDamageType || '').trim();
+                    entry.spellDamage = String(spellDamage || '').trim();
+                    entry.spellSave = String(spellSave || '').trim();
+                    entry.spellAttackBonus = String(spellAttackBonus || '').trim();
+                    entry.spellSaveDc = String(spellSaveDc || '').trim();
+                    entry.spellcastingAbility = String(spellcastingAbility || '').trim();
+                    entry.spellcastingMod = String(spellcastingMod || '').trim();
+                }
+                if (entry[config.nameKey] && entry[config.idKey]) entries.push(entry);
+            }
+
+            return entries;
+        },
+
+        parseInlineRepeatingQuads(raw = '', type = '') {
+            const config = this.getRepeatingConfig(type);
+            if (!config) return [];
+
+            const source = String(raw || '').trim();
+            if (!source) return [];
+
+            const entries = [];
+            const pattern = /"((?:\\.|[^"\\])*)"\s*:\s*"((?:\\.|[^"\\])*)"\s*:\s*"((?:\\.|[^"\\])*)"\s*:\s*"((?:\\.|[^"\\])*)"(?:\s*:\s*"((?:\\.|[^"\\])*)")?(?:\s*:\s*"((?:\\.|[^"\\])*)")?(?:\s*:\s*"((?:\\.|[^"\\])*)")?(?:\s*:\s*"((?:\\.|[^"\\])*)")?(?:\s*:\s*"((?:\\.|[^"\\])*)")?/g;
+            let match;
+
+            while ((match = pattern.exec(source)) !== null) {
+                let name = '';
+                let id = '';
+                let damage = '';
+                let damageType = '';
+                let attackBonus = '';
+                let saveFlag = '';
+                let saveAttr = '';
+                let atkProfFlag = '';
+                let saveDc = '';
+                try { name = JSON.parse('"' + match[1] + '"'); } catch (error) { name = match[1]; }
+                try { id = JSON.parse('"' + match[2] + '"'); } catch (error) { id = match[2]; }
+                try { damage = JSON.parse('"' + match[3] + '"'); } catch (error) { damage = match[3]; }
+                try { damageType = JSON.parse('"' + match[4] + '"'); } catch (error) { damageType = match[4]; }
+                if (match[5] !== undefined) {
+                    try { attackBonus = JSON.parse('"' + match[5] + '"'); } catch (error) { attackBonus = match[5]; }
+                }
+                if (match[6] !== undefined) {
+                    try { saveFlag = JSON.parse('"' + match[6] + '"'); } catch (error) { saveFlag = match[6]; }
+                }
+                if (match[7] !== undefined) {
+                    try { saveAttr = JSON.parse('"' + match[7] + '"'); } catch (error) { saveAttr = match[7]; }
+                }
+                if (match[8] !== undefined) {
+                    try { atkProfFlag = JSON.parse('"' + match[8] + '"'); } catch (error) { atkProfFlag = match[8]; }
+                }
+                if (match[9] !== undefined) {
+                    try { saveDc = JSON.parse('"' + match[9] + '"'); } catch (error) { saveDc = match[9]; }
+                }
+
+                const entry = {};
+                entry[config.nameKey] = String(name || '').trim();
+                entry[config.idKey] = String(id || '').trim();
+                entry.dmgBase = String(damage || '').trim();
+                entry.dmgMod = '';
+                entry.dmgType = String(damageType || '').trim();
+                entry.attackBonus = String(attackBonus || '').trim();
+                entry.saveFlag = String(saveFlag || '').trim();
+                entry.saveAttr = String(saveAttr || '').trim();
+                entry.atkProfFlag = String(atkProfFlag || '').trim();
+                entry.saveDc = String(saveDc || '').trim();
+                if (entry[config.nameKey] && entry[config.idKey]) entries.push(entry);
+            }
+
+            return entries;
+        },
+
+        parseRepeatingListValue(value = '', type = '') {
+            const config = this.getRepeatingConfig(type);
+            if (!config) return [];
+
+            const raw = String(value || '').trim();
+            if (!raw) return [];
+
+            if (type === 'spell') {
+                const inlineEntries = this.parseInlineRepeatingTriples(raw, type);
+                if (inlineEntries.length) return inlineEntries;
+            }
+            if (type === 'attack') {
+                const inlineEntries = this.parseInlineRepeatingQuads(raw, type);
+                if (inlineEntries.length) return inlineEntries;
+            }
+
+            const candidates = [
+                raw,
+                raw.charAt(0) === '{' ? raw : ('{' + raw + '}')
+            ];
+
+            for (let i = 0; i < candidates.length; i += 1) {
+                try {
+                    const parsed = JSON.parse(candidates[i]);
+                    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) continue;
+                    return Object.keys(parsed)
+                        .map((entryName) => {
+                            const payload = parsed[entryName];
+                            const entry = {};
+                            entry[config.nameKey] = String(entryName || '').trim();
+                            if (payload && typeof payload === 'object' && !Array.isArray(payload)) {
+                                entry[config.idKey] = String(payload.id || payload[config.idKey] || '').trim();
+                                const extraFields = config.extraFields || {};
+                                const extraKeys = Object.keys(extraFields);
+                                for (let x = 0; x < extraKeys.length; x += 1) {
+                                    const key = extraKeys[x];
+                                    entry[key] = String(payload[key] || '').trim();
+                                }
+                            } else {
+                                entry[config.idKey] = String(payload || '').trim();
+                            }
+                            return entry;
+                        })
+                        .filter((entry) => entry[config.nameKey] && entry[config.idKey]);
+                } catch (error) {}
+            }
+
+            return [];
+        },
+        
+
+        async getStoredRepeatingList(characterId = '', type = '') {
+            const safeCharacterId = String(characterId || '').trim();
+            const config = this.getRepeatingConfig(type);
+            if (!safeCharacterId || !config) return [];
+
+            const rawValue = await R20.getSheet(safeCharacterId, config.listAttribute);
+            const entries = this.parseRepeatingListValue(rawValue, type);
+            if (type === 'attack' && entries.length) {
+                const attributes = this.getCharacterAttributes(safeCharacterId);
+                const dumpRoots = this.getCharacterSheetDumpRoots(attributes);
+                const fastDetails = await this.getFastDetails(safeCharacterId);
+                await this.resolveAttackDamageModifiers(entries, attributes, dumpRoots, safeCharacterId, fastDetails);
+            }
+            return entries;
+        },
+
+        async getStoredAttacks(characterId = '') {
+            const safeCharacterId = String(characterId || '').trim();
+            if (!safeCharacterId) return [];
+            return this.getStoredRepeatingList(safeCharacterId, 'attack');
+        },
+
+        async getStoredSpells(characterId = '') {
+            const safeCharacterId = String(characterId || '').trim();
+            if (!safeCharacterId) return [];
+            return this.getStoredRepeatingList(safeCharacterId, 'spell');
+        },
+
+        buildAttackAction(characterId = '', attackId = '', options = {}) {
+            const safeCharacterId = String(characterId || '').trim();
+            const safeAttackId = String(attackId || '')
+                .trim()
+                .replace(/"/g, '')
+                .replace(/[^A-Za-z0-9_-]/g, '');
+            if (!safeCharacterId || !safeAttackId) return '';
+
+            if (options && options.encodeForQuery) {
+                return '%&#123;' + safeCharacterId + '&#124;repeating_attack(&quot;' + safeAttackId + '&quot;&#44; &quot;attack&quot;)&#125;';
+            }
+
+            return '%{' + safeCharacterId + '|repeating_attack_' + safeAttackId + '_attack}';
+        },
+
+        async updateRepeatingListAttribute(characterId = '', type = '', entries = []) {
+            const safeCharacterId = String(characterId || '').trim();
+            const config = this.getRepeatingConfig(type);
+            const attributeName = config ? config.listAttribute : '';
+            if (!safeCharacterId) {
+                return { ok: false, action: 'failed', name: attributeName || String(type || ''), message: 'Character is required.' };
+            }
+            if (!config) {
+                return { ok: false, action: 'failed', name: String(type || ''), message: 'Unknown repeating list type.' };
+            }
+
+            try {
+                const value = this.buildRepeatingListValue(entries, type);
+                await R20.setSheet(safeCharacterId, attributeName, value);
+                return { ok: true, action: 'set', name: attributeName, value };
+            } catch (error) {
+                return {
+                    ok: false,
+                    action: 'failed',
+                    name: attributeName,
+                    message: error && error.message ? error.message : String(error)
+                };
+            }
+        },
+
+        async updateAttackListAttribute(characterId = '', attacks = []) {
+            return this.updateRepeatingListAttribute(characterId, 'attack', attacks);
+        },
+
+        async updateJsonAttribute(characterId = '', attributeName = '', value = '') {
+            const safeCharacterId = String(characterId || '').trim();
+            const safeAttributeName = String(attributeName || '').trim();
+            if (!safeCharacterId) {
+                return { ok: false, action: 'failed', name: safeAttributeName, message: 'Character is required.' };
+            }
+            if (!safeAttributeName) {
+                return { ok: false, action: 'failed', name: '', message: 'Attribute name is required.' };
+            }
+
+            try {
+                await R20.setSheet(safeCharacterId, safeAttributeName, value);
+                return { ok: true, action: 'set', name: safeAttributeName, value };
+            } catch (error) {
+                return {
+                    ok: false,
+                    action: 'failed',
+                    name: safeAttributeName,
+                    message: error && error.message ? error.message : String(error)
+                };
+            }
+        },
+
+        buildSpellDumpValue(dumpRoots = [], spells = []) {
+            return JSON.stringify({
+                generatedAt: new Date().toISOString(),
+                dumpRoots: Array.isArray(dumpRoots) ? dumpRoots.length : 0,
+                spells: (Array.isArray(spells) ? spells : []).map((spell) => ({
+                    rowKey: String((spell && spell.rowKey) || ''),
+                    id: String((spell && (spell.spellId || spell.id)) || ''),
+                    name: String((spell && (spell.spellName || spell.name)) || ''),
+                    level: String((spell && spell.spellLevel) || ''),
+                    spellClass: String((spell && spell.spellClass) || ''),
+                    spellDamageType: String((spell && spell.spellDamageType) || ''),
+                    spellDamage: String((spell && spell.spellDamage) || ''),
+                    spellSave: String((spell && spell.spellSave) || ''),
+                    spellAttackBonus: String((spell && spell.spellAttackBonus) || ''),
+                    spellSaveDc: String((spell && spell.spellSaveDc) || ''),
+                    spellcastingAbility: String((spell && spell.spellcastingAbility) || ''),
+                    spellcastingMod: String((spell && spell.spellcastingMod) || ''),
+                    debug: spell && spell.__debug ? spell.__debug : null
+                })),
+                roots: Array.isArray(dumpRoots) ? dumpRoots : []
+            });
+        },
+
+        async updateSpellDumpAttribute(characterId = '', dumpRoots = [], spells = []) {
+            return this.updateJsonAttribute(characterId, 'user.tnt_spell_dump', this.buildSpellDumpValue(dumpRoots, spells));
+        },
+
+        async updateSpellListAttribute(characterId = '', spells = []) {
+            return this.updateRepeatingListAttribute(characterId, 'spell', spells);
+        },
+
+        macroQuerySafeText(value = '') {
+            return String(value || '')
+                .replace(/[|,{}]/g, ' ')
+                .replace(/[\r\n\t]+/g, ' ')
+                .replace(/\s+/g, ' ')
+                .trim();
+        },
+
+        cleanRepeatingActionId(value = '') {
+            return String(value || '')
+                .trim()
+                .replace(/"/g, '')
+                .replace(/[^A-Za-z0-9_-]/g, '');
+        },
+
+        isRepeatingLookupError(value = '') {
+            return String(value || '').trim().indexOf('&{template:error}') >= 0;
+        },
+
+        getRepeatingFieldSuffixes(fieldConfig) {
+            if (Array.isArray(fieldConfig)) {
+                return fieldConfig
+                    .map((entry) => String(entry || '').trim())
+                    .filter(Boolean);
+            }
+            const suffix = String(fieldConfig || '').trim();
+            return suffix ? [suffix] : [];
+        },
+
+        getRepeatingFieldValueBySuffixes(attributes = [], prefix = '', rowKey = '', suffixes = []) {
+            const safePrefix = String(prefix || '').trim();
+            const safeRowKey = String(rowKey || '').trim();
+            if (!safePrefix || !safeRowKey || !Array.isArray(suffixes) || !suffixes.length) return '';
+
+            for (let i = 0; i < suffixes.length; i += 1) {
+                const targetName = safePrefix + '_' + safeRowKey + '_' + suffixes[i];
+                const attr = attributes.find((attribute) =>
+                    String(attribute.get('name') || '').trim().toLowerCase() === targetName.toLowerCase()
+                );
+                if (!attr) continue;
+                const value = this.getAttributeCurrent(attr);
+                if (value) return value;
+            }
+            return '';
+        },
+
+        cleanSheetAttributeReference(value = '') {
+            const raw = String(value || '').trim();
+            if (!raw) return '';
+
+            const referenceMatch = raw.match(/^@\{(?:[^|{}]+\|)?([^|{}]+)\}$/);
+            if (referenceMatch) return String(referenceMatch[1] || '').trim();
+
+            return raw
+                .replace(/^@?\{+/, '')
+                .replace(/\}+$/, '')
+                .split('|')
+                .pop()
+                .trim();
+        },
+
+        getAttributeCurrentByName(attributes = [], attributeName = '') {
+            const key = this.cleanSheetAttributeReference(attributeName).toLowerCase();
+            if (!key || !Array.isArray(attributes)) return '';
+
+            const attr = attributes.find((attribute) =>
+                String(attribute.get('name') || '').trim().toLowerCase() === key
+            );
+            return this.getAttributeCurrent(attr);
+        },
+
+        getAttributeMaxByName(attributes = [], attributeName = '') {
+            const key = this.cleanSheetAttributeReference(attributeName).toLowerCase();
+            if (!key || !Array.isArray(attributes)) return '';
+
+            const attr = attributes.find((attribute) =>
+                String(attribute.get('name') || '').trim().toLowerCase() === key
+            );
+            return attr && Utils.isFunction(attr.get) ? String(attr.get('max') || '').trim() : '';
+        },
+
+        getAttributeRawCurrentByName(attributes = [], attributeName = '') {
+            const key = String(attributeName || '').trim().toLowerCase();
+            if (!key || !Array.isArray(attributes)) return '';
+
+            const attr = attributes.find((attribute) =>
+                String(attribute.get('name') || '').trim().toLowerCase() === key
+            );
+            return attr && Utils.isFunction(attr.get) ? attr.get('current') : '';
+        },
+
+        parseSheetDumpRoot(value) {
+            if (value && typeof value === 'object') return value;
+            const raw = String(value || '').trim();
+            if (!raw) return null;
+
+            try { return JSON.parse(raw); } catch (error) {}
+            return null;
+        },
+
+        getCharacterSheetDumpRoots(attributes = []) {
+            const roots = [];
+            ['builder', 'store'].forEach((attributeName) => {
+                const parsed = this.parseSheetDumpRoot(this.getAttributeRawCurrentByName(attributes, attributeName));
+                if (parsed && typeof parsed === 'object') roots.push(parsed);
+            });
+            return roots;
+        },
+
+        normalizeLookupText(value = '') {
+            return String(value || '')
+                .trim()
+                .toLowerCase()
+                .replace(/\s+/g, ' ');
+        },
+
+        extractBuilderAttackAbility(node) {
+            if (!node || typeof node !== 'object') return '';
+
+            const attack = node.attack;
+            if (!attack || typeof attack !== 'object') return '';
+
+            const explicitAbility = String(
+                attack.abilityBonus ||
+                (attack.ability && attack.ability.ability) ||
+                ''
+            ).trim();
+            if (explicitAbility) return explicitAbility;
+
+            const attackType = this.normalizeLookupText(attack.type || '');
+            if (attackType === 'melee') return 'Strength';
+            if (attackType === 'ranged') return 'Dexterity';
+            return '';
+        },
+
+        extractBuilderSaveMeta(node) {
+            if (!node || typeof node !== 'object' || !node.save || typeof node.save !== 'object') {
+                return { saveFlag: '', saveAttr: '' };
+            }
+
+            const saveAttr = String(
+                node.save.saveAbility ||
+                node.save.saveAttr ||
+                node.save.saveattr ||
+                ''
+            ).trim();
+
+            return {
+                saveFlag: saveAttr ? '1' : '',
+                saveAttr
+            };
+        },
+
+        spellLevelSortValue(value = '') {
+            const level = this.normalizeSpellLevel(value);
+            return level === 'cantrip' ? 0 : Utils.toInt(level, 1);
+        },
+
+        canonicalAbilityName(value = '') {
+            const normalized = this.normalizeLookupText(value);
+            const map = {
+                str: 'Strength',
+                strength: 'Strength',
+                dex: 'Dexterity',
+                dexterity: 'Dexterity',
+                con: 'Constitution',
+                constitution: 'Constitution',
+                int: 'Intelligence',
+                intelligence: 'Intelligence',
+                wis: 'Wisdom',
+                wisdom: 'Wisdom',
+                cha: 'Charisma',
+                charisma: 'Charisma'
+            };
+            return map[normalized] || '';
+        },
+
+        abilityNameToShort(value = '') {
+            const ability = this.canonicalAbilityName(value);
+            const map = {
+                Strength: 'STR',
+                Dexterity: 'DEX',
+                Constitution: 'CON',
+                Intelligence: 'INT',
+                Wisdom: 'WIS',
+                Charisma: 'CHA'
+            };
+            return map[ability] || '';
+        },
+
+        abilityShortToModifierKey(value = '') {
+            const shortName = String(value || '').trim().toLowerCase();
+            const map = {
+                str: 'str_mod',
+                dex: 'dex_mod',
+                con: 'con_mod',
+                int: 'int_mod',
+                wis: 'wis_mod',
+                cha: 'cha_mod'
+            };
+            return map[shortName] || '';
+        },
+
+        extractSpellcastingAbilityFromText(value = '') {
+            const text = this.normalizeLookupText(value);
+            if (!text || text.indexOf('spellcasting') < 0) return '';
+
+            const abilities = [
+                ['Strength', ['strength', 'str']],
+                ['Dexterity', ['dexterity', 'dex']],
+                ['Constitution', ['constitution', 'con']],
+                ['Intelligence', ['intelligence', 'int']],
+                ['Wisdom', ['wisdom', 'wis']],
+                ['Charisma', ['charisma', 'cha']]
+            ];
+            for (let i = 0; i < abilities.length; i += 1) {
+                const ability = abilities[i][0];
+                const aliases = abilities[i][1];
+                for (let x = 0; x < aliases.length; x += 1) {
+                    if (new RegExp('(^|[^a-z])' + aliases[x] + '([^a-z]|$)').test(text)) return ability;
+                }
+            }
+            return '';
+        },
+
+        normalizeRaceSpellcastingSource(value = '') {
+            const normalized = this.normalizeLookupText(value);
+            if (normalized === 'elf') return ['elf', 'elven'];
+            return normalized ? [normalized] : [];
+        },
+
+        findSpellcastingAbilityInDumpRoots(dumpRoots = [], sourceName = '', sourceType = 'class') {
+            const sourceKeys = sourceType === 'race'
+                ? this.normalizeRaceSpellcastingSource(sourceName)
+                : [this.normalizeLookupText(sourceName)];
+            if (!Array.isArray(dumpRoots) || !dumpRoots.length || !sourceKeys.filter(Boolean).length) return '';
+
+            let fallbackAbility = '';
+            const matchesSource = (text) => {
+                const normalized = this.normalizeLookupText(text);
+                if (!normalized || normalized.indexOf('spellcasting') < 0) return false;
+                return sourceKeys.some((key) => key && normalized.indexOf(key) >= 0);
+            };
+            const walk = (node) => {
+                if (!node || typeof node !== 'object') return '';
+                if (Array.isArray(node)) return node.reduce((found, child) => found || walk(child), '');
+
+                const text = [node.recordName, node.name, node.builderDisplayName].filter(Boolean).join(' ');
+                const ability = this.extractSpellcastingAbilityFromText(text);
+                if (ability && matchesSource(text)) return ability;
+                if (!fallbackAbility && sourceType === 'race' && ability && this.normalizeLookupText(text).indexOf('spellcasting choice') >= 0) {
+                    fallbackAbility = ability;
+                }
+
+                const keys = Object.keys(node);
+                for (let i = 0; i < keys.length; i += 1) {
+                    const found = walk(node[keys[i]]);
+                    if (found) return found;
+                }
+                return '';
+            };
+
+            for (let i = 0; i < dumpRoots.length; i += 1) {
+                const found = walk(dumpRoots[i]);
+                if (found) return found;
+            }
+            return fallbackAbility;
+        },
+
+        resolveSpellOriginAbility({ spellClass = '', characterClass = '', race = '', dumpRoots = [], fastDetails = {} } = {}) {
+            const origin = this.normalizeLookupText(spellClass);
+            const classSource = origin && origin.indexOf('magic initiate') !== 0 ? spellClass : characterClass;
+            const useClass = !origin || origin.indexOf('magic initiate') === 0 || origin.indexOf(this.normalizeLookupText(characterClass)) >= 0;
+            if (!useClass && race && origin.indexOf(this.normalizeLookupText(race)) >= 0) {
+                if (fastDetails && fastDetails.race_spellcasting_attribute) return this.canonicalAbilityName(fastDetails.race_spellcasting_attribute);
+                return this.findSpellcastingAbilityInDumpRoots(dumpRoots, race, 'race');
+            }
+            return useClass
+                ? (this.canonicalAbilityName(fastDetails && fastDetails.class_spellcasting_attribute) ||
+                    this.findSpellcastingAbilityInDumpRoots(dumpRoots, classSource, 'class') ||
+                    this.findSpellcastingAbilityInDumpRoots(dumpRoots, characterClass, 'class'))
+                : (this.canonicalAbilityName(fastDetails && fastDetails.race_spellcasting_attribute) ||
+                    this.findSpellcastingAbilityInDumpRoots(dumpRoots, race, 'race') ||
+                    this.findSpellcastingAbilityInDumpRoots(dumpRoots, classSource, 'class') ||
+                    this.findSpellcastingAbilityInDumpRoots(dumpRoots, characterClass, 'class'));
+        },
+
+        parseFastDetailsValue(value = '') {
+            const raw = String(value || '').trim();
+            if (!raw) return {};
+            try {
+                const parsed = JSON.parse(raw);
+                return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : {};
+            } catch (error) {
+                return {};
+            }
+        },
+
+        async getFastDetails(characterId = '') {
+            const raw = await R20.getSheet(characterId, 'user.T&T_fast_details');
+            return this.parseFastDetailsValue(raw);
+        },
+
+        buildSpellcastingFastDetails({ abilityShort = '', pb = 0, fastDetails = {}, prefix = '' } = {}) {
+            const safePrefix = String(prefix || '').trim();
+            const ability = this.abilityNameToShort(abilityShort) || String(abilityShort || '').trim().toUpperCase();
+            const modKey = this.abilityShortToModifierKey(ability);
+            const mod = modKey ? Utils.toInt(fastDetails[modKey], 0) : 0;
+            const bonus = ability ? this.formatSignedModifier(Utils.toInt(pb, 0) + mod) : '';
+            const save = ability ? String(8 + Utils.toInt(pb, 0) + mod) : '';
+            return {
+                [safePrefix + '_spellcasting_attribute']: ability,
+                [safePrefix + '_spellcasting_bonus']: bonus,
+                [safePrefix + '_spellcasting_save']: save
+            };
+        },
+
+        async buildFastDetails(characterId = '', attributes = [], dumpRoots = []) {
+            const existing = await this.getFastDetails(characterId);
+            const [
+                hpMaxRaw,
+                acRaw,
+                levelRaw,
+                strModRaw,
+                dexModRaw,
+                conModRaw,
+                intModRaw,
+                wisModRaw,
+                chaModRaw,
+                pbRaw,
+                classRaw,
+                raceRaw
+            ] = await Promise.all([
+                this.getResolvedAttributeValue(characterId, attributes, 'hp_max'),
+                this.getResolvedAttributeValue(characterId, attributes, 'ac'),
+                this.getResolvedAttributeValue(characterId, attributes, 'level'),
+                this.getResolvedAttributeValue(characterId, attributes, 'strength_mod'),
+                this.getResolvedAttributeValue(characterId, attributes, 'dexterity_mod'),
+                this.getResolvedAttributeValue(characterId, attributes, 'constitution_mod'),
+                this.getResolvedAttributeValue(characterId, attributes, 'intelligence_mod'),
+                this.getResolvedAttributeValue(characterId, attributes, 'wisdom_mod'),
+                this.getResolvedAttributeValue(characterId, attributes, 'charisma_mod'),
+                this.getResolvedAttributeValue(characterId, attributes, 'pb'),
+                existing.class ? Promise.resolve(existing.class) : this.getResolvedAttributeValue(characterId, attributes, 'class'),
+                existing.race ? Promise.resolve(existing.race) : this.getResolvedAttributeValue(characterId, attributes, 'race')
+            ]);
+            const details = {
+                hp_max: Utils.toInt(hpMaxRaw, 0),
+                ac: Utils.toInt(acRaw, 10),
+                level: Utils.toInt(levelRaw, 0),
+                str_mod: Utils.toInt(strModRaw, 0),
+                dex_mod: Utils.toInt(dexModRaw, 0),
+                con_mod: Utils.toInt(conModRaw, 0),
+                int_mod: Utils.toInt(intModRaw, 0),
+                wis_mod: Utils.toInt(wisModRaw, 0),
+                cha_mod: Utils.toInt(chaModRaw, 0),
+                pb: Utils.toInt(pbRaw, 0),
+                class: String(classRaw || '').trim(),
+                race: String(raceRaw || '').trim()
+            };
+
+            const shouldLookupClassCasting = !String(existing.class || '').trim();
+            const shouldLookupRaceCasting = !String(existing.race || '').trim();
+            const classAbility = String(existing.class_spellcasting_attribute || '').trim().toUpperCase() ||
+                (shouldLookupClassCasting ? this.abilityNameToShort(this.findSpellcastingAbilityInDumpRoots(dumpRoots, details.class, 'class')) : '');
+            const raceAbility = String(existing.race_spellcasting_attribute || '').trim().toUpperCase() ||
+                (shouldLookupRaceCasting ? this.abilityNameToShort(this.findSpellcastingAbilityInDumpRoots(dumpRoots, details.race, 'race')) : '');
+
+            return Object.assign(
+                details,
+                this.buildSpellcastingFastDetails({ abilityShort: classAbility, pb: details.pb, fastDetails: details, prefix: 'class' }),
+                this.buildSpellcastingFastDetails({ abilityShort: raceAbility, pb: details.pb, fastDetails: details, prefix: 'race' })
+            );
+        },
+
+        async updateFastDetailsAttribute(characterId = '', fastDetails = {}) {
+            return this.updateJsonAttribute(characterId, 'user.T&T_fast_details', JSON.stringify(fastDetails || {}));
+        },
+
+        findAttackNodeInDumpRoots(dumpRoots = [], entry = {}) {
+            const attackId = this.cleanRepeatingActionId(entry.attackId || entry.id || '');
+            const attackName = this.normalizeLookupText(entry.attackName || entry.name || '');
+            if ((!attackId && !attackName) || !Array.isArray(dumpRoots) || !dumpRoots.length) return null;
+
+            let idOnlyNode = null;
+            let nameOnlyNode = null;
+            const matchesName = (node) => {
+                if (!attackName) return true;
+                const nodeName = this.normalizeLookupText(node.name || '');
+                const recordName = this.normalizeLookupText(node.recordName || '');
+                return nodeName === attackName ||
+                    recordName === attackName ||
+                    recordName.indexOf(attackName) >= 0 ||
+                    (!!nodeName && attackName.indexOf(nodeName) >= 0);
+            };
+
+            const walk = (node) => {
+                if (!node || typeof node !== 'object') return null;
+
+                if (Array.isArray(node)) return node.reduce((found, child) => found || walk(child), null);
+
+                const shortId = String(node.shortID || node.shortId || '').trim();
+                if (attackId && shortId === attackId) {
+                    if (matchesName(node)) return node;
+                    if (!idOnlyNode) idOnlyNode = node;
+                }
+                if (!nameOnlyNode && node.attack && typeof node.attack === 'object' && matchesName(node)) {
+                    nameOnlyNode = node;
+                }
+
+                const keys = Object.keys(node);
+                for (let i = 0; i < keys.length; i += 1) {
+                    const found = walk(node[keys[i]]);
+                    if (found) return found;
+                }
+                return null;
+            };
+
+            for (let i = 0; i < dumpRoots.length; i += 1) {
+                const found = walk(dumpRoots[i]);
+                if (found) return found;
+            }
+            return idOnlyNode || nameOnlyNode;
+        },
+
+        abilityNameToModifierAttribute(abilityName = '') {
+            const normalized = String(abilityName || '').trim().toLowerCase();
+            if (!normalized || normalized === 'none' || normalized === 'auto' || normalized === 'spell') return '';
+
+            const map = {
+                strength: 'strength_mod',
+                str: 'strength_mod',
+                dexterity: 'dexterity_mod',
+                dex: 'dexterity_mod',
+                constitution: 'constitution_mod',
+                con: 'constitution_mod',
+                intelligence: 'intelligence_mod',
+                int: 'intelligence_mod',
+                wisdom: 'wisdom_mod',
+                wis: 'wisdom_mod',
+                charisma: 'charisma_mod',
+                cha: 'charisma_mod'
+            };
+            return map[normalized] || '';
+        },
+
+        modifierAttributeToFastKey(attributeName = '') {
+            const key = this.cleanSheetAttributeReference(attributeName).toLowerCase();
+            const map = {
+                strength_mod: 'str_mod',
+                dexterity_mod: 'dex_mod',
+                constitution_mod: 'con_mod',
+                intelligence_mod: 'int_mod',
+                wisdom_mod: 'wis_mod',
+                charisma_mod: 'cha_mod'
+            };
+            return map[key] || key;
+        },
+
+        getFastDetailValue(fastDetails = {}, attributeName = '') {
+            const key = this.modifierAttributeToFastKey(attributeName);
+            if (!key || !fastDetails || typeof fastDetails !== 'object') return '';
+            if (!Object.prototype.hasOwnProperty.call(fastDetails, key)) return '';
+            const value = fastDetails[key];
+            return value === undefined || value === null ? '' : String(value).trim();
+        },
+
+        async getCachedOrResolvedAttributeValue(characterId = '', attributes = [], attributeName = '', fastDetails = {}) {
+            const cached = this.getFastDetailValue(fastDetails, attributeName);
+            if (cached !== '') return cached;
+            return this.getResolvedAttributeValue(characterId, attributes, attributeName);
+        },
+
+        isBlankOrZeroModifier(value = '') {
+            const raw = String(value || '').trim();
+            return !raw || raw === '0' || raw === '+0' || raw === '-0';
+        },
+
+        isPositiveFlag(value = '') {
+            const raw = String(value || '').trim().toLowerCase();
+            if (!raw) return false;
+            if (['1', 'true', 'yes', 'y', 'on'].includes(raw)) return true;
+            return Utils.toInt(raw, 0) > 0;
+        },
+
+        damageTextHasModifier(value = '') {
+            return /[+-]\s*\d+/.test(String(value || '').trim());
+        },
+
+        appendDamageModifier(base = '', next = '') {
+            const rawNext = String(next || '').trim();
+            if (this.isBlankOrZeroModifier(rawNext)) return String(base || '').trim();
+
+            const current = String(base || '').trim();
+            const normalizedNext = /^[+-]?\d+$/.test(rawNext)
+                ? (Utils.toInt(rawNext, 0) >= 0 ? ('+' + String(Utils.toInt(rawNext, 0))) : String(Utils.toInt(rawNext, 0)))
+                : rawNext;
+
+            if (!current) return normalizedNext;
+            if (normalizedNext.charAt(0) === '-') return current + ' - ' + normalizedNext.slice(1);
+            return current + ' + ' + normalizedNext.replace(/^\+/, '');
+        },
+
+        async getResolvedAttributeValue(characterId = '', attributes = [], attributeName = '') {
+            const attrName = this.cleanSheetAttributeReference(attributeName);
+            if (!attrName) return '';
+
+            const directValue = this.getAttributeCurrentByName(attributes, attrName);
+            if (directValue) return directValue;
+
+            const sheetValue = String(await R20.getSheet(characterId, attrName) || '').trim();
+            return this.isRepeatingLookupError(sheetValue) ? '' : sheetValue;
+        },
+
+        async getFirstResolvedAttributeValue(characterId = '', attributes = [], attributeNames = []) {
+            const names = Array.isArray(attributeNames) ? attributeNames : [attributeNames];
+            for (let i = 0; i < names.length; i += 1) {
+                const value = await this.getResolvedAttributeValue(characterId, attributes, names[i]);
+                if (String(value || '').trim()) return String(value || '').trim();
+            }
+            return '';
+        },
+
+        modifierValueToNumber(value = '') {
+            const raw = String(value || '').trim();
+            if (!raw) return 0;
+            const match = raw.match(/[+-]?\d+/);
+            return match ? Utils.toInt(match[0], 0) : 0;
+        },
+
+        formatSignedModifier(value = 0) {
+            const numeric = Utils.toInt(value, 0);
+            return numeric >= 0 ? ('+' + String(numeric)) : String(numeric);
+        },
+
+        applyAttackSaveMeta(entry = {}, attackNode = null) {
+            if (!entry) return;
+            const saveMeta = this.extractBuilderSaveMeta(attackNode);
+            [
+                ['saveFlag', 'saveflag'],
+                ['saveFlag', 'saveFlag'],
+                ['saveAttr', 'saveattr'],
+                ['saveAttr', 'saveAttr']
+            ].forEach(([entryKey, nodeKey]) => {
+                if (attackNode && !entry[entryKey] && attackNode[nodeKey] !== undefined) {
+                    entry[entryKey] = String(attackNode[nodeKey] || '').trim();
+                }
+            });
+            if (!entry.saveFlag && saveMeta.saveFlag) entry.saveFlag = saveMeta.saveFlag;
+            if (!entry.saveAttr && saveMeta.saveAttr) entry.saveAttr = saveMeta.saveAttr;
+            if (!this.isPositiveFlag(entry.saveFlag)) entry.saveAttr = '';
+        },
+
+        buildAttackDebugEntry(entry = {}, data = {}) {
+            const attackNode = data.attackNode || null;
+            return {
+                rowKey: String(entry.rowKey || ''),
+                id: String(entry.attackId || entry.id || ''),
+                name: String(entry.attackName || entry.name || ''),
+                atkAttrBase: String(data.atkAttrBase || ''),
+                saveFlag: String(entry.saveFlag || ''),
+                saveAttr: String(entry.saveAttr || ''),
+                atkProfFlag: String(entry.atkProfFlag || ''),
+                dumpNodeFound: attackNode ? '1' : '0',
+                dumpShortId: attackNode ? String(attackNode.shortID || attackNode.shortId || '') : '',
+                dumpName: attackNode ? String(attackNode.name || '') : '',
+                dumpRecordName: attackNode ? String(attackNode.recordName || '') : '',
+                abilityBonus: String(data.builderAbility || ''),
+                abilityModAttr: String(data.abilityModAttr || ''),
+                abilityMod: String(data.abilityMod || ''),
+                dmgBase: String(entry.dmgBase || ''),
+                dmgModRaw: String(data.dmgModRaw || ''),
+                resolvedDmgMod: String(data.resolvedDmgMod || ''),
+                finalDmgMod: String(entry.dmgMod || ''),
+                proficiencyBonus: String(data.proficiencyBonus || ''),
+                attackBonus: String(entry.attackBonus || ''),
+                saveAbilityModAttr: String(data.saveAbilityModAttr || ''),
+                saveAbilityMod: String(data.saveAbilityMod || ''),
+                saveDc: String(entry.saveDc || '')
+            };
+        },
+
+        async resolveAttackDamageModifiers(entries = [], attributes = [], dumpRoots = [], characterId = '', fastDetails = {}) {
+            if (!Array.isArray(entries) || !entries.length) return entries;
+
+            for (let i = 0; i < entries.length; i += 1) {
+                const entry = entries[i];
+                if (!entry) continue;
+
+                const dmgModRaw = String(entry.dmgMod || '').trim();
+                const atkAttrBaseRaw = String(entry.atkAttrBase || '').trim();
+                const dmgModAttrName = this.cleanSheetAttributeReference(dmgModRaw);
+                const atkAttrName = this.cleanSheetAttributeReference(atkAttrBaseRaw);
+                const isSpellAttack = atkAttrName.toLowerCase() === 'spell';
+                const shouldResolveDmgMod = dmgModAttrName && /^[A-Za-z_][A-Za-z0-9_ -]*$/.test(dmgModAttrName);
+                const attackNode = this.findAttackNodeInDumpRoots(dumpRoots, entry);
+                this.applyAttackSaveMeta(entry, attackNode);
+
+                const isSaveAttack = this.isPositiveFlag(entry.saveFlag);
+                const shouldUseAttackAbility = !isSpellAttack && !isSaveAttack;
+                const builderAbility = shouldUseAttackAbility ? this.extractBuilderAttackAbility(attackNode) : '';
+                const builderAbilityModAttr = this.abilityNameToModifierAttribute(builderAbility);
+                const atkAbilityModAttr = shouldUseAttackAbility ? (this.abilityNameToModifierAttribute(atkAttrName) || atkAttrName) : '';
+                const abilityModAttr = builderAbilityModAttr || atkAbilityModAttr;
+                const saveAbilityModAttr = isSaveAttack ? this.abilityNameToModifierAttribute(entry.saveAttr) : '';
+
+                const resolvedDmgMod = shouldResolveDmgMod
+                    ? await this.getCachedOrResolvedAttributeValue(characterId, attributes, dmgModAttrName, fastDetails)
+                    : '';
+                const resolvedBuilderAbilityMod = builderAbilityModAttr
+                    ? await this.getCachedOrResolvedAttributeValue(characterId, attributes, builderAbilityModAttr, fastDetails)
+                    : '';
+                const resolvedAtkMod = (!resolvedBuilderAbilityMod && shouldUseAttackAbility && atkAbilityModAttr)
+                    ? await this.getCachedOrResolvedAttributeValue(characterId, attributes, atkAbilityModAttr, fastDetails)
+                    : '';
+                const abilityMod = resolvedBuilderAbilityMod || resolvedAtkMod;
+                const saveAbilityMod = saveAbilityModAttr
+                    ? await this.getCachedOrResolvedAttributeValue(characterId, attributes, saveAbilityModAttr, fastDetails)
+                    : '';
+
+                let combinedMod = '';
+                if (resolvedDmgMod) {
+                    combinedMod = this.appendDamageModifier(combinedMod, resolvedDmgMod);
+                } else if (!shouldResolveDmgMod && !this.isBlankOrZeroModifier(dmgModRaw)) {
+                    combinedMod = this.appendDamageModifier(combinedMod, dmgModRaw);
+                }
+
+                if (shouldUseAttackAbility && dmgModAttrName.toLowerCase() !== String(abilityModAttr || '').toLowerCase()) {
+                    combinedMod = this.appendDamageModifier(combinedMod, abilityMod);
+                }
+                entry.dmgMod = this.damageTextHasModifier(entry.dmgBase) ? '' : combinedMod;
+
+                const proficiencyBonus = (shouldUseAttackAbility && this.isPositiveFlag(entry.atkProfFlag))
+                    ? (this.getFastDetailValue(fastDetails, 'pb') || await this.getFirstResolvedAttributeValue(characterId, attributes, ['pb', 'proficiency_bonus', 'prof_bonus']))
+                    : '';
+                const saveProficiencyBonus = isSaveAttack
+                    ? (this.getFastDetailValue(fastDetails, 'pb') || await this.getFirstResolvedAttributeValue(characterId, attributes, ['pb', 'proficiency_bonus', 'prof_bonus']))
+                    : '';
+                const attackBonusValue = this.modifierValueToNumber(abilityMod) + this.modifierValueToNumber(proficiencyBonus);
+                if (abilityMod || proficiencyBonus) entry.attackBonus = this.formatSignedModifier(attackBonusValue);
+                if (isSaveAttack) {
+                    entry.saveDc = String(8 + this.modifierValueToNumber(saveAbilityMod) + this.modifierValueToNumber(saveProficiencyBonus));
+                }
+                if (builderAbility) entry.abilityModSource = builderAbility;
+                entry.__debug = this.buildAttackDebugEntry(entry, {
+                    attackNode,
+                    atkAttrBase: atkAttrBaseRaw,
+                    builderAbility,
+                    abilityModAttr,
+                    abilityMod,
+                    dmgModRaw,
+                    resolvedDmgMod,
+                    proficiencyBonus: isSaveAttack ? saveProficiencyBonus : proficiencyBonus,
+                    saveAbilityModAttr,
+                    saveAbilityMod
+                });
+            }
+
+            return entries;
+        },
+
+        async resolveSpellModifiers(entries = [], attributes = [], dumpRoots = [], characterId = '', fastDetails = {}) {
+            if (!Array.isArray(entries) || !entries.length) return entries;
+
+            const characterClass = String((fastDetails && fastDetails.class) || this.getAttributeCurrentByName(attributes, 'class') || '').trim();
+            const race = String((fastDetails && fastDetails.race) || this.getAttributeCurrentByName(attributes, 'race') || '').trim();
+            const proficiencyBonus = this.getFastDetailValue(fastDetails, 'pb') ||
+                await this.getFirstResolvedAttributeValue(characterId, attributes, ['pb', 'proficiency_bonus', 'prof_bonus']);
+
+            for (let i = 0; i < entries.length; i += 1) {
+                const entry = entries[i];
+                if (!entry) continue;
+
+                const spellDamageType = this.normalizeLookupText(entry.spellDamageType || '');
+                const spellcastingAbility = this.resolveSpellOriginAbility({
+                    spellClass: entry.spellClass,
+                    characterClass,
+                    race,
+                    dumpRoots,
+                    fastDetails
+                });
+                const spellcastingModAttr = this.abilityNameToModifierAttribute(spellcastingAbility);
+                const spellcastingMod = spellcastingModAttr
+                    ? await this.getCachedOrResolvedAttributeValue(characterId, attributes, spellcastingModAttr, fastDetails)
+                    : '';
+
+                entry.spellcastingAbility = spellcastingAbility;
+                entry.spellcastingMod = spellcastingMod;
+
+                if (spellDamageType === 'spell attack') {
+                    entry.spellSave = '';
+                    entry.spellSaveDc = '';
+                    entry.spellAttackBonus = this.formatSignedModifier(
+                        this.modifierValueToNumber(proficiencyBonus) + this.modifierValueToNumber(spellcastingMod)
+                    );
+                } else if (spellDamageType === 'spell save') {
+                    const saveAbility = this.canonicalAbilityName(entry.spellSave);
+                    entry.spellSave = saveAbility || String(entry.spellSave || '').trim();
+                    entry.spellAttackBonus = '';
+                    entry.spellSaveDc = String(8 + this.modifierValueToNumber(proficiencyBonus) + this.modifierValueToNumber(spellcastingMod));
+                } else {
+                    entry.spellDamage = '';
+                    entry.spellSave = '';
+                    entry.spellAttackBonus = '';
+                    entry.spellSaveDc = '';
+                }
+
+                entry.__debug = {
+                    rowKey: String(entry.rowKey || ''),
+                    id: String(entry.spellId || entry.id || ''),
+                    name: String(entry.spellName || entry.name || ''),
+                    level: this.normalizeSpellLevel(entry.spellLevel || ''),
+                    spellClass: String(entry.spellClass || ''),
+                    spellDamageType: String(entry.spellDamageType || ''),
+                    spellDamage: String(entry.spellDamage || ''),
+                    spellSave: String(entry.spellSave || ''),
+                    spellcastingAbility,
+                    spellcastingModAttr,
+                    spellcastingMod,
+                    proficiencyBonus,
+                    spellAttackBonus: String(entry.spellAttackBonus || ''),
+                    spellSaveDc: String(entry.spellSaveDc || ''),
+                    spellDcFormula: spellDamageType === 'spell save' ? '8 + proficiencyBonus + spellcastingMod' : ''
+                };
+            }
+
+            return entries;
+        },
+
+        async getRepeatingSheetValue(characterId = '', prefix = '', rowKey = '', suffixes = []) {
+            for (let i = 0; i < suffixes.length; i += 1) {
+                const value = String(await R20.getSheet(characterId, prefix + '_' + rowKey + '_' + suffixes[i]) || '').trim();
+                if (this.isRepeatingLookupError(value)) return '';
+                if (value) return value;
+            }
+            return '';
+        },
+
+        async getRepeatingEntries(characterId = '', type = '', options = {}) {
+            const config = this.getRepeatingConfig(type);
+            if (!config) return [];
+
+            const attributes = Array.isArray(options.attributes) ? options.attributes : this.getCharacterAttributes(characterId);
+            const sharedDumpRoots = Array.isArray(options.dumpRoots) ? options.dumpRoots : this.getCharacterSheetDumpRoots(attributes);
+            const dumpRoots = type === 'attack' ? sharedDumpRoots : [];
+            const spellDumpRoots = type === 'spell' ? sharedDumpRoots : [];
+            const fastDetails = options.fastDetails && typeof options.fastDetails === 'object' ? options.fastDetails : {};
+            const byName = {};
+            const idByRow = {};
+            const extraByRow = {};
+            const nameRegex = new RegExp('^' + config.prefix + '_(.+)_' + config.nameSuffix + '$');
+            const idRegex = new RegExp('^' + config.prefix + '_(.+)_' + config.idSuffix + '$');
+            const extraFields = config.extraFields || {};
+            const extraKeys = Object.keys(extraFields);
+
+            for (let i = 0; i < attributes.length; i += 1) {
+                const attr = attributes[i];
+                const attrName = String(attr.get('name') || '').trim();
+                let match = attrName.match(nameRegex);
+                if (match) {
+                    const rowKey = String(match[1] || '').trim();
+                    if (rowKey) byName[rowKey] = this.getAttributeCurrent(attr);
+                    continue;
+                }
+
+                match = attrName.match(idRegex);
+                if (match) {
+                    const rowKey = String(match[1] || '').trim();
+                    if (rowKey) idByRow[rowKey] = this.getAttributeCurrent(attr);
+                    continue;
+                }
+
+                for (let x = 0; x < extraKeys.length; x += 1) {
+                    const key = extraKeys[x];
+                    const suffixes = this.getRepeatingFieldSuffixes(extraFields[key]);
+                    for (let s = 0; s < suffixes.length; s += 1) {
+                        const extraRegex = new RegExp('^' + config.prefix + '_(.+)_' + suffixes[s] + '$');
+                        match = attrName.match(extraRegex);
+                        if (!match) continue;
+                        const rowKey = String(match[1] || '').trim();
+                        if (!rowKey) continue;
+                        extraByRow[rowKey] = extraByRow[rowKey] || {};
+                        extraByRow[rowKey][key] = this.getAttributeCurrent(attr);
+                        break;
+                    }
+                }
+            }
+
+            const entries = Object.keys(byName)
+                .map((rowKey) => {
+                    const id = String(idByRow[rowKey] || rowKey).trim();
+                    const name = String(byName[rowKey] || id || config.fallbackName).trim();
+                    const entry = { rowKey };
+                    entry[config.idKey] = id;
+                    entry[config.nameKey] = name;
+                    const extra = extraByRow[rowKey] || {};
+                    for (let x = 0; x < extraKeys.length; x += 1) {
+                        const key = extraKeys[x];
+                        const suffixes = this.getRepeatingFieldSuffixes(extraFields[key]);
+                        entry[key] = String(extra[key] || this.getRepeatingFieldValueBySuffixes(attributes, config.prefix, rowKey, suffixes) || '').trim();
+                    }
+                    return entry;
+                })
+                .filter((entry) => entry[config.idKey] && entry[config.nameKey])
+                .filter((entry) => type !== 'attack' || String(entry.atkAttrBase || '').trim().toLowerCase() !== 'spell')
+                .sort((a, b) => type === 'spell'
+                    ? (this.spellLevelSortValue(a.spellLevel) - this.spellLevelSortValue(b.spellLevel) ||
+                        String(a[config.nameKey] || '').localeCompare(String(b[config.nameKey] || '')))
+                    : String(a[config.nameKey] || '').localeCompare(String(b[config.nameKey] || '')));
+
+            if (entries.length) {
+                if (type === 'attack') await this.resolveAttackDamageModifiers(entries, attributes, dumpRoots, characterId, fastDetails);
+                if (type === 'spell') await this.resolveSpellModifiers(entries, attributes, spellDumpRoots, characterId, fastDetails);
+                return entries;
+            }
+
+            const indexedEntries = [];
+            for (let index = 0; index < 50; index += 1) {
+                const rowKey = '$' + String(index);
+                const name = String(await R20.getSheet(characterId, config.prefix + '_' + rowKey + '_' + config.nameSuffix) || '').trim();
+                const id = String(await R20.getSheet(characterId, config.prefix + '_' + rowKey + '_' + config.idSuffix) || '').trim();
+                if (this.isRepeatingLookupError(name) || this.isRepeatingLookupError(id)) break;
+                if (!name && !id) continue;
+
+                const entry = { rowKey };
+                entry[config.idKey] = id || rowKey;
+                entry[config.nameKey] = name || id || (config.fallbackName + ' ' + String(index + 1));
+                for (let x = 0; x < extraKeys.length; x += 1) {
+                    const key = extraKeys[x];
+                    if (type === 'attack' && key === 'saveAttr' && !this.isPositiveFlag(entry.saveFlag)) {
+                        entry[key] = '';
+                        continue;
+                    }
+                    if (type === 'spell') {
+                        const spellDamageType = this.normalizeLookupText(entry.spellDamageType || '');
+                        if (key === 'spellDamage' && spellDamageType !== 'spell attack' && spellDamageType !== 'spell save') {
+                            entry[key] = '';
+                            continue;
+                        }
+                        if (key === 'spellSave' && spellDamageType !== 'spell save') {
+                            entry[key] = '';
+                            continue;
+                        }
+                    }
+                    const suffixes = this.getRepeatingFieldSuffixes(extraFields[key]);
+                    entry[key] = await this.getRepeatingSheetValue(characterId, config.prefix, rowKey, suffixes);
+                }
+                indexedEntries.push(entry);
+            }
+
+            const filteredIndexedEntries = indexedEntries
+                .filter((entry) => type !== 'attack' || String(entry.atkAttrBase || '').trim().toLowerCase() !== 'spell');
+            if (type === 'attack') await this.resolveAttackDamageModifiers(filteredIndexedEntries, attributes, dumpRoots, characterId, fastDetails);
+            if (type === 'spell') {
+                await this.resolveSpellModifiers(filteredIndexedEntries, attributes, spellDumpRoots, characterId, fastDetails);
+                filteredIndexedEntries.sort((a, b) =>
+                    this.spellLevelSortValue(a.spellLevel) - this.spellLevelSortValue(b.spellLevel) ||
+                    String(a[config.nameKey] || '').localeCompare(String(b[config.nameKey] || ''))
+                );
+            }
+            return filteredIndexedEntries;
+        },
+
+        async getRepeatingAttacks(characterId = '', options = {}) {
+            return this.getRepeatingEntries(characterId, 'attack', options);
+        },
+
+        async getRepeatingSpells(characterId = '', options = {}) {
+            return this.getRepeatingEntries(characterId, 'spell', options);
+        },
+
+        async buildAttackMacro(characterId = '', tokenId = '') {
+            const safeCharacterId = String(characterId || '').trim();
+            const safeTokenId = String(tokenId || '').trim();
+            const attacks = await this.getRepeatingAttacks(safeCharacterId);
+            if (!safeCharacterId || !safeTokenId || !attacks.length) return '';
+
+            const options = attacks.map((attack) => {
+                const label = this.macroQuerySafeText(attack.attackName || attack.attackId);
+                const attackId = this.macroQuerySafeText(attack.attackId);
+                const action = this.buildAttackAction(safeCharacterId, attackId, { encodeForQuery: true });
+                return label + ',' + action;
+            });
+
+            return '?{Attack|' + options.join('|') + '}';
         },
 
         getCharacterAbilities(characterId = '') {
@@ -5620,6 +7455,40 @@ const TnT = (() => {
             if (!key) return null;
             const abilities = this.getCharacterAbilities(characterId);
             return abilities.find((ability) => String(ability.get('name') || '').trim().toLowerCase() === key) || null;
+        },
+
+        removeObject(object) {
+            if (!object || !Utils.isFunction(object.remove)) return false;
+            object.remove();
+            return true;
+        },
+
+        clearManagedAbilities(characterId = '') {
+            const safeCharacterId = String(characterId || '').trim();
+            const names = this.managedAbilityNames.map((name) => String(name || '').trim().toLowerCase());
+            const abilities = this.getCharacterAbilities(safeCharacterId);
+            const removed = [];
+
+            for (let i = 0; i < abilities.length; i += 1) {
+                const ability = abilities[i];
+                const name = String(ability.get('name') || '').trim();
+                if (!names.includes(name.toLowerCase())) continue;
+                if (this.removeObject(ability)) removed.push(name);
+            }
+
+            return removed;
+        },
+
+        clearCharacterSetup(characterId = '') {
+            const safeCharacterId = String(characterId || '').trim();
+            if (!safeCharacterId) return { ok: false, message: 'Character is required.' };
+
+            const removedAbilities = this.clearManagedAbilities(safeCharacterId);
+            return {
+                ok: true,
+                removedAbilities,
+                abilityCount: removedAbilities.length,
+            };
         },
 
         upsertCharacterAbility(characterId = '', ability = {}) {
@@ -5648,11 +7517,12 @@ const TnT = (() => {
             return { ok: !!created, action: created ? 'created' : 'failed', name, ability: created };
         },
 
-        initCharacterAbilities(characterId = '') {
+        async initCharacterAbilities(characterId = '', tokenId = '') {
             const safeCharacterId = String(characterId || '').trim();
             if (!safeCharacterId) return { ok: false, message: 'Character is required.' };
 
-            const results = this.getInitAbilities().map((ability) => this.upsertCharacterAbility(safeCharacterId, ability));
+            const abilities = await this.getInitAbilities(safeCharacterId, tokenId);
+            const results = abilities.map((ability) => this.upsertCharacterAbility(safeCharacterId, ability));
             const failed = results.filter((result) => !result.ok);
             return {
                 ok: !failed.length,
@@ -5694,7 +7564,9 @@ const TnT = (() => {
                     : 'Item Catalog: !tntItem {search|details}.';
             }
             if (name === 'token') {
-                return 'Token setup: !tntToken init.';
+                return isGM
+                    ? 'Token: !tntToken {init|clear|attacks|refreshattacks|refreshspells}.'
+                    : 'Token: !tntToken {attacks|refreshattacks|refreshspells}.';
             }
             return String(command.description || '');
         },
@@ -5745,7 +7617,218 @@ const TnT = (() => {
             const action = String((ctx.args && ctx.args[0]) || '').trim().toLowerCase();
 
             if (!ACTIONS.TOKEN.includes(action)) {
-                Render.sendWhisperMessage(who, 'Command Usage', 'Use: <b>!tntToken init</b>', 'warning');
+                Render.sendWhisperMessage(
+                    who,
+                    'Command Usage',
+                    ctx.isGM ? 'Use: <b>!tntToken {init|clear|attacks|refreshattacks|refreshspells}</b>' : 'Use: <b>!tntToken {attacks|refreshattacks|refreshspells}</b>',
+                    'warning'
+                );
+                return;
+            }
+
+            if (action === 'roll') {
+                const rollType = String((ctx.args && ctx.args[1]) || '').trim().toLowerCase();
+                const characterId = String((ctx.args && ctx.args[2]) || '').trim();
+                const actionId = TokenService.cleanRepeatingActionId((ctx.args && ctx.args[3]) || '');
+                const spellLevel = TokenService.normalizeSpellLevel((ctx.args && ctx.args[4]) || '');
+                const character = characterId ? getObj('character', characterId) : null;
+
+                if (!character || !actionId || (rollType !== 'attack' && rollType !== 'spell')) {
+                    Render.sendWhisperMessage(
+                        who,
+                        'Token Action',
+                        'Invalid token action request.',
+                        'failure'
+                    );
+                    return;
+                }
+
+                const access = R20.getCharacterAccessFlags(character, ctx.playerId, ctx.isGM);
+                if (!access.hasAccess) {
+                    Render.sendWhisperMessage(
+                        who,
+                        'Access Denied',
+                        'You need both journal and control access to this character.',
+                        'failure'
+                    );
+                    return;
+                }
+
+                const macro = rollType === 'attack'
+                    ? '%{' + characterId + '|repeating_attack("' + actionId + '", "attack")}'
+                    : '%{' + characterId + '|repeating_spell-' + spellLevel + '("' + actionId + '", "spell")}';
+                R20.send(macro);
+                return;
+            }
+
+            if ((action === 'init' || action === 'clear') && !ctx.isGM) {
+                Render.sendWhisperMessage(who, 'GM Command', 'Only a GM can initialize or clear token setup.', 'failure');
+                return;
+            }
+
+            if (action === 'attacks') {
+                const token = R20.getSelectedToken(ctx.msg);
+                const accessResult = R20.requireSourceTokenAccess({
+                    sourceTokenId: token && token.id,
+                    playerId: ctx.playerId,
+                    isGM: ctx.isGM,
+                    actionLabel: 'view attacks from'
+                });
+
+                if (!accessResult.ok) {
+                    R20.sendSourceAccessFailure(who, 'Token Attacks', accessResult);
+                    return;
+                }
+
+                const character = accessResult.access.character;
+                const characterName = String(character.get('name') || accessResult.access.tokenName || 'Character');
+                const rawAttackList = await R20.getSheet(character.id, 'user.T&T_attack_list');
+                const attacks = await TokenService.getStoredAttacks(character.id);
+                const spells = await TokenService.getStoredSpells(character.id);
+                if (!String(rawAttackList || '').trim() && !attacks.length && !spells.length) {
+                    Render.sendWhisperMessage(
+                        who,
+                        'Token Attacks',
+                        'No attacks or spells were found for <b>' + Utils.escapeHtml(characterName) + '</b>.',
+                        'warning'
+                    );
+                    return;
+                }
+
+                const renderOptions = {
+                    title: characterName + ' Actions',
+                    tokenName: accessResult.access.tokenName || characterName,
+                    characterId: character.id,
+                    tokenId: accessResult.access.token.id,
+                    tokenRef: R20.makeTokenRef(accessResult.access.token),
+                    rawAttributeName: 'user.T&T_attack_list',
+                    rawAttributeValue: rawAttackList
+                };
+                const attackCard = Render.showTokenAttackList(attacks, renderOptions);
+                const spellCard = Render.showTokenSpellList(spells, renderOptions);
+                if (attackCard) R20.whisper(who, attackCard);
+                if (spellCard) R20.whisper(who, spellCard);
+                return;
+            }
+
+            if (action === 'refreshattacks') {
+                const selectedToken = R20.getSelectedToken(ctx.msg);
+                const tokenRef = String((ctx.args && ctx.args[1]) || '').trim();
+                const sourceTokenId = tokenRef || (selectedToken && selectedToken.id);
+                const accessResult = R20.requireSourceTokenAccess({
+                    sourceTokenId,
+                    playerId: ctx.playerId,
+                    isGM: ctx.isGM,
+                    actionLabel: 'refresh attacks from'
+                });
+
+                if (!accessResult.ok) {
+                    R20.sendSourceAccessFailure(who, 'T&T Refresh Attacks', accessResult);
+                    return;
+                }
+
+                const character = accessResult.access.character;
+                const tokenName = String(accessResult.access.tokenName || character.get('name') || 'Character');
+                Render.sendWhisperMessage(who, 'T&T Refresh Attacks', 'This may take a few seconds.', 'success');
+
+                const attributes = TokenService.getCharacterAttributes(character.id);
+                const dumpRoots = TokenService.getCharacterSheetDumpRoots(attributes);
+                const fastDetails = await TokenService.buildFastDetails(character.id, attributes, dumpRoots);
+                const attacks = await TokenService.getRepeatingAttacks(character.id, {
+                    attributes,
+                    dumpRoots,
+                    fastDetails
+                });
+                const result = await TokenService.updateAttackListAttribute(character.id, attacks);
+                if (!result || !result.ok) {
+                    Render.sendWhisperMessage(
+                        who,
+                        'T&T Refresh Attacks',
+                        Utils.escapeHtml((result && result.message) || 'Unable to update attack list.'),
+                        'failure'
+                    );
+                    return;
+                }
+
+                const attackCard = Render.showTokenAttackList(attacks, {
+                    title: tokenName + ' Actions',
+                    tokenName,
+                    characterId: character.id,
+                    tokenId: accessResult.access.token.id,
+                    tokenRef: R20.makeTokenRef(accessResult.access.token)
+                });
+                if (attackCard) {
+                    R20.whisper(who, attackCard);
+                    return;
+                }
+
+                Render.sendWhisperMessage(
+                    who,
+                    'T&T Refresh Attacks',
+                    'No attacks were found for <b>' + Utils.escapeHtml(tokenName) + '</b>.',
+                    'warning'
+                );
+                return;
+            }
+
+            if (action === 'refreshspells') {
+                const selectedToken = R20.getSelectedToken(ctx.msg);
+                const tokenRef = String((ctx.args && ctx.args[1]) || '').trim();
+                const sourceTokenId = tokenRef || (selectedToken && selectedToken.id);
+                const accessResult = R20.requireSourceTokenAccess({
+                    sourceTokenId,
+                    playerId: ctx.playerId,
+                    isGM: ctx.isGM,
+                    actionLabel: 'refresh spells from'
+                });
+
+                if (!accessResult.ok) {
+                    R20.sendSourceAccessFailure(who, 'T&T Refresh Spells', accessResult);
+                    return;
+                }
+
+                const character = accessResult.access.character;
+                const tokenName = String(accessResult.access.tokenName || character.get('name') || 'Character');
+                Render.sendWhisperMessage(who, 'T&T Refresh Spells', 'This may take a few seconds.', 'success');
+
+                const attributes = TokenService.getCharacterAttributes(character.id);
+                const dumpRoots = TokenService.getCharacterSheetDumpRoots(attributes);
+                const fastDetails = await TokenService.buildFastDetails(character.id, attributes, dumpRoots);
+                const spells = await TokenService.getRepeatingSpells(character.id, {
+                    attributes,
+                    dumpRoots,
+                    fastDetails
+                });
+                const listResult = await TokenService.updateSpellListAttribute(character.id, spells);
+                const dumpResult = await TokenService.updateSpellDumpAttribute(character.id, dumpRoots, spells);
+                if (!listResult || !listResult.ok || !dumpResult || !dumpResult.ok) {
+                    Render.sendWhisperMessage(
+                        who,
+                        'T&T Refresh Spells',
+                        Utils.escapeHtml((listResult && listResult.message) || (dumpResult && dumpResult.message) || 'Unable to update spell list.'),
+                        'failure'
+                    );
+                    return;
+                }
+
+                const spellCard = Render.showTokenSpellList(spells, {
+                    title: tokenName + ' Actions',
+                    tokenName,
+                    characterId: character.id,
+                    tokenId: accessResult.access.token.id,
+                    tokenRef: R20.makeTokenRef(accessResult.access.token)
+                });
+                if (spellCard) {
+                    R20.whisper(who, spellCard);
+                    return;
+                }
+
+                Render.sendWhisperMessage(
+                    who,
+                    'T&T Refresh Spells',
+                    'No spells were found for <b>' + Utils.escapeHtml(tokenName) + '</b>.',
+                    'warning'
+                );
                 return;
             }
 
@@ -5757,8 +7840,18 @@ const TnT = (() => {
                     return;
                 }
 
-                const result = TokenService.initCharacterAbilities(character.id);
-                const characterName = Utils.escapeHtml(String(character.get('name') || token.get('name') || 'Character'));
+                const rawTokenName = String(token.get('name') || character.get('name') || 'Character');
+                const characterName = Utils.escapeHtml(String(character.get('name') || rawTokenName));
+                Render.sendWhisperMessage(
+                    'GM',
+                    'T&T Token Initialization',
+                    'Preparing ' +
+                    Html.span(Utils.escapeHtml(rawTokenName), 'color:' + CONFIG.DEFAULT_TEXT_CHARACTER_COLOR + ';font-weight:700;') +
+                    '\'s Trinkets and Trackers.' +
+                    '<div>This may take a few seconds.</div>',
+                    'success'
+                );
+                const result = await TokenService.initCharacterAbilities(character.id, token.id);
                 if (!result.ok) {
                     Render.sendWhisperMessage(
                         who,
@@ -5769,15 +7862,78 @@ const TnT = (() => {
                     return;
                 }
 
+                const setupAttributes = TokenService.getCharacterAttributes(character.id);
+                const setupDumpRoots = TokenService.getCharacterSheetDumpRoots(setupAttributes);
+                const fastDetails = await TokenService.buildFastDetails(character.id, setupAttributes, setupDumpRoots);
+                const attacks = await TokenService.getRepeatingAttacks(character.id, {
+                    attributes: setupAttributes,
+                    dumpRoots: setupDumpRoots,
+                    fastDetails
+                });
+                const spells = await TokenService.getRepeatingSpells(character.id, {
+                    attributes: setupAttributes,
+                    dumpRoots: setupDumpRoots,
+                    fastDetails
+                });
+                const attributeResults = [
+                    await TokenService.updateFastDetailsAttribute(character.id, fastDetails),
+                    await TokenService.updateAttackListAttribute(character.id, attacks),
+                    await TokenService.updateSpellListAttribute(character.id, spells),
+                    await TokenService.updateSpellDumpAttribute(character.id, setupDumpRoots, spells)
+                ];
+
                 const abilityList = result.results
                     .map((entry) => Utils.escapeHtml(entry.name) + ' <span style="color:rgb(165,165,165);">(' + Utils.escapeHtml(entry.action) + ')</span>')
+                    .join('<br>');
+                const attributeSet = attributeResults.filter((entry) => entry && entry.ok).length;
+                const attributeFailed = attributeResults.filter((entry) => !entry || !entry.ok).length;
+                const attributeList = attributeResults
+                    .map((entry) => {
+                        const status = (entry && entry.ok) ? entry.action : 'failed';
+                        const name = (entry && entry.name) ? entry.name : 'unknown';
+                        const message = entry && entry.message ? (': ' + String(entry.message)) : '';
+                        return Utils.escapeHtml(name) + ' <span style="color:rgb(165,165,165);">(' + Utils.escapeHtml(status + message) + ')</span>';
+                    })
                     .join('<br>');
                 Render.sendWhisperMessage(
                     who,
                     'Token Setup',
-                    'Initialized token actions for <b>' + characterName + '</b>.<br>' +
+                    'T&T Setup for <b>' + characterName + '</b>.<br>' +
                     'Created: <b>' + Utils.escapeHtml(String(result.created)) + '</b> | Updated: <b>' + Utils.escapeHtml(String(result.updated)) + '</b><br><br>' +
-                    abilityList,
+                    abilityList +
+                    '<br><br><b>Attributes</b><br>' +
+                    'Set: <b>' + Utils.escapeHtml(String(attributeSet)) + '</b> | Failed: <b>' + Utils.escapeHtml(String(attributeFailed)) + '</b><br><br>' +
+                    attributeList,
+                    'success'
+                );
+                return;
+            }
+
+            if (action === 'clear') {
+                const token = R20.getSelectedToken(ctx.msg);
+                const character = R20.getCharacterFromToken(token);
+                if (!token || !character) {
+                    Render.sendWhisperMessage(who, 'Token Setup', 'Select a token linked to a character.', 'warning');
+                    return;
+                }
+
+                const characterName = Utils.escapeHtml(String(character.get('name') || token.get('name') || 'Character'));
+                const result = TokenService.clearCharacterSetup(character.id);
+                if (!result.ok) {
+                    Render.sendWhisperMessage(
+                        who,
+                        'Token Setup',
+                        Utils.escapeHtml(result.message || 'Unable to clear token setup.'),
+                        'failure'
+                    );
+                    return;
+                }
+
+                Render.sendWhisperMessage(
+                    who,
+                    'Token Setup Cleared',
+                    'Cleared T&T for <b>' + Html.span(characterName, 'color:' + CONFIG.DEFAULT_TEXT_CHARACTER_COLOR + ';') + '</b>.' +
+                    '<div>' + 'Macros removed: <b>' + Utils.escapeHtml(String(result.abilityCount)) + '</b>.</div>',
                     'success'
                 );
             }
@@ -5902,6 +8058,7 @@ const TnT = (() => {
                 const cpRaw = await R20.getSheet(characterObj.id, 'cp');
                 const spRaw = await R20.getSheet(characterObj.id, 'sp');
                 const gpRaw = await R20.getSheet(characterObj.id, 'gp');
+                const sourceTokenRef = R20.makeTokenRef(sourceTokenObj);
 
                 const tokenDisplayName = Utils.asString(
                     (sourceTokenObj && sourceTokenObj.get('name')) ||
@@ -5912,14 +8069,14 @@ const TnT = (() => {
                     cp: cpRaw,
                     sp: spRaw,
                     gp: gpRaw,
-                    sourceTokenId: (sourceTokenObj && sourceTokenObj.id) ? sourceTokenObj.id : ''
+                    sourceTokenId: sourceTokenRef
                 });
 
                 R20.whisper(who, Render.showItemsList(items, {
                     title: tokenDisplayName + ' Inventory',
                     walletHtml: walletHtml,
                     menuType: 'inventory',
-                    sourceTokenId: (sourceTokenObj && sourceTokenObj.id) ? sourceTokenObj.id : ''
+                    sourceTokenId: sourceTokenRef
                 }));
             };
 
@@ -6194,12 +8351,18 @@ const TnT = (() => {
                 }
 
                 const renderTitle = 'Item Used';
-                const sourceTokenId = String(useArgs[0] || '').trim();
+                let sourceTokenId = String(useArgs[0] || '').trim();
                 const targetTokenId = String(useArgs[1] || '').trim();
                 const itemName = useArgs.slice(2).join(' ').trim();
                 if (!sourceTokenId || !targetTokenId || !itemName) {
                     Render.sendWhisperMessage(who, renderTitle, 'Missing source token, target token, or item name.', 'failure');
                     return;
+                }
+
+                const sourceResolved = R20.resolveTokenRef(sourceTokenId);
+                const targetResolved = R20.resolveTokenRef(targetTokenId);
+                if (!sourceResolved.token && targetResolved.token) {
+                    sourceTokenId = targetTokenId;
                 }
 
                 const useResult = await InventoryService.useInventoryItem({
@@ -6222,6 +8385,10 @@ const TnT = (() => {
 
                 const sourceContext = R20.getTokenContext(sourceTokenId, sourceTokenId);
                 const targetContext = R20.getTokenContext(targetTokenId, targetTokenId);
+                const isSelfTarget = !!(
+                    (sourceContext.characterId && targetContext.characterId && sourceContext.characterId === targetContext.characterId) ||
+                    (sourceContext.tokenId && targetContext.tokenId && sourceContext.tokenId === targetContext.tokenId)
+                );
                 const globalNarrative = Render.buildInventoryUseNarrative({
                     sourceName: sourceContext.tokenName,
                     targetName: targetContext.tokenName,
@@ -6232,7 +8399,7 @@ const TnT = (() => {
                     narrativeValue: useResult.effectResult && useResult.effectResult.narrativeValue,
                     rollData: useResult.effectResult && useResult.effectResult.roll,
                     effect: useResult.effect,
-                    isSelf: sourceTokenId === targetTokenId
+                    isSelf: isSelfTarget
                 });
                 Render.sendPublicMessage(renderTitle, globalNarrative);
 
@@ -7149,11 +9316,11 @@ const TnT = (() => {
 
             Registry.registerCommand(new ChatCommand({
                 name: 'Token',
-                description: 'Token setup: !tntToken init.',
+                description: 'Token: !tntToken {init|clear|attacks|refreshattacks|refreshspells}.',
                 trigger: '!tntToken',
-                useToken: true,
+                useToken: false,
                 enabled: true,
-                gmOnly: true,
+                gmOnly: false,
                 callback: Handlers.token
             }));
             

@@ -9,7 +9,7 @@ not done, the script will warn the GM in chat and will not register its commands
 
 ## What This Script Does
 
-`TrinketsAndTrackers.js` is a Roll20 API script for managing character inventory,
+`Trinkets&Trackers.js` is a Roll20 API script for managing character inventory,
 currency, item catalogs, and shops in a D&D game.
 
 It includes:
@@ -24,7 +24,7 @@ It includes:
 
 ## Repository Files
 
-- `TrinketsAndTrackers.js`: the main Roll20 API / One-Click Install script.
+- `Trinkets&Trackers.js`: the main Roll20 API / One-Click Install script.
 - `T&T Items Catalog.json`: the base item catalog.
 - `T&T Items Template.json`: the base item template data used when creating
   inventory entries.
@@ -32,7 +32,7 @@ It includes:
 
 ## Installation
 
-1. Install or add `TrinketsAndTrackers.js` as a Roll20 API Script / Mod.
+1. Install or add `Trinkets&Trackers.js` as a Roll20 API Script / Mod.
 2. In Roll20, go to **Mod Library**.
 3. Set **API Sandbox Version** to **Experimental**.
 4. Prepare the three `T&T` handouts described below.
