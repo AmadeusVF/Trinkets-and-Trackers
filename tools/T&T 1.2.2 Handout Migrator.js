@@ -3,8 +3,8 @@
  * @File        T&T 1.2.2 Handout Migrator.js
  * @Description Temporary Roll20 API helper to migrate old T&T 1.2.2 handouts
  *              into the modern T&T Portable Database handout.
- * @Author      AmadeusVF / Codex
- * @Version     0.1.0
+ * @Author      AmadeusVF
+ * @Version     0.0.1
  * =========================================================
  *
  * Usage:
