@@ -1,8 +1,0 @@
-{
-  "version": "2.0.0",
-  "settings": {
-    "DEBUG": false,
-    "LANGUAGE": "en",
-    "CHAT_BACKGROUND_IMAGE_URL": "https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTEyL3Jhd3BpeGVsX29mZmljZV80Nl9ibGFja193YWxscGFwZXJfbW9ub2Nocm9tZV9jaGluZXNlX2RyYWdvbl8yNmY3MzllOS1mYzkwLTQ3MDEtYjdmNS01NjFmMTQwMjc1OGRfMS5qcGc.jpg"
-  }
-}
