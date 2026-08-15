@@ -46,7 +46,7 @@
  *   Script Enable
  *     OFF disables all reading and marker reduction.
  *
- *   Reduce Timing when turn
+ *   Reduce Counter when turn
  *     START reduces the token that just started its turn.
  *     END reduces the token that just finished its turn.
  *
@@ -445,7 +445,7 @@
                     toggleButton(settings.enabled, COMMANDS[0] + " toggle enabled")
                 ) +
                 settingRow(
-                    "Reduce Timing when turn",
+                    "Reduce counter when turn",
                     timingButton(getReduceTiming(), COMMANDS[0] + " toggle timing")
                 ) +
                 settingRow(
