@@ -2,7 +2,7 @@
  * Resource Quick Manager
  * Roll20 2024 character sheet helper.
  *
- * Commands (GM only, selected token required):
+ * Commands (player access disabled by default, selected token required):
  *   !resource scan
  *   !resource get Resource Name
  *   !resource set Resource Name 3
@@ -12,6 +12,12 @@
  *   !resource setpublic Resource Name 3
  *   !resource addpublic Resource Name 1
  *   !resource usepublic Resource Name 1
+ * GM-only whisper commands (GM + token/character controller):
+ *   !resource getwhisper Resource Name
+ *   !resource setwhisper Resource Name 3
+ *   !resource addwhisper Resource Name 1
+ *   !resource usewhisper Resource Name 1
+ *   !resource players true/false   (GM only; resets to false on sandbox restart)
  *
  * Add [characterId] after the action to target a character directly:
  *   !resource usepublic [-CharacterId] Resource Name 1
@@ -22,7 +28,7 @@ const ResourceQuickManager = (() => {
 
     const META = Object.freeze({
         NAME: 'Resource Quick Manager',
-        VERSION: '1.4.4',
+        VERSION: '1.4.5',
         COMMAND: '!resource',
         DEVELOPER: 'AmadeusVF'
     });
@@ -38,6 +44,17 @@ const ResourceQuickManager = (() => {
     });
 
     const locks = Object.create(null);
+
+    // Runtime-only permission. Intentionally not stored in Roll20 state.
+    // Every API sandbox restart returns player command access to false.
+    const Access = {
+        playersEnabled: false,
+
+        setPlayersEnabled(value) {
+            this.playersEnabled = value === true;
+            return this.playersEnabled;
+        }
+    };
 
     const Logger = {
         info(...args) {
@@ -230,8 +247,86 @@ const ResourceQuickManager = (() => {
             sendChat(CONFIG.CHAT_SPEAKER, this.card(title, body, 'normal', { iconUrl }));
         },
 
-        help(message = '') {
-            const body = (message
+        playerDisplayName(playerId = '') {
+            const safePlayerId = String(playerId || '').trim();
+            if (!safePlayerId) return '';
+            const player = getObj('player', safePlayerId);
+            if (!player) return '';
+            return String(player.get('_displayname') || player.get('displayname') || '').trim();
+        },
+
+        sendToPlayer(playerId = '', title = '', body = '', type = 'normal', options = {}) {
+            const displayName = this.playerDisplayName(playerId);
+            if (!displayName) return false;
+            const safeWhisperName = displayName.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+            sendChat(
+                CONFIG.CHAT_SPEAKER,
+                '/w "' + safeWhisperName + '" ' + this.card(title, body, type, options),
+                null,
+                { noarchive: true }
+            );
+            return true;
+        },
+
+        sendToActor(actor = {}, title = '', body = '', type = 'normal', options = {}) {
+            if (actor && actor.isGM === false && actor.playerId) {
+                return this.sendToPlayer(actor.playerId, title, body, type, options);
+            }
+            this.send(title, body, type, options);
+            return true;
+        },
+
+        sendPlayerAndGM(playerId = '', title = '', body = '', type = 'normal', options = {}) {
+            this.send(title, body, type, options);
+            this.sendToPlayer(playerId, title, body, type, options);
+        },
+
+        whisperTargets(ctx = {}) {
+            const ids = Object.create(null);
+            const addControllers = (value = '') => {
+                String(value || '').split(',').map((id) => id.trim()).filter(Boolean).forEach((id) => {
+                    if (id === 'all') {
+                        (findObjs({ _type: 'player' }) || []).forEach((player) => {
+                            const playerId = String(player.id || player.get('_id') || '').trim();
+                            if (playerId && (typeof playerIsGM !== 'function' || !playerIsGM(playerId))) ids[playerId] = true;
+                        });
+                        return;
+                    }
+                    if (typeof playerIsGM === 'function' && playerIsGM(id)) return;
+                    ids[id] = true;
+                });
+            };
+
+            if (!ctx.direct && ctx.token && typeof ctx.token.get === 'function') {
+                addControllers(ctx.token.get('controlledby'));
+            }
+            if (!Object.keys(ids).length && ctx.character && typeof ctx.character.get === 'function') {
+                addControllers(ctx.character.get('controlledby'));
+            }
+
+            return Object.keys(ids).map((playerId) => {
+                const player = getObj('player', playerId);
+                if (!player) return '';
+                return String(player.get('_displayname') || player.get('displayname') || '').trim();
+            }).filter(Boolean);
+        },
+
+        sendWhisper(title = '', body = '', type = 'normal', options = {}, ctx = {}) {
+            const card = this.card(title, body, type, options);
+            sendChat(CONFIG.CHAT_SPEAKER, '/w gm ' + card, null, { noarchive: true });
+
+            const sent = Object.create(null);
+            this.whisperTargets(ctx).forEach((displayName) => {
+                const key = String(displayName || '').toLowerCase();
+                if (!key || sent[key]) return;
+                sent[key] = true;
+                const safeWhisperName = String(displayName).replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+                sendChat(CONFIG.CHAT_SPEAKER, '/w "' + safeWhisperName + '" ' + card, null, { noarchive: true });
+            });
+        },
+
+        help(message = '', actor = {}) {
+            let body = (message
                 ? '<div style="color:#ef8c8c;margin-bottom:7px;">' + Utils.escapeHtml(message) + '</div>'
                 : '') +
                 '<div style="color:#b8bbc2;">Select one linked token, then use:</div>' +
@@ -244,41 +339,66 @@ const ResourceQuickManager = (() => {
                 '<div style="color:#f0c85b;">!resource getpublic Resource Name</div>' +
                 '<div style="color:#f0c85b;">!resource setpublic Resource Name 3</div>' +
                 '<div style="color:#f0c85b;">!resource addpublic Resource Name 1</div>' +
-                '<div style="color:#f0c85b;">!resource usepublic Resource Name 1</div>' +
-                '<div style="color:#b8bbc2;margin-top:6px;">Optional direct target:</div>' +
+                '<div style="color:#f0c85b;">!resource usepublic Resource Name 1</div>';
+
+            if (!actor || actor.isGM !== false) {
+                body += '<div style="color:#b8bbc2;margin-top:6px;">GM + token controller:</div>' +
+                    '<div style="color:#f0c85b;">!resource getwhisper Resource Name</div>' +
+                    '<div style="color:#f0c85b;">!resource setwhisper Resource Name 3</div>' +
+                    '<div style="color:#f0c85b;">!resource addwhisper Resource Name 1</div>' +
+                    '<div style="color:#f0c85b;">!resource usewhisper Resource Name 1</div>' +
+                    '<div style="color:#b8bbc2;margin-top:6px;">Player access (GM only, runtime):</div>' +
+                    '<div style="color:#f0c85b;">!resource players true</div>' +
+                    '<div style="color:#f0c85b;">!resource players false</div>';
+            }
+
+            body += '<div style="color:#b8bbc2;margin-top:6px;">Optional direct target:</div>' +
                 '<div style="color:#f0c85b;">!resource get [characterId] Resource Name</div>';
-            this.send(META.NAME, body, message ? 'error' : 'normal');
+
+            this.sendToActor(actor, META.NAME, body, message ? 'error' : 'normal');
         },
 
-        resourceResult(result = {}) {
-            if (result.empty) {
-                const tokenName = String(result.tokenName || result.characterName || 'Token').trim();
-                const resourceName = String(result.resourceName || 'Resource').trim();
-                const body = this.publicSpan(tokenName, CONFIG.TOKEN_COLOR) +
-                    ' has no more ' +
-                    this.publicSpan(resourceName, CONFIG.RESOURCE_COLOR) +
-                    ' to use.';
-                this.send(
-                    tokenName + '\n' + resourceName,
-                    body,
-                    'warning',
-                    { iconUrl: result.tokenImage }
-                );
-                return;
-            }
-            const changed = result.action !== 'get';
+        resourceNarrative(result = {}) {
+            const tokenName = String(result.tokenName || result.characterName || 'Token').trim();
+            const characterName = String(result.characterName || tokenName || 'Character').trim();
+            const resourceName = String(result.resourceName || 'Resource').trim();
+            const characterHtml = this.publicSpan(characterName, CONFIG.TOKEN_COLOR);
+            const resourceHtml = this.publicSpan(resourceName, CONFIG.RESOURCE_COLOR);
+            const afterHtml = this.publicSpan(Utils.formatResourceValue(result.after), CONFIG.VALUE_COLOR);
             let body = '';
-            body += this.row('Character', result.characterName || 'Unknown', '#d7d9df');
-            body += this.row('Resource', result.resourceName || 'Unknown', '#f0c85b');
-            body += this.row('Current', Utils.formatResourceValue(result.after), '#75d59a');
-            if (changed) {
-                body += this.row('Change', Utils.formatResourceValue(result.before) + ' -> ' + Utils.formatResourceValue(result.after), '#75d59a');
-                body += this.row('Action', String(result.action || '').toUpperCase(), '#d7d9df');
+
+            if (result.action === 'use') {
+                const used = Math.max(0, (Utils.toFiniteNumber(result.before) || 0) - (Utils.toFiniteNumber(result.after) || 0));
+                body = characterHtml + ' uses ' +
+                    this.publicSpan(Utils.formatNumber(used), CONFIG.VALUE_COLOR) + ' ' +
+                    resourceHtml + ', and has ' + afterHtml + ' left.';
+            } else if (result.action === 'add') {
+                const recovered = Math.max(0, (Utils.toFiniteNumber(result.after) || 0) - (Utils.toFiniteNumber(result.before) || 0));
+                body = characterHtml + ' recovers ' +
+                    this.publicSpan(Utils.formatNumber(recovered), CONFIG.VALUE_COLOR) + ' ' +
+                    resourceHtml + ', and has ' + afterHtml + ' left.';
+            } else {
+                body = characterHtml + ' has ' + afterHtml + ' ' + resourceHtml + '.';
             }
-            if (result.clamped) {
-                body += '<div style="color:#f0c85b;margin-top:7px;">The requested value was limited to the resource range.</div>';
+
+            return {
+                title: tokenName + '\n' + resourceName,
+                body,
+                iconUrl: result.tokenImage
+            };
+        },
+
+        resourceResult(result = {}, ctx = {}, actor = {}) {
+            const narrative = this.resourceNarrative(result);
+            const options = { iconUrl: narrative.iconUrl };
+
+            if (result.whisperOutput) {
+                this.sendWhisper(narrative.title, narrative.body, 'normal', options, ctx);
+            } else if (actor && actor.isGM === false && actor.playerId) {
+                this.sendPlayerAndGM(actor.playerId, narrative.title, narrative.body, 'normal', options);
+            } else {
+                this.send(narrative.title, narrative.body, 'normal', options);
             }
-            this.send(changed ? 'Resource Updated' : 'Resource Status', body, changed ? 'success' : 'normal');
         },
 
         publicSpan(value = '', color = '#ffffff') {
@@ -286,40 +406,29 @@ const ResourceQuickManager = (() => {
         },
 
         resourcePublic(result = {}) {
-            const tokenName = String(result.tokenName || result.characterName || 'Token').trim();
-            const resourceName = String(result.resourceName || 'Resource').trim();
-            const tokenHtml = this.publicSpan(tokenName, CONFIG.TOKEN_COLOR);
-            const resourceHtml = this.publicSpan(resourceName, CONFIG.RESOURCE_COLOR);
-            const afterHtml = this.publicSpan(Utils.formatResourceValue(result.after), CONFIG.VALUE_COLOR);
-            let body = '';
-
-            if (result.empty) {
-                body = tokenHtml + ' has no more ' + resourceHtml + ' to use.';
-            } else if (result.action === 'add') {
-                const added = Math.max(0, (Utils.toFiniteNumber(result.after) || 0) - (Utils.toFiniteNumber(result.before) || 0));
-                body = tokenHtml + ' Recovers ' +
-                    this.publicSpan(Utils.formatNumber(added), CONFIG.VALUE_COLOR) + ' ' +
-                    resourceHtml + ', and has ' + afterHtml + ' left.';
-            } else if (result.action === 'use') {
-                const expended = Math.max(0, (Utils.toFiniteNumber(result.before) || 0) - (Utils.toFiniteNumber(result.after) || 0));
-                body = tokenHtml + ' Expends ' +
-                    this.publicSpan(Utils.formatNumber(expended), CONFIG.VALUE_COLOR) + ' ' +
-                    resourceHtml + ', and has ' + afterHtml + ' left.';
-            } else {
-                body = tokenHtml + ' has ' + afterHtml + ' ' + resourceHtml + '.';
-            }
-
-            this.sendPublic(tokenName + '\n' + resourceName, body, result.tokenImage);
+            const narrative = this.resourceNarrative(result);
+            this.sendPublic(narrative.title, narrative.body, narrative.iconUrl);
         },
 
-        resourceScan(result = {}) {
+        resourceScan(result = {}, actor = {}) {
             const resources = Array.isArray(result.resources) ? result.resources : [];
             const pageSize = 20;
+            const characterName = String(result.characterName || 'Unknown').trim();
+            const characterHtml = this.publicSpan(characterName, CONFIG.TOKEN_COLOR);
+            const sendScan = (title, body, type) => {
+                if (actor && actor.isGM === false && actor.playerId) {
+                    this.sendPlayerAndGM(actor.playerId, title, body, type);
+                } else {
+                    this.send(title, body, type);
+                }
+            };
+
             if (!resources.length) {
-                this.send(
+                sendScan(
                     'Resource Scan',
-                    this.row('Character', result.characterName || 'Unknown', '#d7d9df') +
-                    '<div style="color:#b8bbc2;padding-top:7px;">No resources were found.</div>',
+                    '<div style="text-align:left;">' + characterHtml + ' has:' +
+                        '<div style="color:#b8bbc2;padding-top:5px;">No resources were found.</div>' +
+                    '</div>',
                     'warning'
                 );
                 return;
@@ -327,20 +436,20 @@ const ResourceQuickManager = (() => {
 
             for (let offset = 0; offset < resources.length; offset += pageSize) {
                 const page = resources.slice(offset, offset + pageSize);
-                let body = this.row('Character', result.characterName || 'Unknown', '#d7d9df');
+                let body = '<div style="text-align:left;">' + characterHtml + ' has:';
+
                 page.forEach((resource) => {
-                    const alias = resource.recordName && Utils.normalizeName(resource.recordName) !== Utils.normalizeName(resource.name)
-                        ? ' (' + resource.recordName + ')'
-                        : '';
-                    body += this.row(
-                        resource.name + alias,
-                        Utils.formatResourceValue(resource.current),
-                        '#75d59a'
-                    );
+                    const resourceName = this.publicSpan(resource.name || 'Unnamed Resource', CONFIG.RESOURCE_COLOR);
+                    const current = this.publicSpan(Utils.formatResourceValue(resource.current), CONFIG.VALUE_COLOR);
+                    const maximum = this.publicSpan(Utils.formatResourceValue(resource.max), CONFIG.VALUE_COLOR);
+                    body += '<div style="padding-top:3px;">' + resourceName + ' - ' + current +
+                        '<span style="color:#ffffff;font-weight:700;">/</span>' + maximum + '</div>';
                 });
+
+                body += '</div>';
                 const first = offset + 1;
                 const last = offset + page.length;
-                this.send(
+                sendScan(
                     'Resource Scan ' + first + '-' + last + ' / ' + resources.length,
                     body,
                     'normal'
@@ -348,11 +457,11 @@ const ResourceQuickManager = (() => {
             }
         },
 
-        error(message = '', context = {}) {
+        error(message = '', context = {}, actor = {}) {
             let body = '<div style="color:#efb0b0;">' + Utils.escapeHtml(message || 'Unknown resource error.') + '</div>';
             if (context.characterName) body += this.row('Character', context.characterName, '#d7d9df');
             if (context.resourceName) body += this.row('Resource', context.resourceName, '#f0c85b');
-            this.send('Resource Error', body, 'error');
+            this.sendToActor(actor, 'Resource Error', body, 'error');
         }
     };
 
@@ -377,44 +486,69 @@ const ResourceQuickManager = (() => {
             if (text.toLowerCase().indexOf(META.COMMAND + ' ') !== 0) return null;
 
             const remainder = text.slice(META.COMMAND.length).trim();
+
+            const playersMatch = remainder.match(/^players\b\s*(.*)$/i);
+            if (playersMatch) {
+                const value = String(playersMatch[1] || '').trim().toLowerCase();
+                if (value !== 'true' && value !== 'false') {
+                    return {
+                        ok: false,
+                        help: true,
+                        action: 'players',
+                        message: 'Players requires true or false.'
+                    };
+                }
+                return {
+                    ok: true,
+                    action: 'players',
+                    enabled: value === 'true',
+                    name: '',
+                    value: null,
+                    publicOutput: false,
+                    whisperOutput: false,
+                    characterId: ''
+                };
+            }
+
             const target = this.extractCharacterTarget(remainder);
             if (!target.ok) return { ok: false, help: true, message: target.message };
-            const actionMatch = target.args.match(/^(scan|getpublic|setpublic|addpublic|usepublic|get|set|add|use)\b\s*(.*)$/i);
+            const actionMatch = target.args.match(/^(scan|getpublic|setpublic|addpublic|usepublic|getwhisper|setwhisper|addwhisper|usewhisper|get|set|add|use)\b\s*(.*)$/i);
             if (!actionMatch) {
                 return { ok: false, help: true, message: 'Unknown action.' };
             }
 
             const requestedAction = actionMatch[1].toLowerCase();
             const publicOutput = /public$/.test(requestedAction);
-            const action = requestedAction.replace(/public$/, '');
+            const whisperOutput = /whisper$/.test(requestedAction);
+            const action = requestedAction.replace(/(?:public|whisper)$/, '');
             const args = String(actionMatch[2] || '').trim();
             if (action === 'scan') {
                 return args
                     ? { ok: false, help: true, message: 'Scan does not accept a resource name or value.' }
-                    : { ok: true, action, name: '', value: null, publicOutput: false, characterId: target.characterId };
+                    : { ok: true, action, name: '', value: null, publicOutput: false, whisperOutput: false, characterId: target.characterId };
             }
             if (!args) {
-                return { ok: false, help: true, message: 'Resource name is required.' };
+                return { ok: false, help: true, action, publicOutput, whisperOutput, message: 'Resource name is required.' };
             }
 
             if (action === 'get') {
                 const name = Utils.cleanName(args);
                 return name
-                    ? { ok: true, action, name, value: null, publicOutput, characterId: target.characterId }
-                    : { ok: false, help: true, message: 'Resource name is required.' };
+                    ? { ok: true, action, name, value: null, publicOutput, whisperOutput, characterId: target.characterId }
+                    : { ok: false, help: true, action, publicOutput, whisperOutput, message: 'Resource name is required.' };
             }
 
             const valueMatch = args.match(/^(.*?)\s+([+-]?\d+)\s*$/);
             if (!valueMatch) {
-                return { ok: false, help: true, message: 'A non-negative integer value is required.' };
+                return { ok: false, help: true, action, publicOutput, whisperOutput, message: 'A non-negative integer value is required.' };
             }
 
             const name = Utils.cleanName(valueMatch[1]);
             const value = Utils.toNonNegativeInteger(valueMatch[2]);
-            if (!name) return { ok: false, help: true, message: 'Resource name is required.' };
-            if (value === null) return { ok: false, help: true, message: 'Value must be a non-negative integer.' };
+            if (!name) return { ok: false, help: true, action, publicOutput, whisperOutput, message: 'Resource name is required.' };
+            if (value === null) return { ok: false, help: true, action, publicOutput, whisperOutput, message: 'Value must be a non-negative integer.' };
 
-            return { ok: true, action, name, value, publicOutput, characterId: target.characterId };
+            return { ok: true, action, name, value, publicOutput, whisperOutput, characterId: target.characterId };
         }
     };
 
@@ -489,6 +623,14 @@ const ResourceQuickManager = (() => {
             });
         },
 
+        getResourceMax(node = {}) {
+            if (!Utils.isObject(node)) return '?';
+            if (Utils.isObject(node.maxValueFormula) && Utils.hasOwn(node.maxValueFormula, 'flatValue')) {
+                return Utils.formatResourceValue(node.maxValueFormula.flatValue);
+            }
+            return '?';
+        },
+
         listResources(root = {}) {
             const integrants = this.getIntegrants(root);
             if (!integrants) return [];
@@ -500,7 +642,8 @@ const ResourceQuickManager = (() => {
                     rowId,
                     name: String(node.name || node.recordName || 'Unnamed Resource').trim(),
                     recordName: String(node.recordName || '').trim(),
-                    current: node.value
+                    current: node.value,
+                    max: this.getResourceMax(node)
                 };
             }).filter(Boolean).sort((left, right) => {
                 return String(left.name || '').localeCompare(String(right.name || ''));
@@ -641,6 +784,29 @@ const ResourceQuickManager = (() => {
             return (findObjs({ _type: 'graphic', represents: safeId }) || [])[0] || null;
         },
 
+        objectControlledBy(object = null, playerId = '') {
+            if (!object || typeof object.get !== 'function') return false;
+            const safePlayerId = String(playerId || '').trim();
+            if (!safePlayerId) return false;
+            return String(object.get('controlledby') || '')
+                .split(',')
+                .map((id) => id.trim())
+                .filter(Boolean)
+                .some((id) => id === 'all' || id === safePlayerId);
+        },
+
+        playerControlsContext(ctx = {}, playerId = '') {
+            const safePlayerId = String(playerId || '').trim();
+            if (!safePlayerId) return false;
+
+            // A direct [characterId] must be controlled through the Character itself.
+            // This prevents a representative token elsewhere on the table from granting access.
+            if (ctx.direct) return this.objectControlledBy(ctx.character, safePlayerId);
+
+            return this.objectControlledBy(ctx.token, safePlayerId) ||
+                this.objectControlledBy(ctx.character, safePlayerId);
+        },
+
         getCharacterContext(msg = {}, directCharacterId = '') {
             const safeDirectId = String(directCharacterId || '').trim();
             if (safeDirectId) {
@@ -748,6 +914,7 @@ const ResourceQuickManager = (() => {
                     after: current,
                     requested: command.value,
                     publicOutput: !!command.publicOutput,
+                    whisperOutput: !!command.whisperOutput,
                     clamped: false
                 };
 
@@ -801,18 +968,61 @@ const ResourceQuickManager = (() => {
             const command = Command.parse(msg.content);
             if (!command) return;
 
-            if (typeof playerIsGM !== 'function' || !playerIsGM(String(msg.playerid || ''))) {
-                Render.error('Only the GM can use this command.');
+            const playerId = String(msg.playerid || '');
+            const isGM = typeof playerIsGM === 'function' && playerIsGM(playerId);
+            const actor = { playerId, isGM };
+
+            // The runtime access switch itself is always GM-only.
+            if (command.action === 'players') {
+                if (!isGM) {
+                    Render.error('Only the GM can change player access.', {}, actor);
+                    return;
+                }
+                if (!command.ok) {
+                    Render.help(command.message || '', actor);
+                    return;
+                }
+                const enabled = Access.setPlayersEnabled(command.enabled);
+                Render.send(
+                    'Player Commands',
+                    '<div style="text-align:left;">Player access is <span style="color:' +
+                        (enabled ? '#75d59a' : '#ef8c8c') + ';font-weight:700;">' +
+                        (enabled ? 'ENABLED' : 'DISABLED') + '</span>.</div>',
+                    enabled ? 'success' : 'warning'
+                );
+                Logger.info('Player command access ' + (enabled ? 'enabled.' : 'disabled.'));
                 return;
             }
+
+            // Players receive a private explanation instead of being ignored.
+            if (!isGM && !Access.playersEnabled) {
+                Render.error('Player access is disabled. Ask your DM to enable it.', {}, actor);
+                return;
+            }
+
+            // *whisper is intentionally GM -> player only.
+            if (!isGM && command.whisperOutput) {
+                Render.error('Whisper commands are GM only.', {}, actor);
+                return;
+            }
+
             if (!command.ok) {
-                Render.help(command.message || '');
+                Render.help(command.message || '', actor);
                 return;
             }
 
             const ctx = Service.getCharacterContext(msg, command.characterId);
             if (!ctx.ok) {
-                Render.error(ctx.message || 'A linked token is required.', { resourceName: command.name });
+                Render.error(ctx.message || 'A linked token is required.', { resourceName: command.name }, actor);
+                return;
+            }
+
+            // Player commands remain restricted to characters/tokens they control.
+            if (!isGM && !Service.playerControlsContext(ctx, playerId)) {
+                Render.error('You do not control the selected token or character.', {
+                    characterName: ctx.characterName,
+                    resourceName: command.name
+                }, actor);
                 return;
             }
 
@@ -821,19 +1031,20 @@ const ResourceQuickManager = (() => {
                 if (!result || !result.ok) {
                     Render.error(
                         (result && result.message) || 'The resource operation failed.',
-                        { characterName: ctx.characterName, resourceName: command.name }
+                        { characterName: ctx.characterName, resourceName: command.name },
+                        actor
                     );
                     return;
                 }
-                if (result.action === 'scan') Render.resourceScan(result);
+                if (result.action === 'scan') Render.resourceScan(result, actor);
                 else if (result.publicOutput) Render.resourcePublic(result);
-                else Render.resourceResult(result);
+                else Render.resourceResult(result, ctx, actor);
             } catch (error) {
                 Logger.error('Unhandled command failure.', error);
                 Render.error('The resource operation failed before it could complete.', {
                     characterName: ctx.characterName,
                     resourceName: command.name
-                });
+                }, actor);
             }
         },
 
@@ -841,7 +1052,9 @@ const ResourceQuickManager = (() => {
             on('chat:message', (msg) => {
                 this.onChatMessage(msg).catch((error) => {
                     Logger.error('Chat handler failure.', error);
-                    Render.error('Unexpected Resource Quick Manager error.');
+                    const playerId = String((msg && msg.playerid) || '');
+                    const isGM = typeof playerIsGM === 'function' && playerIsGM(playerId);
+                    Render.error('Unexpected Resource Quick Manager error.', {}, { playerId, isGM });
                 });
             });
         }
@@ -854,7 +1067,7 @@ const ResourceQuickManager = (() => {
 
     const publicApi = {
         meta: META,
-        diagnostics: () => ({ activeLocks: WriteQueue.diagnostics() })
+        diagnostics: () => ({ activeLocks: WriteQueue.diagnostics(), playersEnabled: Access.playersEnabled })
     };
 
     if (typeof globalThis !== 'undefined' && globalThis.__RQM_TEST_MODE__ === true) {
@@ -864,7 +1077,8 @@ const ResourceQuickManager = (() => {
             SheetStore,
             Service,
             Render,
-            WriteQueue
+            WriteQueue,
+            Access
         };
     }
 
