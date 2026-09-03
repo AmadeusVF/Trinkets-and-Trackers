@@ -7,7 +7,7 @@
  * @Version     1.3.5
  * =========================================================
  */
-const TnT = (() => {
+globalThis.TnT = (() => {
     'use strict';
 
     /** -----------------------------------------------------------------------
@@ -18,7 +18,7 @@ const TnT = (() => {
         DEVELOPER: 'AmadeusVF',
         SHORT_NAME: 'T&T',
         LOG_NAME: 'T&T',
-        VERSION: '1.3.5',
+        VERSION: '1.3.5F',
         STATE_KEY: 'TRINKETS_AND_TRACKERS',
         SCHEMA_VERSION: 3
     });
@@ -207,7 +207,10 @@ const TnT = (() => {
         DAMAGE_ROUND_UP: true,
         SETUP_TOKEN_ON_SPAWN: true,
         CHAT_MONITORING: true,
+        COMBAT_ASSISTANT: true,
         SHOP_GRID_VIEW: true,
+        PLAYER_HEALTH_TRACKER: true,
+        NPC_DEATH_MARK: true,
         PLAYER_MANUAL_ROLL: false,
         ROLLS_FONT_STYLE: Object.freeze({
             fontFamily: "'Comic Sans MS', 'Comic Sans', cursive",
@@ -233,7 +236,10 @@ const TnT = (() => {
         INVENTORY_TRANSFER_MAX_DISTANCE_FT: CONFIG.INVENTORY_TRANSFER_MAX_DISTANCE_FT,
         SETUP_TOKEN_ON_SPAWN: CONFIG.SETUP_TOKEN_ON_SPAWN,
         CHAT_MONITORING: CONFIG.CHAT_MONITORING,
+        COMBAT_ASSISTANT: CONFIG.COMBAT_ASSISTANT,
         SHOP_GRID_VIEW: CONFIG.SHOP_GRID_VIEW,
+        PLAYER_HEALTH_TRACKER: CONFIG.PLAYER_HEALTH_TRACKER,
+        NPC_DEATH_MARK: CONFIG.NPC_DEATH_MARK,
         PLAYER_MANUAL_ROLL: CONFIG.PLAYER_MANUAL_ROLL
     });
 
@@ -244,7 +250,10 @@ const TnT = (() => {
         { key: 'INVENTORY_TRANSFER_MAX_DISTANCE_FT', label: 'Transfer Max Distance', type: 'number' },
         { key: 'SETUP_TOKEN_ON_SPAWN', label: 'Setup Token on Spawn', type: 'boolean' },
         { key: 'CHAT_MONITORING', label: 'Chat Monitoring', type: 'boolean' },
+        { key: 'COMBAT_ASSISTANT', label: 'Combat Assistant', type: 'boolean' },
         { key: 'SHOP_GRID_VIEW', label: 'Shop Icon View', type: 'boolean' },
+        { key: 'PLAYER_HEALTH_TRACKER', label: 'Player Health Tracker', type: 'boolean' },
+        { key: 'NPC_DEATH_MARK', label: 'NPC Death Mark', type: 'boolean' },
         { key: 'PLAYER_MANUAL_ROLL', label: 'Player Manual Roll', type: 'boolean' }
     ]);
 
@@ -259,7 +268,7 @@ const TnT = (() => {
     const ACTIONS = Object.freeze({
         INVENTORY: Object.freeze(['get', 'remove', 'add', 'buy', 'give', 'use', 'discard', 'equip', 'template', 'lightoff', 'prone', 'deathsave']),
         CURRENCY: Object.freeze(['give', 'take', 'wallet']),
-        SHOP: Object.freeze(['get', 'list', 'buy', 'create', 'add', 'remove', 'delete', 'open', 'close', 'hide', 'reveal', 'toggle', 'blacklist', 'config', 'icon', 'load', 'unload', 'reload', 'export', 'menu', 'detail', 'stockmode', 'rollprice', 'price', 'stock']),
+        SHOP: Object.freeze(['get', 'list', 'buy', 'create', 'add', 'remove', 'delete', 'open', 'close', 'hide', 'reveal', 'toggle', 'blacklist', 'config', 'icon', 'name', 'rename', 'load', 'unload', 'reload', 'export', 'menu', 'detail', 'stockmode', 'rollprice', 'price', 'stock']),
         ITEM: Object.freeze(['list', 'rawlist', 'search', 'details', 'send', 'create', 'remove', 'reload', 'blueprint']),
         TOKEN: Object.freeze(['init', 'clear', 'setup', 'save', 'default', 'edit', 'get', 'set', 'deal', 'dealbatch', 'dealroll', 'heal', 'condition', 'conditionmenu', 'conditiontoggle', 'effectmenu', 'effecttoggle', 'combat', 'spells', 'attacks', 'refreshattacks', 'refreshspells', 'ability', 'saving', 'skill', 'initiative', 'roll', 'attackroll'])
     });
@@ -272,7 +281,7 @@ const TnT = (() => {
     });
     const GM_ACTIONS = Object.freeze({
         INVENTORY: Object.freeze(['add']),
-        SHOP: Object.freeze(['create', 'add', 'remove', 'delete', 'open', 'close', 'hide', 'reveal', 'toggle', 'blacklist', 'config', 'icon', 'load', 'unload', 'reload', 'export', 'menu', 'detail', 'stockmode', 'rollprice', 'price', 'stock']),
+        SHOP: Object.freeze(['create', 'add', 'remove', 'delete', 'open', 'close', 'hide', 'reveal', 'toggle', 'blacklist', 'config', 'icon', 'name', 'rename', 'load', 'unload', 'reload', 'export', 'menu', 'detail', 'stockmode', 'rollprice', 'price', 'stock']),
         ITEM: Object.freeze(['list', 'rawlist', 'create', 'remove', 'reload']),
         TOKEN: Object.freeze(['init', 'clear', 'setup', 'save', 'default', 'edit', 'set', 'get', 'deal', 'dealbatch', 'dealroll', 'heal', 'condition', 'conditionmenu', 'conditiontoggle', 'effectmenu', 'effecttoggle', 'combat', 'spells', 'attacks', 'refreshattacks', 'refreshspells', 'ability', 'saving', 'skill', 'initiative', 'roll', 'attackroll'])
     });
@@ -1919,7 +1928,7 @@ const TnT = (() => {
                 },
                 Damage: {
                     strings: ['ability', 'damageType'],
-                    own: [['_bonus', 'bonus'], ['diceCount', 'count'], ['overrideCrit', 'overrideCrit'], ['critBonus', 'critBonus']],
+                    own: [['_bonus', 'bonus'], ['_diceCount', 'count'], ['diceCount', 'count'], ['overrideCrit', 'overrideCrit'], ['critBonus', 'critBonus']],
                     aliases: [['diceSize', 'die'], ['critDiceSize', 'critDie']]
                 },
                 Item: {
@@ -1928,7 +1937,7 @@ const TnT = (() => {
                 },
                 Healing: {
                     strings: ['ability'],
-                    own: [['_bonus', 'bonus'], ['diceCount', 'count'], ['isTemp', 'isTemp'], ['overrideCrit', 'overrideCrit']],
+                    own: [['_bonus', 'bonus'], ['_diceCount', 'count'], ['diceCount', 'count'], ['isTemp', 'isTemp'], ['overrideCrit', 'overrideCrit']],
                     aliases: [['diceSize', 'die'], ['critDiceSize', 'critDie']]
                 },
                 Attunement: {
@@ -2350,7 +2359,7 @@ const TnT = (() => {
 
         hydrateHealingChildNodeFromFallback(childNode = {}, blueprintName = '', itemData = {}) {
             if (!childNode || String(childNode.type || '').trim() !== 'Healing') return childNode;
-            const hasDice = Math.max(0, Utils.toInt(childNode.diceCount, 0)) > 0 && String(childNode.diceSize || '').trim();
+            const hasDice = Math.max(0, Utils.toInt(childNode._diceCount !== undefined ? childNode._diceCount : childNode.diceCount, 0)) > 0 && String(childNode.diceSize || '').trim();
             if (hasDice) return childNode;
 
             const catalogItem = ItemCatalog.getByName(blueprintName);
@@ -2377,6 +2386,7 @@ const TnT = (() => {
             if (!parts) return childNode;
 
             childNode.diceCount = parts.count;
+            childNode._diceCount = parts.count;
             childNode.diceSize = parts.die;
             childNode._bonus = parts.bonus;
             if (!String(childNode.ability || '').trim()) childNode.ability = 'none';
@@ -6064,6 +6074,15 @@ const TnT = (() => {
             return ShopRepository.save(result.shop);
         },
 
+        setShopName(id = '', name = '') {
+            const result = this.getShop(id);
+            if (!result.ok) return result;
+            const safeName = String(name || '').trim();
+            if (!safeName) return { ok: false, message: 'Shop name is required.' };
+            result.shop.name = safeName;
+            return ShopRepository.save(result.shop);
+        },
+
         setShopState(id = '', state = '') {
             const result = this.getShop(id);
             if (!result.ok) return result;
@@ -6648,6 +6667,53 @@ const TnT = (() => {
                     '</table>'
                 )
                 : attackBadges;
+            const detailPill = (label = '', value = '', color = 'rgb(190,190,190)') => {
+                const safeValue = String(value === undefined || value === null ? '' : value).trim();
+                if (!safeValue) return '';
+                return (
+                    '<span style="display:inline-block;margin:1px 2px 1px 0;padding:1px 4px;border:1px solid rgba(255,255,255,0.25);border-radius:3px;background:rgba(0,0,0,0.28);font-size:10px;line-height:12px;color:' + color + ';font-weight:700;">' +
+                        Utils.escapeHtml(String(label || '')) + ': ' +
+                        '<span style="color:rgb(245,245,245);">' + Utils.escapeHtml(safeValue) + '</span>' +
+                    '</span>'
+                );
+            };
+            const modeLabel = (() => {
+                const mode = String(result.mode || 'normal').trim().toLowerCase();
+                if (mode === 'advantage') return 'Advantage';
+                if (mode === 'disadvantage') return 'Disadvantage';
+                return 'Normal';
+            })();
+            const rollModeDetails = result.rollModeDetails || {};
+            const advantageSources = Array.isArray(rollModeDetails.advantages) ? rollModeDetails.advantages : [];
+            const disadvantageSources = Array.isArray(rollModeDetails.disadvantages) ? rollModeDetails.disadvantages : [];
+            const rollSourceText = advantageSources.concat(disadvantageSources).filter(Boolean).join(', ');
+            const rollInfoHtml = result.isSaveAttack
+                ? (
+                    detailPill('Save', String(result.saveAbilityLabel || 'SAVE') + ' DC ' + String(result.saveDc || 0), 'rgb(255,220,100)') +
+                    detailPill('Action', result.actionType, 'rgb(170,210,255)') +
+                    detailPill('Range', result.range, 'rgb(170,210,255)')
+                )
+                : (
+                    detailPill('Mode', modeLabel, result.mode === 'advantage' ? 'rgb(120,220,140)' : (result.mode === 'disadvantage' ? 'rgb(255,120,120)' : 'rgb(190,190,190)')) +
+                    detailPill('Ability', result.abilityModSource, 'rgb(170,210,255)') +
+                    detailPill('Type', result.attackType, 'rgb(170,210,255)') +
+                    detailPill('Action', result.actionType, 'rgb(170,210,255)') +
+                    detailPill('Range', result.range, 'rgb(170,210,255)') +
+                    detailPill('Sources', rollSourceText, 'rgb(210,210,150)')
+                );
+            const attackBreakdownHtml = result.isSaveAttack
+                ? ''
+                : (
+                    '<tr>' +
+                        '<td colspan="2" style="padding:1px 0 4px 0;text-align:left;font-size:10px;line-height:12px;color:rgb(170,170,170);">' +
+                            detailPill('Attack', '1d20 ' + String(result.attackBonusText || '+0') + ' = ' + String(result.attackTotal || 0), 'rgb(255,238,188)') +
+                            detailPill('Bonus', result.attackExtraBonus ? TokenService.tooltipSignedValue(result.attackExtraBonus) : '', 'rgb(190,190,190)') +
+                            detailPill('Mod', result.attackAbilityMod ? TokenService.tooltipSignedValue(result.attackAbilityMod) : '', 'rgb(190,190,190)') +
+                            detailPill('Exhaustion', result.exhaustionPenalty ? TokenService.tooltipSignedValue(result.exhaustionPenalty) : '', 'rgb(255,170,120)') +
+                            (Array.isArray(result.attackRollEffectRows) ? result.attackRollEffectRows.map((row) => detailPill(row.label || 'Effect', (row.source ? String(row.source) + ' -> ' : '') + String(row.value || ''), 'rgb(190,170,255)')).join('') : '') +
+                        '</td>' +
+                    '</tr>'
+                );
             const damageRolls = Array.isArray(result.damageRolls) && result.damageRolls.length
                 ? result.damageRolls
                 : [{
@@ -8138,7 +8204,7 @@ const TnT = (() => {
                     { iconHtml: '&#128269;', label: 'Search', command: '!tntItem search &#63;{Item Search|}', backgroundColor: palette.item, tooltip: 'Search item catalog' },
                     { iconHtml: '&#128203;', label: 'List', command: '!tntItem list', backgroundColor: palette.item, tooltip: 'Open item catalog' },
                     { iconHtml: '&#128221;', label: 'Create', command: '!tntItem create', backgroundColor: palette.item, tooltip: 'Create custom item' },
-                    { iconHtml: '&#128176;', label: 'Wallet', command: '!tntCurrency wallet &#63;{Wallet|💵 Pay,pay|💸 Take,take} &#63;{Coin|🟠 CP,cp|⚪ SP,sp|&🟡 GP,gp} &#63;{Amount|1}', backgroundColor: palette.item, tooltip: 'Pay or take currency from selected tokens' }
+                    { iconHtml: '&#128176;', label: 'Wallet', command: '!tntCurrency wallet &#63;{Wallet|💵 Pay,pay|💸 Take,take} &#63;{Coin|🟠 CP,cp|⚪ SP,sp|🟡 GP,gp} &#63;{Amount|1}', backgroundColor: palette.item, tooltip: 'Pay or take currency from selected tokens' }
                 ], 4) +
                 this.dmSectionHtml('Shop', 'rgb(190,110,255)') +
                 this.dmIconGrid([
@@ -8497,7 +8563,7 @@ const TnT = (() => {
             const titleHtml =
                 '<div style="position:relative;text-align:center;line-height:1.1;">' +
                     '<a href="!tntShop icon ' + String(safeShop.id || '') + ' &#63;{Shop Icon|' + Utils.attrSafe(shopIcon) + '}" title="Edit shop icon" style="position:absolute;left:-6px;top:-4px;width:28px;height:28px;box-sizing:border-box;border:1px solid rgba(255,255,255,0.75);border-radius:4px;background:transparent;display:flex;align-items:center;justify-content:center;text-align:center;text-decoration:none;line-height:28px;font-size:20px;color:rgb(255,255,255);">' + shopIcon + '</a>' +
-                    '<div style="font-size:20px;font-weight:800;">' + Utils.escapeHtml(String(safeShop.name || 'Shop')) + '</div>' +
+                    '<a href="!tntShop name ' + String(safeShop.id || '') + ' &#63;{Shop Name|' + Utils.attrSafe(String(safeShop.name || 'Shop')) + '}" title="Edit shop name" style="display:inline-block;font-size:20px;font-weight:800;color:inherit;text-decoration:none;background:transparent;border:0;padding:0;margin:0;box-shadow:none;text-shadow:inherit;">' + Utils.escapeHtml(String(safeShop.name || 'Shop')) + '</a>' +
                     '<div style="font-size:11px;color:rgb(170,170,170);font-weight:400;">' + Utils.escapeHtml(String(safeShop.id || '')) + '</div>' +
                 '</div>';
 
@@ -10060,7 +10126,11 @@ const TnT = (() => {
                     atkProfFlag: ['atkprofflag', 'atkprof_flag', 'atk_prof_flag'],
                     atkAttrBase: 'atkattr_base',
                     saveFlag: ['saveflag', 'save_flag'],
-                    saveAttr: ['saveattr', 'save_attr']
+                    saveAttr: ['saveattr', 'save_attr'],
+                    actionType: 'actiontype',
+                    range: 'range',
+                    attackType: 'attacktype',
+                    proficiencyLevel: 'proficiencylevel'
                 }),
                 fallbackName: 'Attack'
             }),
@@ -10368,7 +10438,11 @@ const TnT = (() => {
                             JSON.stringify(String(entry.attackExtraBonus || '')) + ':' +
                             JSON.stringify(String(entry.damageFlatBonus || '')) + ':' +
                             JSON.stringify(String(entry.abilityModSource || entry.attackAbilityName || '')) + ':' +
-                            JSON.stringify(JSON.stringify(Array.isArray(entry.damageParts) ? entry.damageParts : []));
+                            JSON.stringify(JSON.stringify(Array.isArray(entry.damageParts) ? entry.damageParts : [])) + ':' +
+                            JSON.stringify(String(entry.actionType || '')) + ':' +
+                            JSON.stringify(String(entry.range || '')) + ':' +
+                            JSON.stringify(String(entry.attackType || '')) + ':' +
+                            JSON.stringify(String(entry.proficiencyLevel || ''));
                     }
 
                     if (type === 'spell') {
@@ -10571,7 +10645,7 @@ const TnT = (() => {
             if (!source) return [];
 
             const entries = [];
-            const pattern = /"((?:\\.|[^"\\])*)"\s*:\s*"((?:\\.|[^"\\])*)"\s*:\s*"((?:\\.|[^"\\])*)"\s*:\s*"((?:\\.|[^"\\])*)"(?:\s*:\s*"((?:\\.|[^"\\])*)")?(?:\s*:\s*"((?:\\.|[^"\\])*)")?(?:\s*:\s*"((?:\\.|[^"\\])*)")?(?:\s*:\s*"((?:\\.|[^"\\])*)")?(?:\s*:\s*"((?:\\.|[^"\\])*)")?(?:\s*:\s*"((?:\\.|[^"\\])*)")?(?:\s*:\s*"((?:\\.|[^"\\])*)")?(?:\s*:\s*"((?:\\.|[^"\\])*)")?(?:\s*:\s*"((?:\\.|[^"\\])*)")?(?:\s*:\s*"((?:\\.|[^"\\])*)")?(?:\s*:\s*"((?:\\.|[^"\\])*)")?(?:\s*:\s*"((?:\\.|[^"\\])*)")?(?:\s*:\s*"((?:\\.|[^"\\])*)")?/g;
+            const pattern = /"((?:\\.|[^"\\])*)"\s*:\s*"((?:\\.|[^"\\])*)"\s*:\s*"((?:\\.|[^"\\])*)"\s*:\s*"((?:\\.|[^"\\])*)"(?:\s*:\s*"((?:\\.|[^"\\])*)")?(?:\s*:\s*"((?:\\.|[^"\\])*)")?(?:\s*:\s*"((?:\\.|[^"\\])*)")?(?:\s*:\s*"((?:\\.|[^"\\])*)")?(?:\s*:\s*"((?:\\.|[^"\\])*)")?(?:\s*:\s*"((?:\\.|[^"\\])*)")?(?:\s*:\s*"((?:\\.|[^"\\])*)")?(?:\s*:\s*"((?:\\.|[^"\\])*)")?(?:\s*:\s*"((?:\\.|[^"\\])*)")?(?:\s*:\s*"((?:\\.|[^"\\])*)")?(?:\s*:\s*"((?:\\.|[^"\\])*)")?(?:\s*:\s*"((?:\\.|[^"\\])*)")?(?:\s*:\s*"((?:\\.|[^"\\])*)")?(?:\s*:\s*"((?:\\.|[^"\\])*)")?(?:\s*:\s*"((?:\\.|[^"\\])*)")?(?:\s*:\s*"((?:\\.|[^"\\])*)")?(?:\s*:\s*"((?:\\.|[^"\\])*)")?/g;
             let match;
 
             while ((match = pattern.exec(source)) !== null) {
@@ -10592,6 +10666,10 @@ const TnT = (() => {
                 let damageFlatBonus = '';
                 let attackAbilityName = '';
                 let damagePartsRaw = '';
+                let actionType = '';
+                let range = '';
+                let attackType = '';
+                let proficiencyLevel = '';
                 try { name = JSON.parse('"' + match[1] + '"'); } catch (error) { name = match[1]; }
                 try { id = JSON.parse('"' + match[2] + '"'); } catch (error) { id = match[2]; }
                 try { damage = JSON.parse('"' + match[3] + '"'); } catch (error) { damage = match[3]; }
@@ -10635,6 +10713,18 @@ const TnT = (() => {
                 if (match[17] !== undefined) {
                     try { damagePartsRaw = JSON.parse('"' + match[17] + '"'); } catch (error) { damagePartsRaw = match[17]; }
                 }
+                if (match[18] !== undefined) {
+                    try { actionType = JSON.parse('"' + match[18] + '"'); } catch (error) { actionType = match[18]; }
+                }
+                if (match[19] !== undefined) {
+                    try { range = JSON.parse('"' + match[19] + '"'); } catch (error) { range = match[19]; }
+                }
+                if (match[20] !== undefined) {
+                    try { attackType = JSON.parse('"' + match[20] + '"'); } catch (error) { attackType = match[20]; }
+                }
+                if (match[21] !== undefined) {
+                    try { proficiencyLevel = JSON.parse('"' + match[21] + '"'); } catch (error) { proficiencyLevel = match[21]; }
+                }
 
                 const entry = {};
                 entry[config.nameKey] = String(name || '').trim();
@@ -10654,6 +10744,10 @@ const TnT = (() => {
                 entry.attackExtraBonus = String(attackExtraBonus || '').trim();
                 entry.damageFlatBonus = String(damageFlatBonus || '').trim();
                 entry.abilityModSource = String(attackAbilityName || '').trim();
+                entry.actionType = String(actionType || '').trim();
+                entry.range = String(range || '').trim();
+                entry.attackType = String(attackType || '').trim();
+                entry.proficiencyLevel = String(proficiencyLevel || '').trim();
                 try {
                     const parsedParts = JSON.parse(String(damagePartsRaw || '[]'));
                     entry.damageParts = Array.isArray(parsedParts) ? parsedParts : [];
@@ -12499,17 +12593,23 @@ const TnT = (() => {
             const characterId = String(character.id || token.get('represents') || '').trim();
             if (!characterId) return { ok: false, message: 'Character is required.' };
 
-            const tokenData = await this.getTokenData(characterId);
+            const attributes = this.getCharacterAttributes(characterId);
+            const tokenData = await this.getTokenData(characterId, attributes);
             const tokenDetails = this.getFastTokenDetails(tokenData);
-            const isNpcToken = Utils.toBoolean(tokenDetails.NPC, false);
+            const appState = String(this.getAttributeCurrentByName(attributes, 'appState') || '').trim().toLowerCase();
+            const isNpcToken = Utils.toBoolean(tokenDetails.NPC, false) || appState === 'npc';
 
             if (isNpcToken) {
+                if (!RuntimeConfig.get('NPC_DEATH_MARK')) return { ok: true, npc: true, ignored: true };
                 this.setTokenStatusMarker(token, CONFIG.DEATH_STATUS_MARKER, true);
                 return { ok: true, npc: true };
             }
 
+            if (!RuntimeConfig.get('PLAYER_HEALTH_TRACKER')) return { ok: true, npc: false, ignored: true };
             await this.setCharacterConditionState(token, characterId, 'unconscious', true);
             await this.setCharacterConditionState(token, characterId, 'prone', true);
+            this.setTokenConditionMarker(token, 'unconscious', true);
+            this.setTokenConditionMarker(token, 'prone', true);
             await this.setDeathSavesState(characterId, { open: true });
             return { ok: true, npc: false };
         },
@@ -12517,8 +12617,10 @@ const TnT = (() => {
         async clearHealedPlayerDefeatState(token = null, characterId = '') {
             const safeCharacterId = String(characterId || '').trim();
             if (!safeCharacterId) return { ok: false, message: 'Character is required.' };
+            if (!RuntimeConfig.get('PLAYER_HEALTH_TRACKER')) return { ok: true, ignored: true };
             await this.setDeathSavesState(safeCharacterId, { open: false, resetCounters: true });
             await this.setCharacterConditionState(token, safeCharacterId, 'unconscious', false);
+            this.setTokenConditionMarker(token, 'unconscious', false);
             return { ok: true };
         },
 
@@ -12531,6 +12633,17 @@ const TnT = (() => {
             const previousMatch = String(previousRaw || '').match(/[+-]?\d+/);
             const previousHp = previousMatch ? Utils.toInt(previousMatch[0], 0) : null;
             if (previousHp !== null && previousHp <= 0) return { ok: true, ignored: true };
+
+            const bar1Link = this.getLinkedBarAttributeName(token, 1);
+            if (!bar1Link) {
+                if (RuntimeConfig.get('NPC_DEATH_MARK')) {
+                    this.setTokenStatusMarker(token, CONFIG.DEATH_STATUS_MARKER, true);
+                    return { ok: true, npc: true };
+                }
+                return { ok: true, ignored: true };
+            }
+            if (bar1Link !== 'hp') return { ok: true, ignored: true };
+            if (!RuntimeConfig.get('PLAYER_HEALTH_TRACKER') && !RuntimeConfig.get('NPC_DEATH_MARK')) return { ok: true, ignored: true };
 
             const character = R20.getCharacterFromToken(token);
             if (!character) return { ok: false, message: 'Token is not linked to a character.' };
@@ -14199,8 +14312,8 @@ const TnT = (() => {
         async buildAttackRollResult(token = null, character = null, attackId = '', mode = 'auto') {
             if (!token || !character) return { ok: false, message: 'Token must be linked to a character.' };
             const safeAttackId = this.cleanRepeatingActionId(attackId);
-            const attack = await this.getStoredAttackById(character.id, safeAttackId);
-            if (!attack) return { ok: false, message: 'Attack was not found in T&T_attack_list.' };
+            let attack = await this.getStoredAttackById(character.id, safeAttackId);
+            if (!attack) return { ok: false, message: 'Attack was not found in T&T_attack_list. Use refresh attacks or init first.' };
 
             const attributes = this.getCharacterAttributes(character.id);
             const dumpRoots = this.getCharacterStoreDumpRoots(attributes);
@@ -14274,11 +14387,21 @@ const TnT = (() => {
                 characterId: character.id,
                 attackId: safeAttackId,
                 attackName,
+                actionType: String(attack.actionType || '').trim(),
+                range: String(attack.range || '').trim(),
+                attackType: String(attack.attackType || '').trim(),
+                abilityModSource: String(attack.abilityModSource || attack.attackAbilityName || '').trim(),
+                attackAbilityMod: String(attack.attackAbilityMod || '').trim(),
+                attackExtraBonus: String(attack.attackExtraBonus || '').trim(),
+                proficiencyLevel: String(attack.proficiencyLevel || attack.atkProfFlag || '').trim(),
                 attackBonus,
                 baseAttackBonus,
                 exhaustionPenalty,
                 attackBonusText: this.formatSignedModifier(attackBonus),
                 attackRolls,
+                selectedAttackRoll: selectedRoll,
+                attackRollEffectRows: attackRollEffect.rows || [],
+                attackRollEffects: attackRollEffect.effects || [],
                 attackTotal,
                 isCritical,
                 isSaveAttack,
@@ -15600,6 +15723,16 @@ const TnT = (() => {
             });
         },
 
+        getActiveAttackNodeEntryById(characterId = '', attackId = '') {
+            const safeAttackId = this.cleanRepeatingActionId(attackId);
+            if (!safeAttackId) return null;
+            const entries = this.getActiveAttackNodesFromStore(characterId);
+            return entries.find((entry) => {
+                const node = entry && entry.node;
+                return this.cleanRepeatingActionId(node && (node.shortID || node.shortId || node.id || '')) === safeAttackId;
+            }) || null;
+        },
+
         isStoreAttackFromSpell(container = {}, attackNode = null) {
             if (!container || typeof container !== 'object' || Array.isArray(container) || !attackNode) return false;
             const sourceId = String(attackNode.sourceID || attackNode.sourceId || '').trim();
@@ -15643,7 +15776,9 @@ const TnT = (() => {
         formatDamageNodeBase(damageNode = null, attackNode = null) {
             const node = damageNode || {};
             const diceSize = String(node.diceSize || node.dieSize || '').trim().toLowerCase();
-            const diceCountRaw = node.diceCount !== undefined ? node.diceCount : node.count;
+            const diceCountRaw = node._diceCount !== undefined
+                ? node._diceCount
+                : (node.diceCount !== undefined ? node.diceCount : (node.count !== undefined ? node.count : node.dieCount));
             const diceCount = Utils.toInt(diceCountRaw, 0);
             if (diceSize) {
                 const normalizedSize = diceSize.charAt(0) === 'd' ? diceSize : ('d' + diceSize.replace(/^d/i, ''));
@@ -15713,6 +15848,10 @@ const TnT = (() => {
                 rowKey: String(key || attackId),
                 attackId,
                 attackName,
+                actionType: String(node.actionType || '').trim(),
+                range: String(node.range || '').trim(),
+                attackType: String(node.attack && node.attack.type || '').trim(),
+                proficiencyLevel: String(nodeProficiencyLevel || profRaw || '').trim(),
                 dmgBase: String(dmgBaseRaw || '').trim(),
                 dmgMod: '',
                 dmgType: String(dmgTypeRaw || '').trim(),
@@ -16062,7 +16201,7 @@ const TnT = (() => {
             }
             if (name === 'shop') {
                 return isGM
-                    ? 'Shop: !tntShop {list|get|buy|menu|detail|export|create|delete|add|remove|open|close|hide|blacklist|config|load|reload}.'
+                    ? 'Shop: !tntShop {list|get|buy|menu|detail|export|create|delete|add|remove|open|close|hide|blacklist|config|icon|name|load|reload}.'
                     : 'Shop: !tntShop {list|get|buy}.';
             }
             if (name === 'item') {
@@ -19338,6 +19477,15 @@ const TnT = (() => {
                 return;
             }
 
+            if (action === 'name' || action === 'rename') {
+                const shopId = String(args[1] || '').trim();
+                const name = args.slice(2).join(' ').trim();
+                const result = ShopService.setShopName(shopId, name);
+                if (result.ok) R20.whisper(who, Render.showShopDetail(result.shop));
+                else Render.sendWhisperMessage(who, 'Shop Name', Utils.escapeHtml(result.message || 'Unable to update shop name.'), 'failure');
+                return;
+            }
+
             if (action === 'toggle') {
                 const result = ShopService.toggleOpenClose(args[1] || '');
                 if (result.ok && String(args[2] || '').trim().toLowerCase() === 'detail') R20.whisper(who, Render.showShopDetail(result.shop));
@@ -20029,7 +20177,7 @@ const TnT = (() => {
         },
 
         async onChatMessage(msg) {
-            if (RuntimeConfig.get('CHAT_MONITORING')) {
+            if (RuntimeConfig.get('CHAT_MONITORING') && RuntimeConfig.get('COMBAT_ASSISTANT')) {
                 //this.debugChatMessage(msg);
                 this.captureRoll20AttackMessage(msg);
             }
@@ -20144,7 +20292,7 @@ const TnT = (() => {
 
             Registry.registerCommand(new ChatCommand({
                 name: 'Shop',
-                description: 'Shop: !tntShop {menu|detail|export|list|get|buy|create|delete|add|remove|open|close|hide|blacklist|config|load|reload}.',
+                description: 'Shop: !tntShop {menu|detail|export|list|get|buy|create|delete|add|remove|open|close|hide|blacklist|config|icon|name|load|reload}.',
                 trigger: ['!tntShop'],
                 useToken: false,
                 callback: Handlers.shop
@@ -20167,20 +20315,6 @@ const TnT = (() => {
         },
 
         init() {
-            const isSandboxDefault = Campaign().sandboxVersion.toLowerCase() !== 'experimental';
-            if(isSandboxDefault) {
-                Render.sendWhisperMessage(
-                    'GM', 
-                    CONFIG.CHAT_NAME.toUpperCase(), 
-                    Html.span('API SANDBOX VERSION: DEFAULT<br>', 'color:rgb(208, 139, 28)') +
-                    '<br>' +
-                    'T&amp;T API is not available.<br>' +
-                    'Go to Mod Library and set "API Sandbox Version" to Experimental to use this API.',
-                    'failure'
-                );
-                return;
-            }
-
             State.ensure();
             this.registerCommands();
             this.bindEvents();
