@@ -82,11 +82,11 @@ var TrinketsAndTrackers = TrinketsAndTrackers || (function () {
             eventLogWarningBytes: 3000000,
             eventLogMaxBytes: 3400000,
             imageUrl: 'https://files.d20.io/images/496906084/Nc1ByRnJYrXaC_fSooqKgQ/max.webp?1786243857',
-            databaseDownloadUrl: 'https://raw.githubusercontent.com/AmadeusVF/Trinkets-and-Trackers/refs/heads/main/Handouts/T%26T%20Portable%20Database.json',
-            blueprintsDownloadUrl: 'https://raw.githubusercontent.com/AmadeusVF/Trinkets-and-Trackers/refs/heads/main/Handouts/T%26T%20Item%20Blueprints.json'
+            databaseDownloadUrl: 'https://amadeusvf.s.gy/TnT-Portable-Database',
+            blueprintsDownloadUrl: 'https://amadeusvf.s.gy/TnT-Item-Blueprints'
         }),
         links: Object.freeze({
-            roll20GuideUrl: 'https://app.roll20.net/forum/post/12758022/t-and-t-chat-based-inventory-dynamic-shops-auto-healing-loot-and-item-automation-for-roll20-d-and-d-2024'
+            roll20GuideUrl: 'https://app.roll20.net/forum/post/12833401/t-and-t-main-script-trinkets-and-trackers-an-interactive-d-and-d-campaign-layer-legacy-slash-beacon'
         }),
         chat: Object.freeze({
             speaker: 'Trinkets & Trackers',
@@ -136,7 +136,7 @@ var TrinketsAndTrackers = TrinketsAndTrackers || (function () {
             defaultTitleBgColor: 'rgba(0, 0, 0, 0.5)',
             defaultTitleLineColor: 'rgb(168, 42, 42)',
             defaultBodyBgColor: 'rgba(0, 0, 0, 0.3)',
-            defaultBodyImageUrl: 'https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTEyL3Jhd3BpeGVsX29mZmljZV80Nl9ibGFja193YWxscGFwZXJfbW9ub2Nocm9tZV9jaGluZXNlX2RyYWdvbl8yNmY3MzllOS1mYzkwLTQ3MDEtYjdmNS01NjFmMTQwMjc1OGRfMS5qcGc.jpg'
+            defaultBodyImageUrl: 'https://raw.githubusercontent.com/AmadeusVF/Trinkets-Trackers_Images/refs/heads/main/tnt-card-background.jpg'
         }),
         rollBox: Object.freeze({
             width: 40,
@@ -148,7 +148,7 @@ var TrinketsAndTrackers = TrinketsAndTrackers || (function () {
         }),
         inventory: Object.freeze({
             command: '!tntInventory',
-            defaultItemImageUrl: 'https://static.vecteezy.com/system/resources/thumbnails/059/918/034/small/stunning-minimalist-bag-of-cement-4k-free-png.png',
+            defaultItemImageUrl: 'https://files.d20.io/images/502788011/I9xtl1Qtf1YKnNSZ47EXhw/max.webp?1790820252',
             defaultDroppedItemImageUrl: 'https://files.d20.io/images/491584944/cfcv1fMypMTr1ZHcSFQ_pw/max.webp?1782191468',
             defaultDroppedItemTokenSize: '35x35',
             characterColor: 'rgb(212, 175, 55)',
@@ -6382,21 +6382,21 @@ var TrinketsAndTrackers = TrinketsAndTrackers || (function () {
                 CHAT_BACKGROUND_IMAGE_URL: CONFIG.card.defaultBodyImageUrl,
                 ITEM_TRANSFER_MAX_DISTANCE: CONFIG.inventory.defaultTransferMaxDistance,
                 ADJUST_DISTANCES_TO_MAP_SCALE: true,
-                ALLOW_PLAYER_ITEM_ADD: false,
-                ALLOW_PLAYER_TOKEN_SETUP: false,
+                ALLOW_PLAYER_ITEM_ADD: true,
+                ALLOW_PLAYER_TOKEN_SETUP: true,
                 ALLOW_PLAYER_SHAPE: true,
                 ALLOW_PLAYER_FOLLOW: true,
                 ALLOW_PLAYER_ITEM_TRANSFERS: true,
                 ITEM_PICKUP_ENABLED: false,
                 DROP_ITEM_ON_MAP: false,
-                USE_ROLL20_DROP_ITEM_IMAGE: true,
-                DROPPED_ITEM_TOOLTIP: true,
-                DROPPED_ITEM_TOOLTIP_GM_ONLY: true,
+                USE_ROLL20_DROP_ITEM_IMAGE: false,
+                DROPPED_ITEM_TOOLTIP: false,
+                DROPPED_ITEM_TOOLTIP_GM_ONLY: false,
                 DROPPED_ITEM_ROLL20_URL: CONFIG.inventory.defaultDroppedItemImageUrl,
                 DROPPED_ITEM_TOKEN_SIZE: CONFIG.inventory.defaultDroppedItemTokenSize,
                 GM_IGNORES_ITEM_TRANSFER_DISTANCE: false,
                 AUTO_STACK_ITEMS: true,
-                STRICT_STACK_MATCHING: true,
+                STRICT_STACK_MATCHING: false,
                 REOPEN_INVENTORY_AFTER_ITEM_ACTIONS: false,
                 HIDE_PLAYER_ITEM_DETAILS_PRICE: false,
                 BLOCK_PLAYER_ITEM_SEARCH: false,
@@ -6410,7 +6410,7 @@ var TrinketsAndTrackers = TrinketsAndTrackers || (function () {
                 DAMAGE_ROUND_UP: true,
                 MARK_DEFEATED_NPCS: true,
                 VERIFIED_BEACON_HEALTH_SYNC: true,
-                COMBAT_VISUAL_EFFECTS: false,
+                COMBAT_VISUAL_EFFECTS: true,
                 HEALING_EFFECT_NAME: 'sparkle',
                 PROJECTILE_EFFECT_NAME: 'ProjectileFX',
                 DIRECT_HIT_EFFECT_NAME: 'Bomb',
@@ -6422,7 +6422,7 @@ var TrinketsAndTrackers = TrinketsAndTrackers || (function () {
                 SHOW_AOE_AREA: false,
                 DEFAULT_INVENTORY_SORT: 'name',
                 SHOP_ITEM_SORT: 'name',
-                SHOP_ITEM_VIEW: 'list',
+                SHOP_ITEM_VIEW: 'icons',
                 SHOP_REOPEN_AFTER_TRANSACTION: false,
                 SHOP_ALLOW_PRICE_REQUESTS: true,
                 SHOP_ALLOW_DISCOUNT_REQUESTS: true,
@@ -6430,13 +6430,13 @@ var TrinketsAndTrackers = TrinketsAndTrackers || (function () {
                 SHOP_RENTAL_PLAYER_CONTROL_DEFAULT: false,
                 SHOP_DEFAULT_INTERACTION_RANGE: 15,
                 SHOP_DEFAULT_ICON: '🏪',
-                SHOP_ASSIGNED_TOKEN_MARKER: 'custom',
+                SHOP_ASSIGNED_TOKEN_MARKER: 'white-tower',
                 TELEPORT_PAD_TOKEN_ROLL20_URL: CONFIG.shop.defaultTeleportPadTokenRoll20Url,
                 TOKEN_FOLLOW_SNAP_TO_GRID: false,
-                TOKEN_AVOID_BARRIERS: false,
-                TOKEN_SHOW_WAYPOINTS_WHILE_MOVING: true,
-                TOKEN_INSTANT_MOVEMENT: true,
-                TOKEN_MOVEMENT_FREQUENCY_MS: 1000,
+                TOKEN_AVOID_BARRIERS: true,
+                TOKEN_SHOW_WAYPOINTS_WHILE_MOVING: false,
+                TOKEN_INSTANT_MOVEMENT: false,
+                TOKEN_MOVEMENT_FREQUENCY_MS: 550,
                 TOKEN_FOLLOW_MARKER: CONFIG.token.followMarkerDefault,
                 TOKEN_FOLLOW_LOOP_PROTECTION: false,
                 TOKEN_FOLLOW_DEFAULT_DISTANCE_FT: CONFIG.token.followDefaultDistance,
@@ -6452,7 +6452,7 @@ var TrinketsAndTrackers = TrinketsAndTrackers || (function () {
                 TOKEN_FOLLOW_MAX_DOOR_TRANSITIONS: CONFIG.navigation.maximumDoorTransitions,
                 TOKEN_ALLOW_MOVEMENT_INTO_OCCUPIED_SPACES: false,
                 TOKEN_TOKENS_BLOCK_MOVEMENT: false,
-                TOKEN_OPEN_UNLOCKED_DOORS: false,
+                TOKEN_OPEN_UNLOCKED_DOORS: true,
                 TOKEN_ALLOW_SPAWN_OVER_TOKENS: false,
                 TOKEN_ALLOW_COMPANION_AUTO_RECALL: false,
                 ITEM_USE_VISIBILITY: 'public',
@@ -6461,10 +6461,10 @@ var TrinketsAndTrackers = TrinketsAndTrackers || (function () {
                 DEFAULT_ITEM_IMAGE_URL: CONFIG.inventory.defaultItemImageUrl,
                 DEFAULT_KEY_IMAGE_URL: CONFIG.worldInteraction.defaultKeyImageUrl,
                 TIME_FORMAT: '12h',
-                CALENDAR_TYPE: 'gregorian',
+                CALENDAR_TYPE: 'harptos',
                 PLAYER_CAN_VIEW_WORLD_STATUS: true,
                 PUBLIC_WORLD_TIME_UPDATES: false,
-                ADJUST_MAP_LIGHT: false,
+                ADJUST_MAP_LIGHT: true,
                 SMOOTH_MAP_LIGHT_TRANSITION: true,
                 MAP_LIGHT_TRANSITION_SPEED_MS: CONFIG.world.mapLightTransitionSpeedDefaultMs,
                 WEATHER_ASSETS: {}
@@ -31291,7 +31291,7 @@ var TrinketsAndTrackers = TrinketsAndTrackers || (function () {
                 ? RuntimeConfig.get('AUTO_STACK_ITEMS', true) !== false
                 : operationContext.autoStack !== false;
             var strictStackMatching = operationContext.strictStackMatching === undefined
-                ? RuntimeConfig.get('STRICT_STACK_MATCHING', true) !== false
+                ? RuntimeConfig.get('STRICT_STACK_MATCHING', false) !== false
                 : operationContext.strictStackMatching !== false;
             delete operationContext.alreadyLocked;
             delete operationContext.autoStack;
@@ -31473,7 +31473,7 @@ var TrinketsAndTrackers = TrinketsAndTrackers || (function () {
             var amount = Math.max(1, Utils.toInt(quantity, 1));
             return Promise.resolve(adapter.addItem(character, item, amount, {
                 autoStack: RuntimeConfig.get('AUTO_STACK_ITEMS', true) !== false,
-                strictStackMatching: RuntimeConfig.get('STRICT_STACK_MATCHING', true) !== false
+                strictStackMatching: RuntimeConfig.get('STRICT_STACK_MATCHING', false) !== false
             })).then(function (result) {
                 if (result && result.ok) {
                     EventBus.publish(EVENTS.ITEM_ADDED, {
@@ -31670,7 +31670,7 @@ var TrinketsAndTrackers = TrinketsAndTrackers || (function () {
 
             function importForTransfer(payload, item) {
                 var autoStack = transferAutoStack(item, payload);
-                var strictStackMatching = RuntimeConfig.get('STRICT_STACK_MATCHING', true) !== false;
+                var strictStackMatching = RuntimeConfig.get('STRICT_STACK_MATCHING', false) !== false;
                 if (!crossFormat) {
                     return targetAdapter.importTransferItem(targetCharacter, payload, quantity, {
                         alreadyLocked: true, autoStack: autoStack, strictStackMatching: strictStackMatching
@@ -31750,7 +31750,7 @@ var TrinketsAndTrackers = TrinketsAndTrackers || (function () {
                         targetAfterFingerprint: '',
                         crossFormat: crossFormat,
                         autoStack: transferAutoStack(sourceItem, payload),
-                        strictStackMatching: RuntimeConfig.get('STRICT_STACK_MATCHING', true) !== false
+                        strictStackMatching: RuntimeConfig.get('STRICT_STACK_MATCHING', false) !== false
                     };
                     var begun = TransactionService.begin({
                         type: TRANSFER_TRANSACTION_TYPE,
@@ -32014,7 +32014,7 @@ var TrinketsAndTrackers = TrinketsAndTrackers || (function () {
                     return SheetAdapters.detect(character).addInventoryBlueprint(character, delivery.blueprint, quantity, {
                         alreadyLocked: true,
                         autoStack: RuntimeConfig.get('AUTO_STACK_ITEMS', true) !== false,
-                        strictStackMatching: RuntimeConfig.get('STRICT_STACK_MATCHING', true) !== false,
+                        strictStackMatching: RuntimeConfig.get('STRICT_STACK_MATCHING', false) !== false,
                         stackKey: String(delivery.blueprintId || delivery.blueprint && delivery.blueprint.id || '')
                     }).then(function (result) {
                         if (result && result.ok) { result.blueprintId = delivery.blueprintId; }
@@ -32030,7 +32030,7 @@ var TrinketsAndTrackers = TrinketsAndTrackers || (function () {
             if (spec.alreadyLocked === true) {
                 return Promise.resolve(SheetAdapters.detect(character).addItem(character, delivery.item, quantity, {
                     autoStack: RuntimeConfig.get('AUTO_STACK_ITEMS', true) !== false,
-                    strictStackMatching: RuntimeConfig.get('STRICT_STACK_MATCHING', true) !== false,
+                    strictStackMatching: RuntimeConfig.get('STRICT_STACK_MATCHING', false) !== false,
                     alreadyLocked: true
                 }));
             }
@@ -33600,7 +33600,7 @@ var TrinketsAndTrackers = TrinketsAndTrackers || (function () {
         }
 
         function handleHealingApplied(event) {
-            if (RuntimeConfig.get('COMBAT_VISUAL_EFFECTS', false) !== true) { return false; }
+            if (RuntimeConfig.get('COMBAT_VISUAL_EFFECTS', true) !== true) { return false; }
             var effect = event && Array.isArray(event.effects) ? event.effects[0] : null;
             if (!effect || effect.effect !== 'healing' || Utils.toNumber(effect.appliedAmount, 0) <= 0) { return false; }
             var token = R20.getGraphic(event.targetTokenId);
@@ -33613,7 +33613,7 @@ var TrinketsAndTrackers = TrinketsAndTrackers || (function () {
         }
 
         function handleDamageApplied(event) {
-            if (RuntimeConfig.get('COMBAT_VISUAL_EFFECTS', false) !== true) { return false; }
+            if (RuntimeConfig.get('COMBAT_VISUAL_EFFECTS', true) !== true) { return false; }
             var effects = event && Array.isArray(event.effects) ? event.effects : [];
             var effect = effects[0];
             if (effect && effect.damageVisualEffectPlayed === true) { return false; }
@@ -33654,7 +33654,7 @@ var TrinketsAndTrackers = TrinketsAndTrackers || (function () {
         }
 
         function playItemAoe(event) {
-            if (RuntimeConfig.get('COMBAT_VISUAL_EFFECTS', false) !== true || !event ||
+            if (RuntimeConfig.get('COMBAT_VISUAL_EFFECTS', true) !== true || !event ||
                 event.actionType !== 'damage' || !event.aoe) {
                 return false;
             }
@@ -38871,7 +38871,7 @@ var TrinketsAndTrackers = TrinketsAndTrackers || (function () {
 
     var ShopAssignedTokenMarkerService = (function () {
         function configuredMarker() {
-            var marker = String(RuntimeConfig.get('SHOP_ASSIGNED_TOKEN_MARKER', 'custom') || 'custom')
+            var marker = String(RuntimeConfig.get('SHOP_ASSIGNED_TOKEN_MARKER', 'white-tower') || 'custom')
                 .replace(/[\u0000-\u001F\u007F]/g, '').trim().toLowerCase();
             return /^[a-z0-9_-]{1,40}$/.test(marker) ? marker : 'custom';
         }
@@ -47533,7 +47533,7 @@ var TrinketsAndTrackers = TrinketsAndTrackers || (function () {
         });
 
         function calendar() {
-            return CALENDARS[String(RuntimeConfig.get('CALENDAR_TYPE', 'gregorian')).toLowerCase()] || CALENDARS.gregorian;
+            return CALENDARS[String(RuntimeConfig.get('CALENDAR_TYPE', 'harptos')).toLowerCase()] || CALENDARS.gregorian;
         }
 
         function store() {
@@ -47987,14 +47987,14 @@ var TrinketsAndTrackers = TrinketsAndTrackers || (function () {
         }
 
         function syncCurrent(campaign) {
-            if (RuntimeConfig.get('ADJUST_MAP_LIGHT', false) !== true) {
+            if (RuntimeConfig.get('ADJUST_MAP_LIGHT', true) !== true) {
                 return { ok: true, changed: false, skipped: 'setting-disabled', pagesChanged: 0 };
             }
             return applyConfiguredStatus(WorldTimeService.snapshot(), campaign);
         }
 
         function handleWorldTimeChanged(event) {
-            if (RuntimeConfig.get('ADJUST_MAP_LIGHT', false) !== true) { return { ok: true, changed: false, skipped: 'setting-disabled' }; }
+            if (RuntimeConfig.get('ADJUST_MAP_LIGHT', true) !== true) { return { ok: true, changed: false, skipped: 'setting-disabled' }; }
             try {
                 return applyConfiguredStatus(event && event.after || WorldTimeService.snapshot());
             } catch (error) {
@@ -48004,7 +48004,7 @@ var TrinketsAndTrackers = TrinketsAndTrackers || (function () {
         }
 
         function handleWeatherChanged(event) {
-            if (RuntimeConfig.get('ADJUST_MAP_LIGHT', false) !== true) { return { ok: true, changed: false, skipped: 'setting-disabled' }; }
+            if (RuntimeConfig.get('ADJUST_MAP_LIGHT', true) !== true) { return { ok: true, changed: false, skipped: 'setting-disabled' }; }
             try {
                 return applyConfiguredStatus(event && event.after || WorldTimeService.snapshot());
             } catch (error) {
@@ -48014,7 +48014,7 @@ var TrinketsAndTrackers = TrinketsAndTrackers || (function () {
         }
 
         function handleCampaignChanged(campaign, previous) {
-            if (RuntimeConfig.get('ADJUST_MAP_LIGHT', false) !== true) { return { ok: true, changed: false, skipped: 'setting-disabled' }; }
+            if (RuntimeConfig.get('ADJUST_MAP_LIGHT', true) !== true) { return { ok: true, changed: false, skipped: 'setting-disabled' }; }
             var currentCampaign = campaign || R20.getCampaign();
             if (!currentCampaign) { return { ok: true, changed: false, skipped: 'campaign-missing' }; }
             var previousPlayerPage = previous && previous.playerpageid;
@@ -48088,7 +48088,7 @@ var TrinketsAndTrackers = TrinketsAndTrackers || (function () {
 
         function tick() {
             timer = null;
-            if (RuntimeConfig.get('ADJUST_MAP_LIGHT', false) !== true ||
+            if (RuntimeConfig.get('ADJUST_MAP_LIGHT', true) !== true ||
                 RuntimeConfig.get('SMOOTH_MAP_LIGHT_TRANSITION', true) !== true) {
                 targets = Object.create(null);
                 return;
@@ -51684,7 +51684,7 @@ var TrinketsAndTrackers = TrinketsAndTrackers || (function () {
         function resolvedDropImage(item) {
             var fallback = Utils.safeRoll20ImageUrl(RuntimeConfig.get('DROPPED_ITEM_ROLL20_URL', CONFIG.inventory.defaultDroppedItemImageUrl)) ||
                 Utils.safeRoll20ImageUrl(CONFIG.inventory.defaultDroppedItemImageUrl);
-            if (RuntimeConfig.get('USE_ROLL20_DROP_ITEM_IMAGE', true) !== true) {
+            if (RuntimeConfig.get('USE_ROLL20_DROP_ITEM_IMAGE', false) !== true) {
                 return Promise.resolve(TokenService.tokenImageUrl(fallback));
             }
             var live = itemRoll20Image(item);
@@ -51707,7 +51707,7 @@ var TrinketsAndTrackers = TrinketsAndTrackers || (function () {
             return resolvedDropImage(item).then(function (imageUrl) {
                 if (!imageUrl) { return { ok: false, error: I18N.t('dm.itemDropSpawnFailed') }; }
                 var itemName = String(item && item.name || blueprint && blueprint.name || 'Item').trim() || 'Item';
-                var tooltipEnabled = RuntimeConfig.get('DROPPED_ITEM_TOOLTIP', true) === true;
+                var tooltipEnabled = RuntimeConfig.get('DROPPED_ITEM_TOOLTIP', false) === true;
                 var token = null;
                 try {
                     token = R20.createObject('graphic', {
@@ -51725,7 +51725,7 @@ var TrinketsAndTrackers = TrinketsAndTrackers || (function () {
                         gmnotes: '<div style="display:none">' + packet.packet + '</div>',
                         tooltip: Math.max(1, Utils.toInt(quantity, 1)) + 'x ' + itemName,
                         show_tooltip: tooltipEnabled,
-                        gm_only_tooltip: tooltipEnabled && RuntimeConfig.get('DROPPED_ITEM_TOOLTIP_GM_ONLY', true) === true
+                        gm_only_tooltip: tooltipEnabled && RuntimeConfig.get('DROPPED_ITEM_TOOLTIP_GM_ONLY', false) === true
                     });
                 } catch (error) {
                     DiagnosticTraceService.caught('DroppedItem', 'token.spawn-failed', error, { item: itemName, pageId: pageId }, 'error');
@@ -51854,7 +51854,7 @@ var TrinketsAndTrackers = TrinketsAndTrackers || (function () {
             var adapter = SheetAdapters.detect(character);
             return Promise.resolve(adapter.addInventoryBlueprint(character, parsed.blueprint, parsed.quantity, {
                 autoStack: RuntimeConfig.get('AUTO_STACK_ITEMS', true) === true,
-                strictStackMatching: RuntimeConfig.get('STRICT_STACK_MATCHING', true) === true,
+                strictStackMatching: RuntimeConfig.get('STRICT_STACK_MATCHING', false) === true,
                 source: 'map-drop-pickup'
             })).then(function (added) {
                 if (!added || !added.ok) {
@@ -53355,8 +53355,8 @@ var TrinketsAndTrackers = TrinketsAndTrackers || (function () {
         }
 
         function Waypoint_delay(entry) {
-            if (RuntimeConfig.get('TOKEN_INSTANT_MOVEMENT', true) === true) { return 0; }
-            var base = Utils.clamp(Utils.toInt(RuntimeConfig.get('TOKEN_MOVEMENT_FREQUENCY_MS', 1000), 1000), 100, 10000);
+            if (RuntimeConfig.get('TOKEN_INSTANT_MOVEMENT', false) === true) { return 0; }
+            var base = Utils.clamp(Utils.toInt(RuntimeConfig.get('TOKEN_MOVEMENT_FREQUENCY_MS', 550), 550), 100, 10000);
             return Math.max(0, Math.round(base * Clean_frequency_scale(entry && entry.frequencyScale)));
         }
 
@@ -53411,10 +53411,10 @@ var TrinketsAndTrackers = TrinketsAndTrackers || (function () {
             var desiredDistance = DistanceService.configuredDistance(
                 Clean_distance(entry && entry.minimumDistanceFt), targetGeometry.pageId);
             var tacticalDistance = DistanceService.tacticalBoxEdgeDistance(measurement);
-            var avoidBarriers = RuntimeConfig.get('TOKEN_AVOID_BARRIERS', false) === true;
+            var avoidBarriers = RuntimeConfig.get('TOKEN_AVOID_BARRIERS', true) === true;
             var allowOccupiedDestination = RuntimeConfig.get('TOKEN_ALLOW_MOVEMENT_INTO_OCCUPIED_SPACES', false) === true;
             var tokensBlockMovement = RuntimeConfig.get('TOKEN_TOKENS_BLOCK_MOVEMENT', false) === true;
-            var openUnlockedDoors = RuntimeConfig.get('TOKEN_OPEN_UNLOCKED_DOORS', false) === true;
+            var openUnlockedDoors = RuntimeConfig.get('TOKEN_OPEN_UNLOCKED_DOORS', true) === true;
             var targetPoint = { x: followTargetGeometry.left, y: followTargetGeometry.top };
             var followerPoint = { x: followFollowerGeometry.left, y: followFollowerGeometry.top };
             var barrierConnected = !avoidBarriers || TokenNavigationService.lineClear(
@@ -53446,7 +53446,7 @@ var TrinketsAndTrackers = TrinketsAndTrackers || (function () {
                     // a standard 70px cell center; collision checks continue using the real token
                     // footprint so Tiny creatures do not become artificially blocked.
                     normalizeSubgridTokens: true,
-                    showWaypoints: RuntimeConfig.get('TOKEN_SHOW_WAYPOINTS_WHILE_MOVING', true) === true,
+                    showWaypoints: RuntimeConfig.get('TOKEN_SHOW_WAYPOINTS_WHILE_MOVING', false) === true,
                     clearWaypointsOnComplete: true,
                     waypointDelayMs: Waypoint_delay(entry),
                     loopProtection: RuntimeConfig.get('TOKEN_FOLLOW_LOOP_PROTECTION', false) === true,
@@ -63140,7 +63140,7 @@ var TrinketsAndTrackers = TrinketsAndTrackers || (function () {
             var dateOptions;
             var dateValue;
             if (mode === 'monthly') {
-                var calendar = String(RuntimeConfig.get('CALENDAR_TYPE', 'gregorian'));
+                var calendar = String(RuntimeConfig.get('CALENDAR_TYPE', 'harptos'));
                 var maximumDay = calendar === 'cotsworth' ? 28 : (calendar === 'harptos' ? 30 : 31);
                 dateOptions = [];
                 for (var day = 1; day <= maximumDay; day += 1) { dateOptions.push(String(day)); }
@@ -70590,7 +70590,7 @@ var TrinketsAndTrackers = TrinketsAndTrackers || (function () {
                         if (!pageInfo.records.length) {
                             body += '<div style="text-align:center;">' + Utils.escapeHtml(query
                                 ? I18N.t('shops.noSearchMatches', { query: query }) : I18N.t('shops.noOffers')) + '</div>';
-                        } else if (RuntimeConfig.get('SHOP_ITEM_VIEW', 'list') === 'icons') {
+                        } else if (RuntimeConfig.get('SHOP_ITEM_VIEW', 'icons') === 'icons') {
                             body += '<table style="width:100%;border-collapse:collapse;table-layout:fixed;"><tbody>';
                             for (var iconIndex = 0; iconIndex < pageInfo.records.length; iconIndex += 2) {
                                 var iconEntries = pageInfo.records.slice(iconIndex, iconIndex + 2);
@@ -72518,7 +72518,7 @@ var TrinketsAndTrackers = TrinketsAndTrackers || (function () {
                     if (!pageInfo.records.length) {
                         body += '<div style="text-align:center;">' + Utils.escapeHtml(loaded.query
                             ? I18N.t('shops.noSearchMatches', { query: loaded.query }) : I18N.t('shops.noOffers')) + '</div>';
-                    } else if (RuntimeConfig.get('SHOP_ITEM_VIEW', 'list') === 'icons') {
+                    } else if (RuntimeConfig.get('SHOP_ITEM_VIEW', 'icons') === 'icons') {
                         body += '<table style="width:100%;border-collapse:collapse;table-layout:fixed;"><tbody>';
                         for (var index = 0; index < pageInfo.records.length; index += 2) {
                             var rowEntries = pageInfo.records.slice(index, index + 2);
@@ -77085,7 +77085,7 @@ var TrinketsAndTrackers = TrinketsAndTrackers || (function () {
         }
 
         function playerTokenSetupAllowed(message) {
-            return Permissions.isGm(message && message.playerid) || RuntimeConfig.get('ALLOW_PLAYER_TOKEN_SETUP', false) === true;
+            return Permissions.isGm(message && message.playerid) || RuntimeConfig.get('ALLOW_PLAYER_TOKEN_SETUP', true) === true;
         }
 
         function playerTokenSetupIdentity(recipe) {
@@ -83487,7 +83487,7 @@ var TrinketsAndTrackers = TrinketsAndTrackers || (function () {
         }
 
         function addInventoryItem(message, args) {
-            if (!Permissions.isGm(message.playerid) && RuntimeConfig.get('ALLOW_PLAYER_ITEM_ADD', false) !== true) {
+            if (!Permissions.isGm(message.playerid) && RuntimeConfig.get('ALLOW_PLAYER_ITEM_ADD', true) !== true) {
                 ChatUI.error(message.playerid, I18N.t('item.addDisabled'));
                 return true;
             }
@@ -85523,7 +85523,7 @@ var TrinketsAndTrackers = TrinketsAndTrackers || (function () {
 
         function shopSettings(context) {
             var sortMode = String(RuntimeConfig.get('SHOP_ITEM_SORT', 'name'));
-            var viewMode = String(RuntimeConfig.get('SHOP_ITEM_VIEW', 'list'));
+            var viewMode = String(RuntimeConfig.get('SHOP_ITEM_VIEW', 'icons'));
             var reopenAfterTransaction = boolSetting('SHOP_REOPEN_AFTER_TRANSACTION', false);
             var allowPriceRequests = boolSetting('SHOP_ALLOW_PRICE_REQUESTS', true);
             var allowDiscountRequests = boolSetting('SHOP_ALLOW_DISCOUNT_REQUESTS', true);
@@ -85532,7 +85532,7 @@ var TrinketsAndTrackers = TrinketsAndTrackers || (function () {
             var rentalPlayerControlDefault = boolSetting('SHOP_RENTAL_PLAYER_CONTROL_DEFAULT', false);
             var defaultInteractionRange = Utils.clamp(Utils.toNumber(RuntimeConfig.get('SHOP_DEFAULT_INTERACTION_RANGE', 15), 15), 0, 1000);
             var defaultShopIcon = String(RuntimeConfig.get('SHOP_DEFAULT_ICON', '🏪') || '🏪');
-            var assignedTokenMarker = String(RuntimeConfig.get('SHOP_ASSIGNED_TOKEN_MARKER', 'custom') || 'custom');
+            var assignedTokenMarker = String(RuntimeConfig.get('SHOP_ASSIGNED_TOKEN_MARKER', 'white-tower') || 'custom');
             var teleportPadTokenRoll20Url = String(RuntimeConfig.get('TELEPORT_PAD_TOKEN_ROLL20_URL', CONFIG.shop.defaultTeleportPadTokenRoll20Url) || CONFIG.shop.defaultTeleportPadTokenRoll20Url);
             var sortLabels = {
                 name: I18N.t('dm.inventorySortName'),
@@ -85625,15 +85625,15 @@ var TrinketsAndTrackers = TrinketsAndTrackers || (function () {
 
         function tokenSettings(context) {
             var advancedMode = boolSetting('ADVANCED_MODE', false);
-            var allowPlayerTokenSetup = boolSetting('ALLOW_PLAYER_TOKEN_SETUP', false);
+            var allowPlayerTokenSetup = boolSetting('ALLOW_PLAYER_TOKEN_SETUP', true);
             var allowPlayerShape = boolSetting('ALLOW_PLAYER_SHAPE', true);
             var allowPlayerFollow = boolSetting('ALLOW_PLAYER_FOLLOW', true);
             var snapToGrid = boolSetting('TOKEN_FOLLOW_SNAP_TO_GRID', false);
-            var avoidBarriers = boolSetting('TOKEN_AVOID_BARRIERS', false);
-            var openUnlockedDoors = boolSetting('TOKEN_OPEN_UNLOCKED_DOORS', false);
+            var avoidBarriers = boolSetting('TOKEN_AVOID_BARRIERS', true);
+            var openUnlockedDoors = boolSetting('TOKEN_OPEN_UNLOCKED_DOORS', true);
             var loopProtection = boolSetting('TOKEN_FOLLOW_LOOP_PROTECTION', false);
-            var showWaypoints = boolSetting('TOKEN_SHOW_WAYPOINTS_WHILE_MOVING', true);
-            var instantMovement = boolSetting('TOKEN_INSTANT_MOVEMENT', true);
+            var showWaypoints = boolSetting('TOKEN_SHOW_WAYPOINTS_WHILE_MOVING', false);
+            var instantMovement = boolSetting('TOKEN_INSTANT_MOVEMENT', false);
             var allowOccupiedMovement = boolSetting('TOKEN_ALLOW_MOVEMENT_INTO_OCCUPIED_SPACES', false);
             var tokensBlockMovement = boolSetting('TOKEN_TOKENS_BLOCK_MOVEMENT', false);
             var allowCompanionAutoRecall = boolSetting('TOKEN_ALLOW_COMPANION_AUTO_RECALL', false);
@@ -85649,7 +85649,7 @@ var TrinketsAndTrackers = TrinketsAndTrackers || (function () {
             var maximumDoorTransitions = Utils.clamp(Utils.toInt(RuntimeConfig.get('TOKEN_FOLLOW_MAX_DOOR_TRANSITIONS', CONFIG.navigation.maximumDoorTransitions), CONFIG.navigation.maximumDoorTransitions), 1, 50);
             var doorDelayMs = Utils.clamp(Utils.toInt(RuntimeConfig.get('TOKEN_FOLLOW_DOOR_DELAY_MS', CONFIG.navigation.followDoorDelayMs), CONFIG.navigation.followDoorDelayMs), 0, 3000);
             var doorHoldSteps = Utils.clamp(Utils.toInt(RuntimeConfig.get('TOKEN_FOLLOW_DOOR_HOLD_STEPS', CONFIG.navigation.followDoorHoldSteps), CONFIG.navigation.followDoorHoldSteps), 0, 10);
-            var movementFrequency = Utils.clamp(Utils.toInt(RuntimeConfig.get('TOKEN_MOVEMENT_FREQUENCY_MS', 1000), 1000), 100, 10000);
+            var movementFrequency = Utils.clamp(Utils.toInt(RuntimeConfig.get('TOKEN_MOVEMENT_FREQUENCY_MS', 550), 550), 100, 10000);
             var followMarker = String(RuntimeConfig.get('TOKEN_FOLLOW_MARKER', CONFIG.token.followMarkerDefault) || CONFIG.token.followMarkerDefault);
 
             function followNumberCommand(action, promptKey, current) {
@@ -85823,19 +85823,19 @@ var TrinketsAndTrackers = TrinketsAndTrackers || (function () {
         }
 
         function inventorySettings(context) {
-            var allowItemAdd = boolSetting('ALLOW_PLAYER_ITEM_ADD', false);
+            var allowItemAdd = boolSetting('ALLOW_PLAYER_ITEM_ADD', true);
             var allowTransfers = boolSetting('ALLOW_PLAYER_ITEM_TRANSFERS', true);
             var gmIgnoresDistance = boolSetting('GM_IGNORES_ITEM_TRANSFER_DISTANCE', false);
             var autoStack = boolSetting('AUTO_STACK_ITEMS', true);
-            var strictStackMatching = boolSetting('STRICT_STACK_MATCHING', true);
+            var strictStackMatching = boolSetting('STRICT_STACK_MATCHING', false);
             var reopenInventoryAfterActions = boolSetting('REOPEN_INVENTORY_AFTER_ITEM_ACTIONS', false);
             var hideDetailsPrice = boolSetting('HIDE_PLAYER_ITEM_DETAILS_PRICE', false);
             var blockPlayerSearch = boolSetting('BLOCK_PLAYER_ITEM_SEARCH', false);
             var itemPickupEnabled = boolSetting('ITEM_PICKUP_ENABLED', false);
             var dropItemOnMap = boolSetting('DROP_ITEM_ON_MAP', false);
-            var useRoll20DropItemImage = boolSetting('USE_ROLL20_DROP_ITEM_IMAGE', true);
-            var droppedItemTooltip = boolSetting('DROPPED_ITEM_TOOLTIP', true);
-            var droppedItemTooltipGmOnly = boolSetting('DROPPED_ITEM_TOOLTIP_GM_ONLY', true);
+            var useRoll20DropItemImage = boolSetting('USE_ROLL20_DROP_ITEM_IMAGE', false);
+            var droppedItemTooltip = boolSetting('DROPPED_ITEM_TOOLTIP', false);
+            var droppedItemTooltipGmOnly = boolSetting('DROPPED_ITEM_TOOLTIP_GM_ONLY', false);
             var droppedItemRoll20Url = RuntimeConfig.get('DROPPED_ITEM_ROLL20_URL', CONFIG.handouts.imageUrl);
             var giveNotifications = boolSetting('GM_GIVE_NOTIFICATIONS', true);
             var transferNotifications = boolSetting('TRANSFER_NOTIFICATIONS', true);
@@ -85942,7 +85942,7 @@ var TrinketsAndTrackers = TrinketsAndTrackers || (function () {
             var roundUp = boolSetting('DAMAGE_ROUND_UP', true);
             var markDefeatedNpcs = boolSetting('MARK_DEFEATED_NPCS', true);
             var verifiedHealthSync = boolSetting('VERIFIED_BEACON_HEALTH_SYNC', true);
-            var visualEffects = boolSetting('COMBAT_VISUAL_EFFECTS', false);
+            var visualEffects = boolSetting('COMBAT_VISUAL_EFFECTS', true);
             var showAoeArea = boolSetting('SHOW_AOE_AREA', false);
             var useTntRollCards = boolSetting('USE_TNT_ROLL_CARDS', false);
             function barCommand(action, label) {
@@ -86046,10 +86046,10 @@ var TrinketsAndTrackers = TrinketsAndTrackers || (function () {
 
         function timeSettings(context) {
             var format = String(RuntimeConfig.get('TIME_FORMAT', '12h'));
-            var calendar = String(RuntimeConfig.get('CALENDAR_TYPE', 'gregorian'));
+            var calendar = String(RuntimeConfig.get('CALENDAR_TYPE', 'harptos'));
             var playerView = boolSetting('PLAYER_CAN_VIEW_WORLD_STATUS', true);
             var publicWorldUpdates = boolSetting('PUBLIC_WORLD_TIME_UPDATES', false);
-            var adjustMapLight = boolSetting('ADJUST_MAP_LIGHT', false);
+            var adjustMapLight = boolSetting('ADJUST_MAP_LIGHT', true);
             var smoothMapLight = boolSetting('SMOOTH_MAP_LIGHT_TRANSITION', true);
             var transitionSpeed = Utils.clamp(
                 Utils.toInt(RuntimeConfig.get('MAP_LIGHT_TRANSITION_SPEED_MS', CONFIG.world.mapLightTransitionSpeedDefaultMs),
@@ -86110,7 +86110,7 @@ var TrinketsAndTrackers = TrinketsAndTrackers || (function () {
         }
 
         function toggleAdjustMapLight(context) {
-            var nextValue = !boolSetting('ADJUST_MAP_LIGHT', false);
+            var nextValue = !boolSetting('ADJUST_MAP_LIGHT', true);
             persistSetting(context, 'ADJUST_MAP_LIGHT', nextValue, function () {
                 if (nextValue) {
                     MapLightService.syncCurrent();
@@ -86124,7 +86124,7 @@ var TrinketsAndTrackers = TrinketsAndTrackers || (function () {
             var nextValue = !boolSetting('SMOOTH_MAP_LIGHT_TRANSITION', true);
             persistSetting(context, 'SMOOTH_MAP_LIGHT_TRANSITION', nextValue, function () {
                 MapLightTransitionService.cancelAll();
-                if (RuntimeConfig.get('ADJUST_MAP_LIGHT', false) === true) { MapLightService.syncCurrent(); }
+                if (RuntimeConfig.get('ADJUST_MAP_LIGHT', true) === true) { MapLightService.syncCurrent(); }
             }, timeSettings);
         }
 
@@ -87143,20 +87143,20 @@ var TrinketsAndTrackers = TrinketsAndTrackers || (function () {
                 if (settingAction === 'set-weather-url') { setWeatherAppearance(settingContext, 'url'); return true; }
                 if (settingAction === 'set-weather-overlay') { setWeatherAppearance(settingContext, 'overlay'); return true; }
                 if (settingAction === 'set-transfer-distance') { setTransferDistance(settingContext); return true; }
-                if (settingAction === 'toggle-player-item-add') { toggleBooleanSettingFor(settingContext, 'ALLOW_PLAYER_ITEM_ADD', false, 'dm.allowPlayerItemAdd', inventorySettings); return true; }
+                if (settingAction === 'toggle-player-item-add') { toggleBooleanSettingFor(settingContext, 'ALLOW_PLAYER_ITEM_ADD', true, 'dm.allowPlayerItemAdd', inventorySettings); return true; }
                 if (settingAction === 'toggle-player-item-transfers') { toggleBooleanSettingFor(settingContext, 'ALLOW_PLAYER_ITEM_TRANSFERS', true, 'dm.allowPlayerItemTransfers', inventorySettings); return true; }
                 if (settingAction === 'toggle-gm-ignore-transfer-distance') { toggleBooleanSettingFor(settingContext, 'GM_IGNORES_ITEM_TRANSFER_DISTANCE', false, 'dm.gmIgnoresTransferDistance', inventorySettings); return true; }
                 if (settingAction === 'toggle-auto-stack-items') { toggleBooleanSettingFor(settingContext, 'AUTO_STACK_ITEMS', true, 'dm.autoStackItems', inventorySettings); return true; }
-                if (settingAction === 'toggle-strict-stack-matching') { toggleBooleanSettingFor(settingContext, 'STRICT_STACK_MATCHING', true, 'dm.strictStackMatching', inventorySettings); return true; }
+                if (settingAction === 'toggle-strict-stack-matching') { toggleBooleanSettingFor(settingContext, 'STRICT_STACK_MATCHING', false, 'dm.strictStackMatching', inventorySettings); return true; }
                 if (settingAction === 'toggle-reopen-inventory-after-actions') { toggleBooleanSettingFor(settingContext, 'REOPEN_INVENTORY_AFTER_ITEM_ACTIONS', false, 'dm.reopenInventoryAfterItemActions', inventorySettings); return true; }
                 if (settingAction === 'toggle-hide-player-item-details-price') { toggleBooleanSettingFor(settingContext, 'HIDE_PLAYER_ITEM_DETAILS_PRICE', false, 'dm.hideDetailsPrice', inventorySettings); return true; }
                 if (settingAction === 'toggle-block-player-item-search' || settingAction === 'toggle-block-player-inventory-search') { toggleBooleanSettingFor(settingContext, 'BLOCK_PLAYER_ITEM_SEARCH', false, 'dm.blockPlayerItemSearch', inventorySettings); return true; }
                 if (settingAction === 'toggle-item-pickup') { toggleBooleanSettingFor(settingContext, 'ITEM_PICKUP_ENABLED', false, 'dm.itemPickupEnabled', inventorySettings); return true; }
                 if (settingAction === 'toggle-drop-item-on-map') { toggleBooleanSettingFor(settingContext, 'DROP_ITEM_ON_MAP', false, 'dm.dropItemOnMap', inventorySettings); return true; }
-                if (settingAction === 'toggle-use-roll20-drop-item-image') { toggleBooleanSettingFor(settingContext, 'USE_ROLL20_DROP_ITEM_IMAGE', true, 'dm.useRoll20DropItemImage', inventorySettings); return true; }
-                if (settingAction === 'toggle-dropped-item-tooltip') { toggleBooleanSettingFor(settingContext, 'DROPPED_ITEM_TOOLTIP', true, 'dm.droppedItemTooltip', inventorySettings); return true; }
-                if (settingAction === 'toggle-dropped-item-tooltip-gm-only') { toggleBooleanSettingFor(settingContext, 'DROPPED_ITEM_TOOLTIP_GM_ONLY', true, 'dm.droppedItemTooltipGmOnly', inventorySettings); return true; }
-                if (settingAction === 'toggle-allow-player-token-setup') { toggleBooleanSettingFor(settingContext, 'ALLOW_PLAYER_TOKEN_SETUP', false, 'dm.allowPlayerTokenSetup', tokenSettings); return true; }
+                if (settingAction === 'toggle-use-roll20-drop-item-image') { toggleBooleanSettingFor(settingContext, 'USE_ROLL20_DROP_ITEM_IMAGE', false, 'dm.useRoll20DropItemImage', inventorySettings); return true; }
+                if (settingAction === 'toggle-dropped-item-tooltip') { toggleBooleanSettingFor(settingContext, 'DROPPED_ITEM_TOOLTIP', false, 'dm.droppedItemTooltip', inventorySettings); return true; }
+                if (settingAction === 'toggle-dropped-item-tooltip-gm-only') { toggleBooleanSettingFor(settingContext, 'DROPPED_ITEM_TOOLTIP_GM_ONLY', false, 'dm.droppedItemTooltipGmOnly', inventorySettings); return true; }
+                if (settingAction === 'toggle-allow-player-token-setup') { toggleBooleanSettingFor(settingContext, 'ALLOW_PLAYER_TOKEN_SETUP', true, 'dm.allowPlayerTokenSetup', tokenSettings); return true; }
                 if (settingAction === 'toggle-allow-player-shape') { toggleBooleanSettingFor(settingContext, 'ALLOW_PLAYER_SHAPE', true, 'dm.allowPlayerShape', tokenSettings); return true; }
                 if (settingAction === 'toggle-allow-player-follow') { toggleBooleanSettingFor(settingContext, 'ALLOW_PLAYER_FOLLOW', true, 'dm.allowPlayerFollow', tokenSettings); return true; }
                 if (settingAction === 'toggle-token-follow-snap-to-grid') { toggleBooleanSettingFor(settingContext, 'TOKEN_FOLLOW_SNAP_TO_GRID', false, 'dm.tokenFollowSnapToGrid', tokenSettings); return true; }
@@ -87172,12 +87172,12 @@ var TrinketsAndTrackers = TrinketsAndTrackers || (function () {
                 if (settingAction === 'set-token-follow-max-door-transitions') { Set_token_follow_numeric_setting(settingContext, 'TOKEN_FOLLOW_MAX_DOOR_TRANSITIONS', 1, 50, true, 'dm.tokenFollowMaxDoorTransitions'); return true; }
                 if (settingAction === 'set-token-follow-door-delay') { Set_token_follow_numeric_setting(settingContext, 'TOKEN_FOLLOW_DOOR_DELAY_MS', 0, 3000, true, 'dm.tokenFollowDoorDelay'); return true; }
                 if (settingAction === 'set-token-follow-door-hold-steps') { Set_token_follow_numeric_setting(settingContext, 'TOKEN_FOLLOW_DOOR_HOLD_STEPS', 0, 10, true, 'dm.tokenFollowDoorHoldSteps'); return true; }
-                if (settingAction === 'toggle-token-avoid-barriers') { toggleBooleanSettingFor(settingContext, 'TOKEN_AVOID_BARRIERS', false, 'dm.tokenAvoidBarriers', tokenSettings); return true; }
-                if (settingAction === 'toggle-token-show-waypoints') { toggleBooleanSettingFor(settingContext, 'TOKEN_SHOW_WAYPOINTS_WHILE_MOVING', true, 'dm.tokenShowWaypointsWhileMoving', tokenSettings); return true; }
-                if (settingAction === 'toggle-token-instant-movement') { toggleBooleanSettingFor(settingContext, 'TOKEN_INSTANT_MOVEMENT', true, 'dm.tokenInstantMovement', tokenSettings); return true; }
+                if (settingAction === 'toggle-token-avoid-barriers') { toggleBooleanSettingFor(settingContext, 'TOKEN_AVOID_BARRIERS', true, 'dm.tokenAvoidBarriers', tokenSettings); return true; }
+                if (settingAction === 'toggle-token-show-waypoints') { toggleBooleanSettingFor(settingContext, 'TOKEN_SHOW_WAYPOINTS_WHILE_MOVING', false, 'dm.tokenShowWaypointsWhileMoving', tokenSettings); return true; }
+                if (settingAction === 'toggle-token-instant-movement') { toggleBooleanSettingFor(settingContext, 'TOKEN_INSTANT_MOVEMENT', false, 'dm.tokenInstantMovement', tokenSettings); return true; }
                 if (settingAction === 'toggle-token-allow-occupied-movement') { toggleBooleanSettingFor(settingContext, 'TOKEN_ALLOW_MOVEMENT_INTO_OCCUPIED_SPACES', false, 'dm.tokenAllowMovementIntoOccupiedSpaces', tokenSettings); return true; }
                 if (settingAction === 'toggle-token-tokens-block-movement') { toggleBooleanSettingFor(settingContext, 'TOKEN_TOKENS_BLOCK_MOVEMENT', false, 'dm.tokenTokensBlockMovement', tokenSettings); return true; }
-                if (settingAction === 'toggle-token-open-unlocked-doors') { toggleBooleanSettingFor(settingContext, 'TOKEN_OPEN_UNLOCKED_DOORS', false, 'dm.tokenOpenUnlockedDoors', tokenSettings); return true; }
+                if (settingAction === 'toggle-token-open-unlocked-doors') { toggleBooleanSettingFor(settingContext, 'TOKEN_OPEN_UNLOCKED_DOORS', true, 'dm.tokenOpenUnlockedDoors', tokenSettings); return true; }
                 if (settingAction === 'toggle-token-allow-spawn-over-tokens') { toggleBooleanSettingFor(settingContext, 'TOKEN_ALLOW_SPAWN_OVER_TOKENS', false, 'dm.tokenAllowSpawnOverTokens', tokenSettings); return true; }
                 if (settingAction === 'toggle-token-companion-auto-recall') { toggleBooleanSettingFor(settingContext, 'TOKEN_ALLOW_COMPANION_AUTO_RECALL', false, 'dm.tokenAllowCompanionAutoRecall', tokenSettings); return true; }
                 if (settingAction === 'set-token-movement-frequency') { Set_token_movement_frequency(settingContext); return true; }
@@ -87191,7 +87191,7 @@ var TrinketsAndTrackers = TrinketsAndTrackers || (function () {
                 if (settingAction === 'toggle-damage-round-up') { toggleBooleanSettingFor(settingContext, 'DAMAGE_ROUND_UP', true, 'dm.damageRoundUp', combatAssistantSettings); return true; }
                 if (settingAction === 'toggle-mark-defeated-npcs') { toggleBooleanSettingFor(settingContext, 'MARK_DEFEATED_NPCS', true, 'dm.markDefeatedNpcs', combatAssistantSettings); return true; }
                 if (settingAction === 'toggle-verified-beacon-health-sync') { toggleBooleanSettingFor(settingContext, 'VERIFIED_BEACON_HEALTH_SYNC', true, 'dm.verifiedBeaconHealthSync', combatAssistantSettings); return true; }
-                if (settingAction === 'toggle-combat-visual-effects') { toggleBooleanSettingFor(settingContext, 'COMBAT_VISUAL_EFFECTS', false, 'dm.combatVisualEffects', combatAssistantSettings); return true; }
+                if (settingAction === 'toggle-combat-visual-effects') { toggleBooleanSettingFor(settingContext, 'COMBAT_VISUAL_EFFECTS', true, 'dm.combatVisualEffects', combatAssistantSettings); return true; }
                 if (settingAction === 'set-healing-effect-name') { setCombatEffectName(settingContext, 'HEALING_EFFECT_NAME', 'dm.healingEffectName'); return true; }
                 if (settingAction === 'set-projectile-effect-name') { setCombatEffectName(settingContext, 'PROJECTILE_EFFECT_NAME', 'dm.projectileEffectName'); return true; }
                 if (settingAction === 'set-direct-hit-effect-name') { setCombatEffectName(settingContext, 'DIRECT_HIT_EFFECT_NAME', 'dm.directHitEffectName'); return true; }
@@ -88007,4 +88007,3 @@ var TrinketsAndTrackers = TrinketsAndTrackers || (function () {
         version: META.version
     });
 }());
-
