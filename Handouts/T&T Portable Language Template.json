@@ -1,0 +1,5380 @@
+{
+
+  "languages": {
+
+    "portuguese": {
+
+      "common": {
+
+        "all": "Todos",
+
+        "error": "Erro",
+
+        "success": "Sucesso",
+
+        "warning": "Aviso",
+
+        "gm": "GM",
+
+        "on": "LIGADO",
+
+        "off": "DESLIGADO",
+
+        "edit": "Editar",
+
+        "back": "Voltar",
+
+        "createdBy": "Criado por",
+
+        "version": "Versão",
+
+        "unknown": "Desconhecido",
+
+        "yes": "Sim",
+
+        "no": "Não",
+
+        "characterSheetFound": "Ficha Encontrada",
+
+        "characterSheetMissing": "Nenhuma Ficha de Personagem corresponde a este nome",
+
+        "characterSheetAmbiguous": "Há {count} fichas de personagem com este nome",
+
+        "characterSheetAmbiguousTwo": "Há duas fichas de personagem com este nome",
+
+        "characterSheetChoiceTitle": "Escolher Ficha de Personagem",
+
+        "characterSheetChoiceExpired": "Essa seleção de Ficha de Personagem expirou ou não é mais válida."
+
+      },
+
+      "narrative": {
+
+        "source": "Origem",
+
+        "target": "Alvo",
+
+        "someone": "Alguém",
+
+        "you": "Você",
+
+        "itself": "Si mesmo",
+
+        "and": "e"
+
+      },
+
+      "errors": {
+
+        "unexpectedCommand": "Erro inesperado ao executar esse comando. Verifique o log da API para mais detalhes.",
+
+        "sandboxDefaultTitle": "Sandbox v1.0",
+
+        "sandboxDefaultBody": "Mestre, Trinkets & Trackers está desativado porque o console de Mods do Roll20 está executando no Sandbox v1.0. Vários recursos do T&T exigem o Sandbox v1.5. Mude o jogo para o Sandbox v1.5 para continuar ou execute {command} para desativar esta proteção.",
+
+        "futureStateSchemaTitle": "Aviso de Compatibilidade do State",
+
+        "futureStateSchema": "T&T encontrou o schema de state {current}, enquanto este script foi criado para o schema {supported}. A inicialização continuará em modo de compatibilidade com downgrade sem alterar o número do schema armazenado. Recursos removidos ou modificados nesta versão mais antiga podem não compreender dados mais novos, e salvar alterações pode tornar parte desses dados inutilizável. Mantenha um backup e restaure o script mais recente se algo se comportar de forma inesperada.",
+
+        "unknownCommand": "Comando desconhecido. Use {command} help.",
+
+        "gmOnlyAction": "Esta ação é restrita ao Game Master.",
+
+        "twoValidTokensRequired": "São necessários dois tokens válidos.",
+
+        "unsupportedSheet": "Ficha de personagem não suportada.",
+
+        "handoutNotFound": "Handout não encontrado: {name}",
+
+        "invalidHandoutJson": "JSON inválido no handout: {name}",
+
+        "unknownItem": "Item desconhecido: {itemId}",
+
+        "selectExactlyTokens": "Selecione exatamente {count} token(s). Seleção atual: {selected}.",
+
+        "selectAtLeastTokens": "Selecione pelo menos {count} token(s). Seleção atual: {selected}.",
+
+        "selectTokens": "Selecione um ou mais token(s) no mapa.",
+
+        "samePageRequired": "Ambos os tokens devem estar na mesma página para medir a distância."
+
+      },
+
+      "inventory": {
+
+        "title": "Inventário",
+
+        "empty": "Nenhum item encontrado no inventário.",
+
+        "emptyFilter": "Nenhum item do inventário corresponde a esse filtro.",
+
+        "invalidFilter": "Os filtros do inventário usam name-<texto>, type-<texto> ou category-<categoria>.",
+
+        "filter": "Filtrar",
+
+        "search": "Buscar",
+
+        "filterPrompt": "Filtrar inventário",
+
+        "searchPrompt": "Buscar item por nome",
+
+        "tokenFocusTooltip": "Focar este token de personagem no mapa.",
+
+        "tokenNotFoundTitle": "Token Não Encontrado",
+
+        "tokenNotFoundBody": "não foi encontrado neste mapa.",
+
+        "dropItem": "Soltar Item",
+
+        "giveItem": "Dar item a um token próximo",
+
+        "useItem": "Usar item",
+
+        "lightOffButton": "🕯️ Apagar Luz",
+
+        "lightOffTooltip": "Apagar a luz emitida por este token.",
+
+        "lightOffButtonExpired": "Esse botão de luz expirou. Abra o inventário novamente.",
+
+        "duplicateLightOffAction": "Essa ação de luz já está em execução ou já foi concluída.",
+
+        "dynamicLightsTitle": "Luzes Dinâmicas",
+
+        "dynamicLightStopped": "{character} parou de emitir luz.",
+
+        "equipItem": "Equipar item",
+
+        "unequipItem": "Desequipar item",
+
+        "noCharacter": "Selecione um token vinculado a um personagem ou forneça um ID de token.",
+
+        "noPermission": "Você não controla esse token.",
+
+        "unsupportedSheet": "O inventário ainda não está disponível para este tipo de ficha.",
+
+        "itemNotFound": "Item de inventário não encontrado.",
+
+        "itemAmbiguous": "Mais de um item do inventário tem esse nome. Use o ID do item incluído pelo botão do inventário.",
+
+        "invalidDropQuantity": "Quantidade inválida para soltar.",
+
+        "dropButtonExpired": "Esse botão do inventário expirou. Abra o inventário novamente.",
+
+        "duplicateDropAction": "Essa ação de soltar item já foi processada.",
+
+        "equipButtonExpired": "Esse botão de equipar expirou. Abra o inventário novamente.",
+
+        "duplicateEquipAction": "Essa ação de equipar já está em execução ou já foi concluída.",
+
+        "useButtonExpired": "Esse botão de uso expirou. Abra o inventário novamente.",
+
+        "duplicateUseAction": "Esse uso de item já está em execução ou já foi concluído.",
+
+        "itemNotUsable": "Esse item não tem um uso suportado.",
+
+        "useActionNotFound": "Esse uso de item não está mais disponível. Abra o inventário novamente.",
+
+        "chargeUnavailable": "Os dados de cargas para essa ação do item não estão disponíveis.",
+
+        "chargeLedgerFull": "T&T não pode armazenar outro registro de cargas porque o orçamento do state persistente ou o limite de cargas do protótipo foi atingido.",
+
+        "chargeStackUnsupported": "Prototype Charges exige que este item seja uma única instância no inventário (quantidade 1).",
+
+        "chargeDepleted": "Essa ação não tem cargas suficientes ({current}/{maximum}).",
+
+        "chargeConsumeConflict": "Prototype Charges não pode ser combinado com Consume Quantity na mesma ação.",
+
+        "chargeTransferConflict": "T&T não conseguiu mover o registro de cargas deste item porque o destino já possui um registro de cargas.",
+
+        "chargeResult": "Cargas: {current}/{maximum}",
+
+        "useTargetRequired": "Selecione um token alvo válido para esse uso.",
+
+        "useTargetUnavailable": "Esse alvo não está disponível para este uso de item.",
+
+        "useOutOfRange": "O alvo está a {distance} {unit}. O alcance máximo é {maximum} {unit}.",
+
+        "useStatsUnavailable": "As estatísticas necessárias da ficha não puderam ser lidas com segurança.",
+
+        "useEffectFailed": "O efeito do item não pôde ser confirmado. O item não foi consumido.",
+
+        "useTimedEffectFailed": "O efeito temporizado não pôde ser registrado com segurança. O item não foi consumido.",
+
+        "useTimedEffectLimit": "Este alvo já possui efeitos temporizados pendentes demais. O item não foi consumido.",
+
+        "useRandomOutcomeMissing": "A Random Table rolou {roll} em {formula}, mas nenhum resultado está configurado para esse valor. O item não foi consumido.",
+
+        "useConsumeFailed": "O efeito foi revertido porque a ficha não confirmou o consumo do item.",
+
+        "useRollbackFailed": "Erro crítico no uso do item: o consumo falhou e o efeito não pôde ser revertido. O GM deve reconciliar as fichas afetadas.",
+
+        "useTitle": "Uso de Item",
+
+        "useResultTitle": "Uso de Item",
+
+        "useResultSubtitle": "Foi usado",
+
+        "useNarrativeUsed": "usou",
+
+        "useNarrativeOn": "em",
+
+        "useNarrativeFits": "Parece encaixar.",
+
+        "useDrink": "Beber",
+
+        "useThrow": "Arremessar",
+
+        "useLight": "Acender",
+
+        "useHood": "Baixar Capuz",
+
+        "useResult": "{source} usou {item} em {target}.",
+
+        "useWorldInteractionResult": "{source} usa {item} em {target}. Parece encaixar.",
+
+        "useWorldInteractionAction": "usa {item} em {target}. Parece encaixar.",
+
+        "useWorldInteractionMiss": "usa {item} em {target}. Não parece encaixar.",
+
+        "useWorldInteractionNarrative": "{object} agora está {state}.",
+
+        "worldInteractionToggleLock": "Trancar / Destrancar",
+
+        "worldInteractionToggleSecret": "Ocultar / Revelar",
+
+        "useRollTableHealingNarrative": "Cura {formula}.",
+
+        "useRollTableTempHealingNarrative": "Concede {formula} PV temporários.",
+
+        "useRollTableDamageNarrative": "Causa {damage} de dano.",
+
+        "useDamageTargetNarrative": "{target} sofre {damage} de dano{qualifier}.",
+
+        "useDamageReducedByResistance": "reduzido por Resistência a {damage}",
+
+        "useDamageBlockedByImmunity": "bloqueado por Imunidade a {damage}",
+
+        "useDamageIncreasedByVulnerability": "aumentado por Vulnerabilidade a {damage}",
+
+        "useTargetSaveNarrative": "{target}: teste de resistência de {ability} contra CD {dc} — {outcome}.",
+
+        "useSavingThrowDc": "Teste de Resistência de {ability} CD {dc}",
+
+        "useSavingThrowRequirement": "{subject} deve ser bem-sucedido em um Teste de Resistência de {ability} CD {dc}{success}.",
+
+        "useSavingThrowSubjectOne": "O alvo",
+
+        "useSavingThrowSubjectMany": "Cada alvo",
+
+        "useSavingThrowHalfDamage": ", sofrendo metade do dano em caso de sucesso",
+
+        "useDamageSaveTargetNarrative": "{target} {outcome} no teste de resistência de {ability} e sofre {damage} de dano{qualifier}{unconscious}.",
+
+        "useSaveSucceeds": "tem sucesso",
+
+        "useSaveFails": "falha",
+
+        "useFallsUnconscious": " e fica inconsciente",
+
+        "useTokenVitalsMissing": "A Barra {bar} configurada precisa de valores numéricos de PV atual e máximo para um token sem ficha de personagem.",
+
+        "useAoeShapePending": "Áreas de item do tipo {shape} estão reservadas para o sistema de alvos concluído do Combat Assistant.",
+
+        "useRandomRoll": "Rolagem de fortuna",
+
+        "useSaveRoll": "teste de resistência de {ability} contra CD {dc}",
+
+        "useSaveSuccess": "Teste bem-sucedido",
+
+        "useSaveFailure": "Teste falhou",
+
+        "useNoEffect": "Nenhum efeito mecânico foi aplicado.",
+
+        "itemConsumedTitle": "Item Consumido",
+
+        "itemConsumedGm": "{source} usou {quantity} {item} e tem {remaining} restante(s).",
+
+        "itemConsumedLeft": "(restam {remaining})",
+
+        "itemConsumedPlayer": "Você usou {quantity} {item} e tem {remaining} restante(s).",
+
+        "useOutcomeOne": "Grande infortúnio",
+
+        "useOutcomeTwo": "Pequeno infortúnio",
+
+        "useOutcomeThree": "Fortuna sem acontecimentos",
+
+        "useOutcomeFour": "Pequena fortuna",
+
+        "useOutcomeFive": "Grande fortuna",
+
+        "useOutcomeSix": "Fortuna extraordinária",
+
+        "useUsage": "Uso: {command} use [[sourceTokenId]] [itemId] [actionId] [[targetTokenId]].",
+
+        "itemNotEquippable": "Esse item não expõe um estado de equipamento suportado nesta ficha.",
+
+        "equipped": "{itemName} equipado.",
+
+        "unequipped": "{itemName} desequipado.",
+
+        "equipmentTitle": "Equipamento",
+
+        "equipmentDonned": "{character} equipou {item}.",
+
+        "equipmentDoffed": "{character} desequipou {item}.",
+
+        "equipmentDonVerb": "equipou",
+
+        "equipmentDoffVerb": "desequipou",
+
+        "useTooManyTargets": "Essa AOE afetaria mais de {maximum} personagens únicos.",
+
+        "useMenuSuffix": "usos",
+
+        "useConditionApplied": "{condition} aplicada a {target}.",
+
+        "useDefenseApplied": "{defense} aplicada a {target}.",
+
+        "useLightNarrative": "Emite {light}{duration}.",
+
+        "useLightBrightRadius": "raio de {distance} de luz plena",
+
+        "useLightDimRadius": "raio de {distance} de penumbra",
+
+        "useLightBrightCone": "{distance} de luz plena em um cone de {angle} graus",
+
+        "useLightDimCone": "{distance} de penumbra em um cone de {angle} graus",
+
+        "useDurationSuffix": " por {duration}",
+
+        "useResistanceNarrative": "Ganha Resistência a {damage} por {duration}.",
+
+        "useImmunityNarrative": "Ganha Imunidade a {damage} por {duration}.",
+
+        "useVulnerabilityNarrative": "Ganha Vulnerabilidade a {damage} por {duration}.",
+
+        "useDefenseAlreadyActive": "O alvo já possui {defense} a {damage}. O item não foi consumido.",
+
+        "useAttributeAddNarrative": "{attribute} muda em {value} por {duration}.",
+
+        "useAttributeSetNarrative": "{attribute} passa a ser {value} por {duration}.",
+
+        "useAttributeNarrativeOnly": " A ficha 2014 não possui um campo nativo estável para este valor, então a alteração é apenas narrativa.",
+
+        "useAttributeAlreadyActive": "O alvo já possui um efeito temporário do T&T em {attribute}. O item não foi consumido.",
+
+        "useSizeNarrative": "O tamanho muda de {before} para {after} por {duration}.",
+
+        "useSizeAlreadyActive": "O alvo já possui um efeito temporário de tamanho do T&T. O item não foi consumido.",
+
+        "useSizeBoundary": "O alvo já está no limite de tamanho suportado. O item não foi consumido.",
+
+        "useSizeUnchanged": "O alvo já possui esse tamanho. O item não foi consumido.",
+
+        "useShapeNarrative": "Transforma-se em uma forma {size} por {duration}.",
+
+        "useShapeAlreadyActive": "O alvo já possui um efeito ativo de tamanho ou transformação do T&T. O item não foi consumido.",
+
+        "useShapeImageInvalid": "Imagens de Shape Shifting devem usar uma URL https://files.d20.io/ válida. O item não foi consumido.",
+
+        "useShapeImageMissing": "Shape Shifting exige uma Image URL ou uma forma personalizada válida. O item não foi consumido.",
+
+        "useShapeSizeInvalid": "O tamanho personalizado de Shape Shifting é inválido. O item não foi consumido.",
+
+        "useShapeTagMalformed": "Uma forma personalizada de Shape Shifting está incompleta ou malformada. O item não foi consumido.",
+
+        "useShapeTagDuplicate": "A mesma forma personalizada de Shape Shifting aparece mais de uma vez. O item não foi consumido.",
+
+        "useShapeChoiceTitle": "Opções de Shape Shifting",
+
+        "useShapeChoiceTooltip": "Transformar-se nesta forma {size}.",
+
+        "useShapeChoiceExpired": "Essa opção de Shape Shifting expirou ou não corresponde mais ao item.",
+
+        "useShapeUnchanged": "Essa transformação não alteraria o token. O item não foi consumido.",
+
+        "useSpawnNarrative": "{token} aparece{duration}.",
+
+        "useSpawnExpiredNarrative": "{token} desapareceu após {duration}.",
+
+        "useSpawnDefaultName": "Token Criado",
+
+        "useSpawnHiddenName": "um token criado",
+
+        "useSpawnSheetMissing": "Não existe uma ficha de personagem com esse nome exato. O item não foi consumido.",
+
+        "useSpawnSheetAmbiguous": "Mais de uma ficha de personagem possui esse nome. Use um nome de ficha único.",
+
+        "useSpawnControlTagMalformed": "A tag Summon Control deve usar [T&T:SC:sheet-<sheet name>] ou [T&T:SC:sheet-<sheet name>:img-<files.d20 URL>]. O item não foi consumido.",
+
+        "useSpawnControlSheetDenied": "Allow Control só pode usar uma ficha Summon Control que já seja controlada pelo jogador que executou a ação. O item não foi consumido.",
+
+        "useSpawnPageMissing": "O token de origem não está em uma página disponível.",
+
+        "useSpawnImageMissing": "Spawn exige um avatar de personagem válido ou uma Image URL do item.",
+
+        "useSpawnCreateFailed": "O Roll20 não conseguiu criar o token. O item não foi consumido.",
+
+        "useSpawnCleanupFailed": "T&T não conseguiu remover o token criado com segurança.",
+
+        "useSpawnLimit": "Esta ação já possui o número máximo de tokens criados ativos.",
+
+        "useTimedEffectConflict": "O efeito temporário foi alterado fora do T&T e foi deixado intacto para reconciliação segura.",
+
+        "dropCancelled": "A ação de soltar foi cancelada.",
+
+        "dropTitle": "Item Solto",
+
+        "dropVerb": "Solta",
+
+        "pickupTitle": "Pegar",
+
+        "pickupVerb": "Pega",
+
+        "removed": "Removido(s) {quantity} x {itemName}.",
+
+        "actionUsage": "Uso: {command} {action} [[tokenId]|[characterId]] [itemId] quantidade yes.",
+
+        "removeUsage": "Uso: {command} remove [[tokenId]|[characterId]] \"nome ou id do item\".",
+
+        "equipUsage": "Uso: {command} equip [[tokenId]|[characterId]] \"nome ou id do item\".",
+
+        "discardRenamed": "A ação discard foi renomeada para drop. Use {command} drop.",
+
+        "sheetWriteFailed": "A ficha não confirmou a atualização do inventário. Nada mais foi alterado.",
+
+        "transferTitle": "Transferência de Item",
+
+        "transferUsage": "Uso: {command} transfer [[sourceTokenId]] \"nome ou id do item\" quantidade [targetTokenId].",
+
+        "transferTokenRequired": "A transferência de itens requer tokens de origem e destino para que a distância possa ser medida.",
+
+        "transferPlayersDisabled": "As transferências de itens entre jogadores foram desativadas pelo Game Master.",
+
+        "transferTargetNotFound": "O token ou personagem de destino não foi encontrado.",
+
+        "transferTargetUnavailable": "Os jogadores só podem transferir itens entre tokens na camada de tokens visível aos jogadores.",
+
+        "transferTargetAmbiguous": "Esse personagem tem mais de um token nesta página. Selecione um token específico.",
+
+        "transferSameTarget": "Origem e destino devem ser personagens diferentes.",
+
+        "transferSheetMismatch": "A transferência de itens suporta apenas fichas D&D 5e 2014 e 2024 compatíveis.",
+
+        "transferOutOfRange": "O alvo está a {distance} {unit}. A distância máxima para transferir itens é {maximum} {unit}.",
+
+        "transferInvalidQuantity": "A quantidade a transferir deve estar entre 1 e {maximum}.",
+
+        "transferButtonExpired": "Esse botão de transferência expirou. Abra o inventário novamente.",
+
+        "duplicateTransferAction": "Essa transferência já está em execução ou já foi concluída.",
+
+        "transferPayloadTooLarge": "Esse item é grande demais para ser transferido com segurança em uma única operação.",
+
+        "transferSourceReadFailed": "T&T não conseguiu preparar o item de origem para a transferência. O inventário de origem não foi alterado.",
+
+        "transferDestinationFailed": "A ficha de destino não confirmou o item. O inventário de origem não foi alterado.",
+
+        "transferSourceFailed": "O destino recebeu o item, mas a atualização da origem falhou. T&T tentou remover a cópia do destino.",
+
+        "transferRollbackFailed": "Erro crítico de transferência: a atualização da origem e o rollback do destino falharam. O GM deve reconciliar ambos os inventários.",
+
+        "transferGmBody": "{source} transferiu {quantity} x {item} {sourceRemaining} para {target} {targetTotal}.",
+
+        "transferSourceBody": "Você transferiu {quantity} x {item} {sourceRemaining} para {target}.",
+
+        "transferTargetBody": "Você recebeu {quantity} x {item} {targetTotal} de {source}.",
+
+        "transferLeft": "({count} restante(s))",
+
+        "transferHas": "(tem {count})",
+
+        "transferSourceRow": "{source}, você deu",
+
+        "transferTargetRow": "{target}, você recebeu",
+
+        "transferGmRow": "{source} transferiu",
+
+        "transferToRow": "para {target}",
+
+        "transferFromRow": "de {source}",
+
+        "encumbered": "Sobrecarregado",
+
+        "categoryAmmunition": "Munição",
+
+        "categoryPotions": "Poções",
+
+        "categoryScrolls": "Pergaminhos",
+
+        "categoryWeapons": "Armas",
+
+        "categoryEquippable": "Equipáveis",
+
+        "categoryAdventuringGear": "Equipamento de Aventura",
+
+        "categoryQuestItems": "Itens de Missão"
+
+      },
+
+      "attribute": {
+
+        "title": "Atributo",
+
+        "getTitle": "Leitura de Atributo",
+
+        "setTitle": "Escrita de Atributo",
+
+        "getComputedTitle": "Leitura de Propriedade Computada",
+
+        "setComputedTitle": "Escrita de Propriedade Computada",
+
+        "usageGet": "Uso: {command} get [targetId] \"nome do atributo\". targetId é opcional; caso contrário, use tokens selecionados que você controla.",
+
+        "usageSet": "Uso: {command} set [targetId] \"nome do atributo\" \"valor\". targetId é opcional; caso contrário, use tokens selecionados que você controla.",
+
+        "usageGetComputed": "Uso: {command} get-computed [targetId] \"propriedade\" [arg ...]. targetId é opcional; caso contrário, use tokens D&D 5e 2024 selecionados que você controla.",
+
+        "usageSetComputed": "Uso: {command} set-computed [targetId] \"propriedade\" <arg ...>. targetId é opcional; caso contrário, use tokens D&D 5e 2024 selecionados que você controla.",
+
+        "invalidName": "Digite um nome de atributo válido.",
+
+        "invalidValue": "Digite um valor para gravar.",
+
+        "unsupportedSheet": "O acesso a atributos suporta fichas D&D 5e 2014 e D&D 5e 2024.",
+
+        "notFound": "O atributo {name} não foi encontrado.",
+
+        "beaconCustomPrefix": "O atributo {name} não foi encontrado na ficha 2024. Para criar intencionalmente um novo atributo personalizado, use o prefixo user..",
+
+        "readFailed": "T&T não conseguiu ler o atributo {name}.",
+
+        "writeFailed": "T&T não conseguiu confirmar o atributo {name} depois de gravá-lo.",
+
+        "computedOnly2024": "Propriedades computadas exigem uma ficha D&D 5e 2024 Beacon no Mod Script Sandbox v1.5.",
+
+        "computedUnsupported": "A propriedade computada {name} não está listada por Campaign().computedSummary ou não está disponível neste sandbox.",
+
+        "computedReadFailed": "T&T não conseguiu ler a propriedade computada {name}.",
+
+        "computedWriteFailed": "T&T não conseguiu gravar a propriedade computada {name}.",
+
+        "computedWriteAccepted": "Gravação aceita; a releitura genérica não está disponível.",
+
+        "sheetApiUnavailable": "Roll20 getSheetItem/setSheetItem não está disponível para esta ficha 2024.",
+
+        "resultRead": "{name} = {value}",
+
+        "resultWrite": "{name}: {before} -> {after}",
+
+        "sheet2014": "2014",
+
+        "sheet2024": "2024"
+
+      },
+
+      "player": {
+
+        "status": "Status do Personagem",
+
+        "statusTitle": "Status de {name}",
+
+        "usageStatus": "Uso: {command} status com exatamente um token controlado selecionado.",
+
+        "tokenRequired": "O Status do Personagem requer um token específico.",
+
+        "statusFailed": "T&T não conseguiu ler o status desse personagem.",
+
+        "character": "Personagem",
+
+        "characterInformation": "Informações do Personagem",
+
+        "statusSubtitle": "Status",
+
+        "classes": "Classes",
+
+        "attributes": "Atributos",
+
+        "skills": "Perícias",
+
+        "activeEffects": "Efeitos Ativos",
+
+        "noActiveEffects": "Nenhum efeito ativo.",
+
+        "race": "Raça",
+
+        "subrace": "Sub-raça",
+
+        "background": "Antecedente",
+
+        "faith": "Fé",
+
+        "size": "Tamanho",
+
+        "height": "Altura",
+
+        "gender": "Gênero",
+
+        "age": "Idade",
+
+        "years": "Anos",
+
+        "hair": "Cabelo",
+
+        "eyes": "Olhos",
+
+        "skin": "Pele",
+
+        "alignment": "Alinhamento",
+
+        "weight": "Peso",
+
+        "carrying": "Capacidade",
+
+        "characterLevel": "Nv. Pers.",
+
+        "maxHp": "PV Máx.",
+
+        "experience": "Exp",
+
+        "proficiencyBonus": "Bônus Prof.",
+
+        "class": "Classe",
+
+        "subclass": "Subclasse",
+
+        "classLevel": "Nv. Classe",
+
+        "hitDice": "Dados de Vida",
+
+        "strength": "Força",
+
+        "dexterity": "Destreza",
+
+        "constitution": "Constituição",
+
+        "intelligence": "Inteligência",
+
+        "wisdom": "Sabedoria",
+
+        "charisma": "Carisma",
+
+        "abilityBase": "Base",
+
+        "abilityModifier": "Mod",
+
+        "abilitySave": "Resist.",
+
+        "rollAbilityCheck": "Rolar teste de {ability}",
+
+        "rollSavingThrow": "Rolar teste de resistência de {ability}",
+
+        "rollSkillCheck": "Rolar teste de {skill}",
+
+        "abilityCheckResult": "Teste de {ability}",
+
+        "savingThrowResult": "Teste de Resistência de {ability}",
+
+        "abilityRollUsage": "Uso: {command} roll [[tokenId]] <atributo> <check|save>.",
+
+        "abilityRollUnavailable": "Essa rolagem de atributo não está disponível.",
+
+        "transformation": "transformação",
+
+        "minutesLeft": "restam {count} minutos.",
+
+        "effectFrom": "de",
+
+        "endTransformation": "Encerrar transformação",
+
+        "effectUnavailable": "Essa ação de efeito expirou ou não está mais disponível.",
+
+        "effectRevertNotAllowed": "Essa transformação não pode ser encerrada antecipadamente.",
+
+        "transformationEnded": "A transformação terminou com segurança.",
+
+        "shapeDisabled": "Player Shape foi desativado pelo Game Master.",
+
+        "shapeTransformationActive": "Shape não está disponível enquanto este personagem tiver uma transformação ativa.",
+
+        "followDisabled": "Player Follow foi desativado pelo Game Master.",
+
+        "companions": "Companheiros",
+
+        "companionsTitle": "Companheiros de {name}",
+
+        "companionsList": "Lista de Companheiros",
+
+        "companionsUsage": "Uso: {command} Companions com exatamente um token de personagem controlado selecionado.",
+
+        "activeCompanions": "Companheiros Ativos",
+
+        "noCompanions": "Não há companheiros ativos associados a este personagem.",
+
+        "companionUnavailable": "Esse companheiro não está mais disponível.",
+
+        "companionControls": "Controles do Companheiro",
+
+        "companionType": "Tipo",
+
+        "companionTimeLeft": "restam {time}",
+
+        "companionRenewalDue": "Renovação pendente",
+
+        "hp": "PV",
+
+        "hpTemp": "PV Temp.",
+
+        "ac": "CA",
+
+        "commands": "Comandos",
+
+        "move": "Mover",
+
+        "attack": "Atacar",
+
+        "follow": "Seguir",
+
+        "wander": "Vagar",
+
+        "endContract": "Encerrar Contrato",
+
+        "endContractConfirm": "Confirmar encerramento do contrato?",
+
+        "followDistancePrompt": "Separação mínima em pés",
+
+        "followSet": "{name} agora seguirá {target} a {distance} ft.",
+
+        "followStopped": "{name} parou de seguir.",
+
+        "followTargetUnavailable": "O alvo selecionado para seguir não está disponível.",
+
+        "followSameToken": "Um companheiro não pode seguir a si mesmo.",
+
+        "followDifferentPage": "O companheiro e o alvo a seguir devem estar na mesma página.",
+
+        "companionIdle": "Inativo",
+
+        "companionFollowing": "Seguindo",
+
+        "companionAt": "a",
+
+        "contractEnded": "O contrato terminou e o companheiro foi dispensado.",
+
+        "recall": "Recall",
+
+        "recallRequestTitle": "Solicitação de Recall",
+
+        "recallRequestVerb": "solicita chamar de volta",
+
+        "recallRequestSent": "A solicitação de recall foi enviada ao Game Master.",
+
+        "recallRequestRejected": "O Game Master rejeitou a solicitação de recall.",
+
+        "recallCompleted": "{name} foi chamado de volta para perto de {character}.",
+
+        "recallUnavailable": "Esse companheiro não pode mais ser chamado de volta.",
+
+        "restUsage": "Uso: {command} rest <short|long> com exatamente um token de personagem controlado selecionado.",
+
+        "restShort": "Descanso Curto",
+
+        "restLong": "Descanso Longo",
+
+        "restCompleted": "{rest} concluído. {count} recurso(s) de cargas de item recuperado(s).",
+
+        "restNoCharges": "{rest} concluído. Nenhum recurso de cargas de item precisava ser recuperado neste descanso.",
+
+        "restFailed": "T&T não conseguiu recuperar as cargas de itens para esse descanso.",
+
+        "tokenSetupDisabled": "Player Token Setup foi desativado pelo Game Master.",
+
+        "menuTitle": "Menu do Jogador",
+
+        "menuStatus": "Status",
+
+        "menuShops": "Lojas",
+
+        "menuInventory": "Inventário",
+
+        "menuCompanions": "Comp.",
+
+        "menuTime": "Tempo",
+
+        "menuShape": "Forma",
+
+        "menuTokenSetup": "Config.\nToken",
+
+        "menuItemAdd": "Adicionar\nItem",
+
+        "menuFollow": "Seguir",
+
+        "menuMacros": "Macros",
+
+        "menuStatusTooltip": "Abrir o Status do Jogador.",
+
+        "menuShopsTooltip": "Abrir as lojas disponíveis.",
+
+        "menuInventoryTooltip": "Abrir o inventário do personagem.",
+
+        "menuCompanionsTooltip": "Abrir companheiros.",
+
+        "menuTimeTooltip": "Mostrar o tempo do mundo.",
+
+        "menuShapeTooltip": "Abrir as formas pessoais do token.",
+
+        "menuTokenSetupTooltip": "Receitas públicas de configuração de token.",
+
+        "menuItemAddTooltip": "Adicionar um item simples quando Item Add para jogadores estiver habilitado.",
+
+        "menuFollowTooltip": "Seguir um token alvo ou cancelar a ordem de Follow do token selecionado.",
+
+        "menuMacrosTooltip": "Abrir macros pessoais armazenadas nesta ficha de personagem.",
+
+        "tokenSetupTitle": "Configuração de Token",
+
+        "tokenSetupMacrosOnly": "Somente Macros",
+
+        "tokenSetupAutoSize": "Tamanho Auto",
+
+        "tokenSetupMacro": "Macro",
+
+        "tokenSetupMacros": "Macros",
+
+        "tokenSetupNoActiveOptions": "Nenhuma opção ativa",
+
+        "tokenSetupNoPublicRecipes": "Nenhuma receita pública de configuração de token está disponível.",
+
+        "tokenSetupRecipeNotFound": "Receita de configuração de token não encontrada.",
+
+        "tokenSetupPrivate": "Esta receita de configuração de token é privada.",
+
+        "tokenSetupSelectControlled": "Selecione pelo menos um token que você controla.",
+
+        "tokenSetupFailed": "Falha na configuração do token."
+
+      },
+
+      "token": {
+
+        "usage": "Uso: {command} follow [sourceTokenId] <targetTokenId> [distância]; {command} follow-cancel [sourceTokenId]; {command} follow-fast <targetTokenId> [distância]; {command} follow-slow <targetTokenId> [distância]. Ferramentas do GM: {command} get <campo>; {command} set <campo> <valor>.",
+
+        "getTitle": "Token Get",
+
+        "setTitle": "Token Set",
+
+        "selectOneOrMore": "Selecione um ou mais tokens.",
+
+        "unknownField": "Campo do token desconhecido ou indisponível: {field}.",
+
+        "mutableFieldRequired": "Esse campo do token é somente leitura ou não pode ser alterado pelo Token Set: {field}.",
+
+        "invalidBooleanFieldValue": "Esse campo requer true/false, on/off, yes/no ou 1/0.",
+
+        "invalidNumberFieldValue": "Esse campo requer um valor numérico.",
+
+        "fieldWriteFailed": "falha na gravação",
+
+        "fieldUndefined": "indefinido",
+
+        "selectSource": "Selecione exatamente um token para usar como origem do Follow ou forneça o ID do token.",
+
+        "sourceUnavailable": "O token de origem do Follow não está disponível ou você não o controla.",
+
+        "targetUnavailable": "O token alvo do Follow não está disponível na camada de tokens visível aos jogadores.",
+
+        "sameToken": "Um token não pode seguir a si mesmo.",
+
+        "cycleDetected": "Essa ordem de Follow criaria um ciclo de seguimento.",
+
+        "followCapacityReached": "T&T não pode armazenar outra ordem de Follow porque o limite de automação de tokens ou o orçamento de state foi atingido.",
+
+        "differentPage": "A origem e o alvo do Follow devem estar na mesma página quando a ordem for criada.",
+
+        "invalidDistance": "A distância do Follow deve ser um número de pelo menos 5 ft.",
+
+        "followSet": "{source} seguirá {target} a {distance} ft.",
+
+        "followCancelled": "{source} parou de seguir.",
+
+        "followNotActive": "{source} não estava seguindo outro token.",
+
+        "followFastSet": "{source} seguirá {target} usando o ritmo Rápido de waypoints a {distance} ft.",
+
+        "followSlowSet": "{source} seguirá {target} usando o ritmo Lento de waypoints a {distance} ft.",
+
+        "recallDecisionUnavailable": "Essa solicitação de recall expirou ou não é mais válida.",
+
+        "getAction": "Obter",
+
+        "setAction": "Alterar",
+
+        "followAction": "Seguir",
+
+        "followCancelAction": "Cancelar",
+
+        "followFastAction": "Seguir Rápido",
+
+        "followSlowAction": "Seguir Lento",
+
+        "characterNotFound": "A ficha de personagem \"{name}\" não foi encontrada.",
+
+        "characterAmbiguous": "Mais de uma ficha de personagem se chama \"{name}\". Use o ID do Personagem.",
+
+        "tokenMustRepresentCharacter": "O token deve representar um personagem antes que um vínculo de Barra possa ser resolvido.",
+
+        "barLinksUnsupported": "Esta ficha não suporta vínculos de Barras do Token.",
+
+        "sheetFieldLinkFailed": "Não foi possível vincular o campo da ficha \"{name}\"."
+
+      },
+
+      "wallet": {
+
+        "payButton": "Pagar moeda",
+
+        "giveButton": "Dar moeda a um token próximo",
+
+        "noCharacter": "Selecione um token vinculado a uma ficha de personagem suportada.",
+
+        "noPermission": "Você não controla essa carteira.",
+
+        "unsupportedSheet": "As operações de carteira suportam apenas fichas D&D 5e 2014 e 2024 compatíveis.",
+
+        "invalidAmount": "Digite um valor inteiro entre 1 e 1.000.000.000 e uma moeda válida: CP, SP, EP, GP ou PP.",
+
+        "balanceTooLarge": "Essa operação excederia o saldo de carteira suportado.",
+
+        "insufficientFunds": "Essa carteira não contém moeda conversível suficiente.",
+
+        "conversionFailed": "T&T não conseguiu produzir troco exato para esse pagamento. Nada foi alterado.",
+
+        "sheetWriteFailed": "A ficha não confirmou a atualização da carteira. Nada mais foi alterado.",
+
+        "rollbackFailed": "Erro crítico de carteira: o rollback falhou. O GM deve reconciliar a carteira afetada.",
+
+        "duplicateAction": "Essa ação da carteira já está em execução ou já foi concluída.",
+
+        "buttonExpired": "Esse botão da carteira expirou. Abra o inventário novamente.",
+
+        "tokenRequired": "A transferência de moeda requer tokens de origem e destino para que a distância possa ser medida.",
+
+        "targetNotFound": "O token ou personagem de destino não foi encontrado.",
+
+        "targetUnavailable": "Os jogadores só podem dar moeda entre tokens na camada de tokens visível aos jogadores.",
+
+        "targetAmbiguous": "Esse personagem tem mais de um token nesta página. Selecione um token específico.",
+
+        "sameTarget": "As carteiras de origem e destino devem pertencer a personagens diferentes.",
+
+        "outOfRange": "O alvo está a {distance} {unit}. A distância máxima para transferir moeda é {maximum} {unit}.",
+
+        "usage": "Uso: {command} <pay|player-pay|give|take|steal> [[tokenId]|[characterId]] valor <cp|sp|ep|gp|pp> [targetTokenId].",
+
+        "grantTitle": "Moeda Concedida",
+
+        "paymentTitle": "Registro de Pagamento",
+
+        "transferTitle": "Transferência de Moeda",
+
+        "takeTitle": "Moeda Removida",
+
+        "stealTitle": "Remoção Silenciosa de Moeda",
+
+        "grantGmBody": "{character} recebeu {amount}.",
+
+        "grantTargetBody": "Você recebeu {amount}.",
+
+        "paymentGmBody": "{character} pagou {amount}.",
+
+        "paymentPlayerBody": "Você pagou {amount}.",
+
+        "transferGmBody": "{character} deu {amount} para {target}.",
+
+        "transferSourceBody": "Você deu {amount} para {target}.",
+
+        "transferTargetBody": "Você recebeu {amount} de {character}.",
+
+        "takeGmBody": "{amount} foi removido de {character}.",
+
+        "takeTargetBody": "{amount} foi removido da sua carteira.",
+
+        "stealGmBody": "{amount} foi removido silenciosamente de {character}."
+
+      },
+
+      "item": {
+
+        "name": "Nome",
+
+        "details": "Detalhes do Item",
+
+        "searchTitle": "Busca de Item",
+
+        "searchSummary": "{total} item(ns) do catálogo correspondem a \"{query}\".",
+
+        "searchEmpty": "Nenhum item do catálogo corresponde a \"{query}\".",
+
+        "searchUsage": "Uso: {command} search <nome|name-termo|type-termo>.",
+
+        "searchBlocked": "A Busca de Itens está desativada para jogadores.",
+
+        "listTitle": "Catálogo de Itens",
+
+        "listEmpty": "O catálogo portátil não possui itens.",
+
+        "listUsage": "Uso: {command} list [all|type-<categoria>].",
+
+        "listTypeEmpty": "Nenhum item do catálogo está armazenado na categoria {type}.",
+
+        "rawListTitle": "Lista Bruta de Itens",
+
+        "rawListBaseTitle": "Lista Bruta de Itens Base",
+
+        "rawListCustomTitle": "Lista Bruta de Itens Personalizados",
+
+        "rawListEmpty": "O handout portátil não possui itens.",
+
+        "rawListBaseEmpty": "O Banco de Dados Portátil não possui itens base.",
+
+        "rawListCustomEmpty": "O Banco de Dados Portátil não possui itens personalizados.",
+
+        "removeUsage": "Uso: {command} remove \"nome ou id do item\".",
+
+        "removeTitle": "Remover Item",
+
+        "catalogPage": "Página {page} de {pages} | {total} item(ns)",
+
+        "previousPage": "Página anterior",
+
+        "nextPage": "Próxima página",
+
+        "otherType": "Outro",
+
+        "catalogNotFound": "Item não encontrado no catálogo portátil.",
+
+        "give": "Dar",
+
+        "giveUnavailable": "Dar não está disponível para este item ou visualizador.",
+
+        "giveTooltip": "Dar este item ao(s) token(s) de personagem selecionado(s).",
+
+        "inventoryCloneGiveTooltip": "Dar uma cópia exata deste item atual do inventário.",
+
+        "inventoryCloneButtonExpired": "Essa ação de clonar inventário expirou. Abra os detalhes do item novamente.",
+
+        "inventoryCloneActionProcessed": "Essa ação de clonar inventário já está em execução ou já foi concluída.",
+
+        "inventoryCloneSourceUnavailable": "O item de inventário de origem não está mais disponível. Abra os detalhes do item novamente.",
+
+        "inventoryCloneGiveTooltipGmOnly": "Somente o Game Master pode clonar itens atuais do inventário.",
+
+        "inventoryShareTooltip": "Exportar este item atual exato do inventário como um pacote portátil de item do T&T.",
+
+        "inventoryShareUnavailable": "Esse item atual do inventário não está mais disponível. Abra seus detalhes novamente.",
+
+        "giveQuantityPrompt": "Quantidade",
+
+        "giveTargetPrompt": "Destinatário",
+
+        "giveTitle": "Concessão de Item",
+
+        "giveUsage": "Uso: {command} give \"nome do item ou ID do catálogo\" [quantidade] [[tokenId]|[characterId][,...]]. Selecione token(s) quando os IDs forem omitidos.",
+
+        "giveInvalidQuantity": "A quantidade a dar deve ser um número inteiro de 1 a {maximum}.",
+
+        "giveTooManyTargets": "Item Give suporta no máximo {maximum} personagens únicos por comando.",
+
+        "giveSummary": "Atualizados {success} de {total} inventários de destino.",
+
+        "giveSucceeded": "Recebeu {quantity} x {itemName}.",
+
+        "giveFailed": "{error}",
+
+        "giveReceivedVerb": "Recebeu",
+
+        "giveFailedVerb": "Falha ao receber",
+
+        "giveBlueprintSource": "Origem do Blueprint: {source}",
+
+        "giveSourceBlueprintHandout": "T&T Item Blueprints",
+
+        "giveSourceDatabase": "Banco de Dados Portátil",
+
+        "givePlayerReceived": "Você recebe",
+
+        "givePlayerTitle": "Item Recebido",
+
+        "addTitle": "Adicionar Item",
+
+        "addUsage": "Uso: {command} add \"nome do item\" [quantidade] [\"descrição\"] [[tokenId]|[characterId][,...]]. Selecione token(s) quando os IDs forem omitidos.",
+
+        "addDisabled": "Jogadores não podem adicionar itens enquanto Allow Player Item Add estiver DESLIGADO.",
+
+        "addInvalidName": "Os nomes dos itens devem conter texto visível e ter no máximo 120 caracteres.",
+
+        "addInvalidDescription": "A descrição do item é inválida ou excede o tamanho suportado.",
+
+        "addPlayerAutomationDenied": "Somente o Game Master pode criar metadados de automação do T&T, como ações ou mudança de forma.",
+
+        "addNarrative": "{character} adicionou {quantity} {item} ao inventário.",
+
+        "addSimpleSource": "Item simples de inventário",
+
+        "catalogAmbiguous": "Mais de um item do catálogo corresponde a {reference}. Use o ID exato do catálogo.",
+
+        "send": "Enviar",
+
+        "sendTooltip": "Enviar os detalhes do item para o chat público.",
+
+        "sendUsage": "Uso: {command} send [catalogItemId].",
+
+        "remove": "Remover",
+
+        "edit": "Editar",
+
+        "editTooltip": "Editar este item do catálogo.",
+
+        "editUnavailable": "A edição de itens ainda não está disponível.",
+
+        "createTitle": "Criador de Item",
+
+        "editTitle": "Editor de Item",
+
+        "editorIdentity": "Identidade",
+
+        "editorClassification": "Classificação",
+
+        "editorCombat": "Combate",
+
+        "editorWearable": "Vestível",
+
+        "editorBehavior": "Comportamento",
+
+        "editorUsesActions": "Usos / Ações",
+
+        "editorSetup": "Configuração",
+
+        "editorUsesTitle": "Editor de Usos / Ações",
+
+        "editorActionTitle": "Editor de Ação",
+
+        "editorOutcomeTitle": "Editor de Resultado Aleatório",
+
+        "editorEffectTitle": "Editor de Efeito do Resultado",
+
+        "editorAddAction": "+ Ação",
+
+        "editorAddOutcome": "+ Resultado",
+
+        "editorAddEffect": "+ Efeito",
+
+        "editorBack": "Voltar",
+
+        "editorActionIdPrompt": "Nome da Ação",
+
+        "editorActionName": "Nome da Ação",
+
+        "editorActionNamePrompt": "Nome da Ação",
+
+        "editorActionLabel": "Nome da Ação",
+
+        "editorActionEffect": "Tipo de Ação",
+
+        "editorActionFormula": "Fórmula",
+
+        "editorActionFormulaHp": "Fórmula de PV",
+
+        "editorActionFormulaTempHp": "Fórmula de PV Temporários",
+
+        "editorActionHealingType": "Tipo de Cura",
+
+        "editorActionHealingHp": "PV",
+
+        "editorActionHealingTempHp": "PV Temporários",
+
+        "editorActionHealingBoth": "PV + PV Temporários",
+
+        "editorActionDamageFormulaOne": "Fórmula de Dano 1",
+
+        "editorActionDamageTypeOne": "Tipo de Dano 1",
+
+        "editorActionDamageFormulaTwo": "Fórmula de Dano 2",
+
+        "editorActionDamageTypeTwo": "Tipo de Dano 2",
+
+        "editorActionText": "Texto Narrativo",
+
+        "editorActionTarget": "Alvo",
+
+        "editorActionRange": "Alcance (ft)",
+
+        "editorActionRadius": "Raio (ft)",
+
+        "editorActionAoeShape": "Forma da AOE",
+
+        "editorActionAoeRadius": "Raio",
+
+        "editorActionAoeSquare": "Quadrado",
+
+        "editorActionConsume": "Consumir Quantidade",
+
+        "editorActionChargesMax": "Cargas Máximas",
+
+        "editorActionChargeCost": "Custo em Cargas",
+
+        "editorActionChargeRecharge": "Recarga",
+
+        "editorActionChargeShortRecovery": "Recuperação em Descanso Curto",
+
+        "editorActionChargeLongRecovery": "Recuperação em Descanso Longo",
+
+        "editorChargeFull": "Completa",
+
+        "editorChargeNone": "Nenhuma",
+
+        "editorChargeShortRest": "Descanso Curto",
+
+        "editorChargeLongRest": "Descanso Longo",
+
+        "editorChargeShortOrLongRest": "Descanso Curto ou Longo",
+
+        "editorChargeDawn": "Amanhecer",
+
+        "editorActionSaveEnabled": "Teste de Resistência",
+
+        "editorActionSaveAbility": "Atributo do Teste",
+
+        "editorActionSaveDc": "CD do Teste",
+
+        "editorActionSaveDcBase": "Base da CD",
+
+        "editorActionSaveDcAbility": "Atributo da CD",
+
+        "editorActionSaveProficiency": "Adicionar Proficiência",
+
+        "editorActionSaveSuccess": "Em Teste Bem-Sucedido",
+
+        "editorActionRandomRoll": "Rolagem Aleatória",
+
+        "editorActionLightType": "Tipo de Luz",
+
+        "editorActionLightRadial": "Radial",
+
+        "editorActionLightCone": "Cone",
+
+        "editorActionBrightLight": "Luz Plena (ft)",
+
+        "editorActionDimLight": "Penumbra (ft)",
+
+        "editorActionConeAmplitude": "Amplitude do Cone (graus)",
+
+        "editorActionLightColor": "Cor da Luz",
+
+        "editorActionLightColorPrompt": "Use o formato 'transparent' ou '#ffffff'",
+
+        "editorActionTime": "Tempo (minutos)",
+
+        "actionDuration": "Duração: {count} min",
+
+        "editorActionCondition": "Condição",
+
+        "editorActionDefenseType": "Tipo de Defesa",
+
+        "editorActionDefenseAc": "Classe de Armadura",
+
+        "editorActionDefenseResistance": "Resistência",
+
+        "editorActionDefenseImmunity": "Imunidade",
+
+        "editorActionDefenseVulnerability": "Vulnerabilidade",
+
+        "editorActionDefenseValue": "Valor",
+
+        "editorActionAttribute": "Atributo",
+
+        "editorActionAttributeCalculation": "Cálculo",
+
+        "editorActionAttributeAdd": "Adicionar",
+
+        "editorActionAttributeSet": "Definir",
+
+        "editorActionAttributeValue": "Valor",
+
+        "editorActionVisionEffect": "Efeito",
+
+        "editorActionVisionEffectNone": "Nenhum",
+
+        "editorActionVisionEffectNocturnal": "Noturno",
+
+        "editorActionVisionEffectDimming": "Escurecimento",
+
+        "editorActionVisionDimming": "Escurecimento %",
+
+        "editorActionVisionTint": "Tonalidade",
+
+        "editorActionVisionTintPrompt": "Use o formato 'none' ou '#ffffff'",
+
+        "editorActionSizeChange": "Tamanho",
+
+        "editorActionShapeImageUrl": "URL da Imagem da Forma",
+
+        "editorActionShapeImageUrlPrompt": "Use o formato https://files.d20.io/...",
+
+        "editorActionShapeName": "Nome da Forma",
+
+        "editorActionShapeNamePrompt": "Use None para preservar o nome atual do token",
+
+        "editorActionShapeSize": "Tamanho do Token",
+
+        "editorActionAllowEarlyRevert": "Permitir Reversão Antecipada",
+
+        "editorActionAllowCustomSetup": "Permitir Configuração Personalizada",
+
+        "editorSizeEnlarge": "Aumentar",
+
+        "editorSizeReduce": "Reduzir",
+
+        "editorActionSpawnSheetName": "Nome da Ficha",
+
+        "editorActionSpawnLinkVitals": "Vincular Sinais Vitais",
+
+        "editorActionSpawnAllowControl": "Permitir Controle",
+
+        "editorActionSpawnImageUrl": "URL da Imagem",
+
+        "editorActionSpawnName": "Nome",
+
+        "editorActionSpawnShowName": "Mostrar Nome",
+
+        "editorActionSpawnSize": "Tamanho",
+
+        "editorActionSpawnHp": "PV",
+
+        "editorActionSpawnShowHp": "Mostrar PV",
+
+        "editorActionSpawnAc": "CA",
+
+        "editorActionSpawnPlacement": "Posicionamento",
+
+        "editorActionSpawnLimit": "Limite de Spawn",
+
+        "editorSpawnPlacementSource": "Na Origem",
+
+        "editorSpawnPlacementTarget": "No Alvo",
+
+        "editorSpawnPlacementAdjacentSource": "Adjacente à Origem",
+
+        "editorSpawnPlacementAdjacentTarget": "Adjacente ao Alvo",
+
+        "editorSpawnSizeStandard": "Padrão",
+
+        "editorSpawnSizeTiny": "Minúsculo",
+
+        "editorSpawnSizeSmall": "Pequeno",
+
+        "editorSpawnSizeMedium": "Médio",
+
+        "editorSpawnSizeLarge": "Grande",
+
+        "editorSpawnSizeHuge": "Enorme",
+
+        "editorSpawnSizeGargantuan": "Colossal",
+
+        "editorAttributeHpMax": "PV Máximos",
+
+        "editorAttributeAc": "Classe de Armadura",
+
+        "editorAttributeSpeed": "Deslocamento de Caminhada",
+
+        "editorAttributeSwim": "Deslocamento de Natação",
+
+        "editorAttributeClimb": "Deslocamento de Escalada",
+
+        "editorAttributeStrength": "Força",
+
+        "editorAttributeDexterity": "Destreza",
+
+        "editorAttributeConstitution": "Constituição",
+
+        "editorAttributeIntelligence": "Inteligência",
+
+        "editorAttributeWisdom": "Sabedoria",
+
+        "editorAttributeCharisma": "Carisma",
+
+        "editorAttributeSize": "Tamanho",
+
+        "editorAttributeShapeShifting": "Mudança de Forma",
+
+        "editorAttributeDarkvision": "Visão no Escuro",
+
+        "editorOutcomeRollPrompt": "Número do resultado",
+
+        "editorOutcomeLabel": "Rótulo do Resultado",
+
+        "editorOutcomeWeight": "Peso",
+
+        "editorEffectIndex": "Efeito {index}",
+
+        "editorUseEffectHealing": "Cura",
+
+        "editorUseEffectDamage": "Dano",
+
+        "editorUseEffectNarrative": "Narrativa",
+
+        "editorUseEffectRandom": "Tabela de Rolagem",
+
+        "editorUseEffectLight": "Luz",
+
+        "editorUseEffectCondition": "Condição",
+
+        "editorUseEffectDefense": "Defesa",
+
+        "editorUseEffectAttributes": "Atributos",
+
+        "editorUseEffectSpawn": "Spawn",
+
+        "editorUseEffectWorldInteraction": "Interação com o Mundo",
+
+        "editorUseTargetSelf": "Próprio",
+
+        "editorUseTargetRange": "Alcance",
+
+        "editorUseConsumeAttempt": "Na Tentativa",
+
+        "editorUseConsumeSuccess": "No Sucesso",
+
+        "editorUseSaveNone": "Sem Efeito",
+
+        "editorUseSaveHalf": "Metade do Dano",
+
+        "editorUseNoActions": "Nenhuma ação configurada.",
+
+        "editorUseActionExists": "Esse Nome de Ação já existe.",
+
+        "editorUseActionLimit": "Este item já possui o número máximo de ações.",
+
+        "editorUseOutcomeExists": "Esse resultado aleatório já existe.",
+
+        "editorUseEffectLimit": "Esse resultado já possui o número máximo de efeitos.",
+
+        "editorUseRemove": "Remover",
+
+        "merge": "Mesclar",
+
+        "mergeTitle": "Mesclagem do Banco de Dados Portátil",
+
+        "mergeReviewTitle": "Mesclagem de {name}",
+
+        "mergeListTitle": "Itens da Mesclagem de {name}",
+
+        "mergeUsage": "Uso: {command} merge \"nome do handout\".",
+
+        "mergePrompt": "Nome do Handout",
+
+        "mergeSourceMissing": "Nenhum handout chamado {name} foi encontrado.",
+
+        "mergeSourceAmbiguous": "Mais de um handout se chama {name}. Renomeie o handout de origem para que o nome seja único.",
+
+        "mergeSourceInvalid": "{name} não é um T&T Portable Database reconhecido.",
+
+        "mergeSelf": "O T&T Portable Database ativo não pode ser mesclado consigo mesmo.",
+
+        "mergeNewItems": "Novas Entradas",
+
+        "mergeModifiedItems": "Entradas Modificadas",
+
+        "mergeBaseItems": "Itens Base",
+
+        "mergeCustomItems": "Itens Personalizados",
+
+        "mergeShops": "Lojas",
+
+        "mergeNewOne": "Nova Entrada",
+
+        "mergeNewMany": "Novas Entradas",
+
+        "mergeModified": "Modificado",
+
+        "mergeNewButton": "Mesclar Novos",
+
+        "mergeAllButton": "Mesclar Tudo",
+
+        "mergeListButton": "Listar Alterações",
+
+        "mergeNewTooltip": "Adicionar apenas itens e lojas que ainda não existem. As entradas existentes permanecem intactas.",
+
+        "mergeAllTooltip": "Adicionar todos os novos itens e lojas e sobrescrever cada entrada modificada revisada.",
+
+        "mergeListTooltip": "Revisar as novas entradas e os itens ou lojas existentes que Mesclar Tudo sobrescreveria.",
+
+        "mergeSkipped": "Ignoradas {count} entrada(s) inválida(s).",
+
+        "mergeAmbiguous": "{count} entrada(s) tinham nome ou ID duplicado ambíguo e foram ignoradas por segurança.",
+
+        "mergeUnchanged": "{count} entrada(s) correspondente(s) já são idênticas e não exigem alteração.",
+
+        "mergeExpired": "Essa revisão de mesclagem expirou. Execute Merge novamente.",
+
+        "mergeChanged": "O handout de origem mudou depois que a revisão foi criada. Execute Merge novamente.",
+
+        "mergeTargetChanged": "O Portable Database ativo mudou depois que a revisão de mesclagem foi criada. Execute Merge novamente.",
+
+        "mergeNothingToDo": "Nenhum item ou loja novo ou modificado foi encontrado.",
+
+        "mergeNewDone": "Mescladas {count} nova(s) entrada(s). As entradas existentes não foram alteradas.",
+
+        "mergeAllDone": "Mescladas {added} nova(s) entrada(s) e atualizadas {modified} entrada(s) modificada(s).",
+
+        "mergeListPage": "Página {page} de {pages} | {total} alteração(ões)",
+
+        "mergeInvalidName": "O nome do handout de origem é obrigatório.",
+
+        "mergeFailed": "A mesclagem do banco de dados portátil não pôde ser concluída.",
+
+        "share": "Compartilhar",
+
+        "shareTooltip": "Exportar a definição salva no Portable Database como um pacote portátil de item do T&T.",
+
+        "shareTitle": "Compartilhar Item T&T",
+
+        "shareUsage": "Uso: {command} share \"nome do item\". Somente itens salvos no Portable Database podem ser compartilhados.",
+
+        "reloadTitle": "Recarregar Portable Database",
+
+        "reloadUsage": "Uso: {command} reload.",
+
+        "reloadSucceeded": "Recarregados {items} item(ns) base e {customItems} item(ns) personalizado(s) de {handout}.",
+
+        "reloadFailed": "T&T não conseguiu recarregar o Portable Database. Corrija o handout e execute Reload novamente.",
+
+        "shareExported": "Pacote portátil de item criado.",
+
+        "shareInlineHelp": "Copie o código completo abaixo e envie-o para outro GM que use T&T.",
+
+        "shareHandoutHelp": "Este pacote é grande demais para um card de chat seguro. Copie o código do handout: {handout}.",
+
+        "sharePackageLabel": "Pacote",
+
+        "shareChecksumLabel": "Checksum",
+
+        "shareSourceLabel": "Origem",
+
+        "shareActionsLabel": "Ações",
+
+        "shareBlueprintNodesLabel": "Nós do Blueprint",
+
+        "shareImport": "Importar",
+
+        "shareImportTitle": "Importar Item T&T",
+
+        "shareImportUsage": "Uso: {command} import TNTITEM1... ou {command} import-handout \"nome do handout\".",
+
+        "shareImportInvalid": "Esse não é um pacote de item T&T válido.",
+
+        "shareImportTooLarge": "Esse pacote de item T&T excede o limite de segurança configurado.",
+
+        "shareImportChecksum": "O checksum do pacote de item não corresponde. O código pode estar incompleto ou modificado.",
+
+        "shareImportVersion": "Esta versão do pacote de item T&T não é suportada.",
+
+        "shareImportReady": "Pacote verificado. Revise o item antes de importá-lo.",
+
+        "shareImportNew": "Nenhum item com este nome existe atualmente.",
+
+        "shareImportConflict": "Já existe um item com este nome. Escolha Importar como Cópia ou Sobrescrever.",
+
+        "shareImportAmbiguous": "Mais de um item local possui exatamente este nome. Sobrescrever está desativado; importe-o como cópia com um nome único.",
+
+        "shareImportButton": "Importar",
+
+        "shareImportCopy": "Importar como Cópia",
+
+        "shareImportOverwrite": "Sobrescrever",
+
+        "shareImportCopyPrompt": "Novo Nome do Item",
+
+        "shareImportExpired": "Essa prévia de importação de item expirou. Cole o pacote novamente.",
+
+        "shareImportChanged": "O item existente mudou depois da prévia de importação. Nada foi sobrescrito.",
+
+        "shareImportAdded": "{itemName} importado para customItems.",
+
+        "shareImportCopied": "{itemName} importado como um novo item personalizado.",
+
+        "shareImportOverwritten": "{itemName} atualizado a partir do pacote compartilhado.",
+
+        "shareImportHandoutMissing": "Nenhum handout único chamado {name} foi encontrado.",
+
+        "shareImportHandoutInvalid": "O handout {name} não contém um pacote TNTITEM1 válido.",
+
+        "shareImportAuthor": "Compartilhado por",
+
+        "shareImportSourceVersion": "T&T de Origem",
+
+        "shareImportIntegrity": "Checksum de integridade verificado",
+
+        "shareImportUnsafeKey": "O pacote de item contém uma chave de objeto insegura e foi rejeitado.",
+
+        "databaseMigrationTitle": "Migração do Banco de Dados Portátil",
+
+        "databaseMigrationBody": "Mestre, atualizei {count} registro(s) de item legado(s) para o formato atual do Portable Database e criei o backup verificado {backup}.",
+
+        "databaseMigrationLegacyShops": "Converti {count} loja(s) de itens legada(s) e {offers} oferta(s) de item para o schema de lojas da Fase 2. {simple} item(ns) do catálogo sem correspondência foram preservados como ofertas simples. Eles estão disponíveis em Import Portable Shop; os registros legados completos permanecem em {backup}.",
+
+        "databaseMigrationFailedDetail": "T&T não conseguiu migrar o Portable Database com segurança. Os dados originais permanecem inalterados ou em um backup verificado. Causa: {error}",
+
+        "editorRarityCommon": "Comum",
+
+        "editorRarityUncommon": "Incomum",
+
+        "editorRarityRare": "Raro",
+
+        "editorRarityVeryRare": "Muito Raro",
+
+        "editorRarityLegendary": "Lendário",
+
+        "editorRarityArtifact": "Artefato",
+
+        "editorBlueprint": "Blueprint",
+
+        "editorBlueprintCreate": "Criar",
+
+        "editorBlueprintUpdate": "Atualizar",
+
+        "editorBlueprintEmbedded": "Incorporado",
+
+        "editorBlueprintCreateTooltip": "Criar e verificar um blueprint portátil a partir deste item do inventário.",
+
+        "editorBlueprintUpdateTooltip": "Reconstruir o blueprint a partir do item atual do inventário e substituir a cópia incorporada.",
+
+        "editorBlueprintEmbeddedTooltip": "Este item possui um blueprint incorporado. Abra-o a partir de um item atual do inventário para reconstruí-lo.",
+
+        "editorBlueprintUnavailable": "Um blueprint só pode ser criado a partir de um item atual do inventário.",
+
+        "editorBlueprintSimple": "Este item não possui um grafo de ficha que exija blueprint. Ele será salvo e reconstruído como item simples.",
+
+        "editorBlueprintCreated": "O blueprint portátil de {itemName} agora está incorporado.",
+
+        "editorBlueprintUpdated": "O blueprint incorporado de {itemName} foi reconstruído a partir do item atual do inventário.",
+
+        "editorDisplayName": "Nome de Exibição",
+
+        "editorImageUrl": "URL da Imagem",
+
+        "editorPriceAmount": "Valor do Preço",
+
+        "editorPriceCurrency": "Moeda",
+
+        "editorRollBonus": "Bônus de Rolagem",
+
+        "editorDamageOne": "Dano 1",
+
+        "editorDamageTypeOne": "Tipo de Dano 1",
+
+        "editorDamageTwo": "Dano 2",
+
+        "editorDamageTypeTwo": "Tipo de Dano 2",
+
+        "editorDamageBonus": "Bônus de Dano",
+
+        "editorArea": "Área",
+
+        "editorAreaSingle": "Único",
+
+        "editorAreaCone": "Cone",
+
+        "editorAreaRadius": "Raio",
+
+        "editorAreaSquare": "Quadrado",
+
+        "editorAreaLine": "Linha",
+
+        "editorAreaCube": "Cubo",
+
+        "editorAreaCylinder": "Cilindro",
+
+        "editorAreaOption": "{size} ft {shape}",
+
+        "editorNone": "Nenhum",
+
+        "damageTypeAcid": "Ácido",
+
+        "damageTypeBludgeoning": "Concussão",
+
+        "damageTypeCold": "Frio",
+
+        "damageTypeFire": "Fogo",
+
+        "damageTypeForce": "Força",
+
+        "damageTypeLightning": "Elétrico",
+
+        "damageTypeNecrotic": "Necrótico",
+
+        "damageTypePiercing": "Perfurante",
+
+        "damageTypePoison": "Veneno",
+
+        "damageTypePsychic": "Psíquico",
+
+        "damageTypeRadiant": "Radiante",
+
+        "damageTypeSlashing": "Cortante",
+
+        "damageTypeThunder": "Trovão",
+
+        "editorEquippable": "Equipável",
+
+        "editorEquipRequirement": "Requisito para Equipar",
+
+        "editorAttunable": "Sintonizável",
+
+        "editorAttunementRequirement": "Requisito de Sintonização",
+
+        "editorConsumable": "Consumível",
+
+        "editorUsable": "Utilizável",
+
+        "editorQuestItem": "Item de Missão",
+
+        "editorNotSet": "Não definido",
+
+        "editorConfigured": "Configurado",
+
+        "editorLocked": "Bloqueado",
+
+        "editorEditField": "Editar campo",
+
+        "editorPreview": "Prévia",
+
+        "editorSave": "Salvar",
+
+        "editorCancel": "Cancelar",
+
+        "editorSaveConfirm": "Salvar este item?",
+
+        "editorOverwriteTitle": "Sobrescrever Item",
+
+        "editorOverwriteConfirm": "{itemName} já existe no banco de dados portátil. Sobrescrevê-lo?",
+
+        "editorOverwriteAction": "Sobrescrever",
+
+        "editorDraftExpired": "Esse editor de item expirou. Abra Criar ou Editar novamente.",
+
+        "editorInvalidDraft": "Os dados do editor de item são inválidos.",
+
+        "editorInvalidField": "Esse campo ou valor do item não é suportado.",
+
+        "editorInvalidFieldDetail": "Esse campo ou valor do item não é suportado: {field}.",
+
+        "editorNameRequired": "Digite um nome antes de salvar o item.",
+
+        "editorNameLocked": "Os nomes de itens existentes no catálogo ficam bloqueados neste editor.",
+
+        "editorDuplicateName": "Outro item do catálogo já usa esse nome.",
+
+        "editorConflict": "Este item do catálogo mudou depois que o editor foi aberto. Abra Editar novamente antes de salvar.",
+
+        "editorSaveFailed": "O catálogo portátil não confirmou a atualização do item.",
+
+        "editorSaved": "{itemName} foi salvo no catálogo portátil.",
+
+        "editorSavedBody": "O item foi salvo com sucesso.",
+
+        "editorCancelled": "O rascunho do item foi descartado.",
+
+        "editorCancelledTitle": "Rascunho Descartado",
+
+        "editorCreateUsage": "Uso: {command} create.",
+
+        "editorEditUsage": "Uso: {command} edit \"nome exato do item ou ID do catálogo\".",
+
+        "editorNamePrompt": "Nome do Item",
+
+        "editorDisplayNamePrompt": "Nome de Exibição",
+
+        "editorTypePrompt": "Tipo do Item",
+
+        "editorSubtypePrompt": "Subtipo do Item",
+
+        "editorImagePrompt": "URL da Imagem",
+
+        "editorDescriptionPrompt": "Descrição",
+
+        "editorEffectPrompt": "Efeito",
+
+        "editorWeightPrompt": "Peso",
+
+        "editorPricePrompt": "Valor do Preço",
+
+        "editorPropertiesPrompt": "Propriedades separadas por vírgulas",
+
+        "editorRollBonusPrompt": "Bônus de Rolagem",
+
+        "editorDamagePrompt": "Fórmula de Dano",
+
+        "editorDamageBonusPrompt": "Bônus de Dano",
+
+        "editorEquipRequirementPrompt": "Requisito para Equipar",
+
+        "editorAttunementRequirementPrompt": "Requisito de Sintonização",
+
+        "editorModifierPrompt": "Modificador",
+
+        "editorArmorClassPrompt": "Classe de Armadura",
+
+        "editorDebuffPrompt": "Penalidade",
+
+        "editorMasteryPrompt": "Maestria",
+
+        "delete": "Excluir",
+
+        "deleteTooltip": "Excluir este item do catálogo portátil.",
+
+        "deleteConfirm": "Excluir {itemName} do catálogo portátil?",
+
+        "catalogDeleted": "{itemName} foi excluído do catálogo portátil.",
+
+        "catalogDeleteFailed": "O catálogo portátil não confirmou a exclusão do item.",
+
+        "catalogDeleteExpired": "Essa ação do catálogo expirou. Abra os detalhes do item novamente.",
+
+        "catalogActionProcessed": "Essa ação do catálogo já foi processada.",
+
+        "overview": "Visão Geral",
+
+        "combatEffects": "Combate e Efeitos",
+
+        "equipment": "Equipamento",
+
+        "uses": "Usos",
+
+        "subtype": "Subtipo",
+
+        "equippable": "Equipável",
+
+        "attunement": "Sintonização",
+
+        "attuned": "Sintonizado",
+
+        "target": "Alvo",
+
+        "consume": "Consome",
+
+        "save": "Resistência",
+
+        "outcomes": "Resultados",
+
+        "description": "Descrição",
+
+        "type": "Tipo",
+
+        "rarity": "Raridade",
+
+        "price": "Preço",
+
+        "effect": "Efeito",
+
+        "modifier": "Modificador",
+
+        "debuff": "Penalidade",
+
+        "dice": "Dados",
+
+        "quantity": "Quantidade",
+
+        "weight": "Peso",
+
+        "properties": "Propriedades",
+
+        "modifiers": "Modificadores",
+
+        "damage": "Dano",
+
+        "damageType": "Tipo de Dano",
+
+        "armorClass": "CA",
+
+        "range": "Alcance",
+
+        "mastery": "Maestria",
+
+        "requirement": "Requisito",
+
+        "source": "Origem",
+
+        "equipped": "Equipado",
+
+        "cost": "Custo",
+
+        "detailsSub": "Sub",
+
+        "detailsAttunable": "Sintonizável",
+
+        "detailsEquipRequirement": "Requisito de Equipamento",
+
+        "detailsAttunementRequirement": "Requisito de Sintonização",
+
+        "detailsCombatDefense": "Combate e Defesa",
+
+        "detailsDamageShort": "Dano",
+
+        "detailsDamageTwoShort": "Dano2",
+
+        "detailsTypeTwo": "Tipo2",
+
+        "detailsRollBonusShort": "Bônus de Rolagem",
+
+        "detailsDamageBonusShort": "Bônus de Dano",
+
+        "detailsUsesAction": "Usos / Ação",
+
+        "yes": "Sim",
+
+        "no": "Não",
+
+        "notFound": "Item não encontrado nesse inventário.",
+
+        "usage": "Uso: {command} details [tokenId|characterId] [itemId].",
+
+        "catalogDetailsUsage": "Uso: {command} details catalog [catalogItemId]."
+
+      },
+
+      "blueprint": {
+
+        "invalid": "O registro do blueprint é inválido.",
+
+        "liveReference": "A exportação do blueprint foi interrompida porque um ID de ficha ativo permaneceu no grafo.",
+
+        "referenceCollision": "A exportação do blueprint foi interrompida porque dois nós do grafo compartilham a mesma referência ativa.",
+
+        "tooLarge": "O blueprint deste item é grande demais para ser exportado com segurança.",
+
+        "handoutTooLarge": "T&T Item Blueprints excederia o limite de segurança configurado de 3,4 MB. Nada foi gravado.",
+
+        "only2024": "A exportação de blueprint suporta apenas fichas D&D 5e 2014 ou 2024 compatíveis.",
+
+        "handoutExportOnly2024": "Salvar blueprints em T&T Item Blueprints atualmente suporta apenas a ficha 2024. Use !tntTools blueprint-get para uma extração temporária de 2014.",
+
+        "ambiguousItem": "Mais de um item do inventário possui esse nome. Exporte usando o ID do item.",
+
+        "notFound": "Blueprint não encontrado: {reference}.",
+
+        "ambiguous": "Mais de um blueprint corresponde a {reference}. Use o ID exato do blueprint.",
+
+        "unsupportedFormat": "Este formato de blueprint não pode ser reconstruído. Exporte-o novamente com a versão atual do T&T.",
+
+        "unresolvedReference": "A reconstrução do blueprint foi interrompida porque uma referência interna não pôde ser resolvida.",
+
+        "invalidGraph": "A reconstrução do blueprint foi interrompida porque o grafo do item está incompleto ou inválido.",
+
+        "importVerifyFailed": "A ficha não confirmou o blueprint reconstruído. O inventário anterior foi restaurado quando possível.",
+
+        "compatibilityTitle": "Compatibilidade 2014",
+
+        "coreOnly2014Import": "O item foi criado. {count} nó(s) do blueprint não podem ser representados nativamente na ficha 2014, mas T&T os preservou em dados ocultos de compatibilidade round-trip.",
+
+        "nativeAttackFailed2014": "O item principal foi preservado, mas seu ataque vinculado não pôde ser verificado. Has Attack permanece desligado.",
+
+        "nativeAttack2014Import": "Criado(s) {linkedCount} ataque(s) vinculado(s) [{attackIds}]. {count} variante(s) de ataque da origem não foram criadas nativamente. {preservedCount} nó(s) adicional(is) do blueprint foram preservados nos dados ocultos de round-trip do T&T.",
+
+        "addedTitle": "Item Construído",
+
+        "added": "Adicionado(s) {quantity} {itemName} a {characterName} a partir do blueprint:",
+
+        "addUsage": "Uso: {command} blueprint-add [[tokenId]|[characterId]] '{blueprint JSON}'.",
+
+        "getUsage": "Uso: {command} blueprint-get [[tokenId]|[characterId]] \"nome ou id do item do inventário\".",
+
+        "rawTooLarge": "Esse blueprint é grande demais para um dump seguro no chat. Use !tntItem export para armazená-lo em T&T Item Blueprints.",
+
+        "roundTripFailed": "A exportação do blueprint foi interrompida porque sua forma compacta não preservou todos os campos do item.",
+
+        "legacyRecordInvalid": "O registro de blueprint legado {index} não pôde ser convertido com segurança.",
+
+        "legacyReferenceInvalid": "O blueprint legado {itemName} contém uma referência interna não resolvida: {reference}.",
+
+        "legacyRoundTripFailed": "O blueprint legado {itemName} não passou na verificação de conversão sem perdas.",
+
+        "legacyIdCollision": "A migração de blueprint encontrou um ID de blueprint ausente ou repetido para {itemName}. Nada foi substituído.",
+
+        "legacyBackupFailed": "T&T não conseguiu criar o backup dos blueprints legados. O handout original não foi alterado.",
+
+        "legacyBackupMismatch": "O backup verificado {handout} não corresponde ao handout atual de blueprints legados. O handout original não foi alterado.",
+
+        "legacyWriteFailed": "T&T não conseguiu verificar o handout de blueprints atualizado. Revise o log da API e o backup antes de continuar.",
+
+        "legacyRollbackFailed": "Erro crítico na migração de blueprint: T&T não conseguiu verificar a atualização nem restaurar o handout original. Use T&T-Bp-Backup antes de continuar.",
+
+        "legacyMigrationTitle": "Migração de Blueprint",
+
+        "legacyMigrationBody": "Mestre, seus blueprints de itens estavam usando um formato antigo. Atualizei {count} blueprints e criei o backup verificado {backup}.",
+
+        "exportUsage": "Uso: {command} export [tokenId|characterId] [itemId].",
+
+        "exported": "Blueprint de {itemName} {action} em {handout} com {nodes} nó(s).",
+
+        "created": "criado",
+
+        "updated": "atualizado"
+
+      },
+
+      "tools": {
+
+        "title": "Ferramentas T&T",
+
+        "tokenInfoTitle": "Informações do Token",
+
+        "distanceTitle": "Ferramentas T&T: distância",
+
+        "distanceButton": "Distância",
+
+        "tokenInfoButton": "Info do Token",
+
+        "imageUrl": "URL da Imagem",
+
+        "attributeGetButton": "Ler Atributo",
+
+        "attributeSetButton": "Definir Atributo",
+
+        "barrierInfoButton": "Portas",
+
+        "attributeGetDescription": "Ler um atributo da ficha de cada personagem selecionado.",
+
+        "attributeSetDescription": "Gravar um atributo da ficha em cada personagem selecionado.",
+
+        "rawChatDebugTitle": "Debug Bruto do Chat",
+
+        "storeDumpDescription": "Criar ou atualizar um Handout visível apenas ao GM contendo todos os dados do T&T pertencentes a uma loja para diagnóstico.",
+
+        "storeDumpUsage": "Uso: {command} store-dump \"ID ou nome da loja\". Para uma loja Local, você também pode selecionar o token da loja e omitir a referência.",
+
+        "storeDumpTitle": "Dump da Loja",
+
+        "storeDumpSaved": "Dump completo de {shop} salvo no Handout {handout} ({bytes} bytes).",
+
+        "tokenInfoDescription": "Inspecionar tokens selecionados ou IDs de token fornecidos.",
+
+        "beaconCapabilitiesDescription": "Inspecionar propriedades computadas do Beacon no Sandbox v1.5 e ações de ficha expostas pelo Roll20.",
+
+        "beaconCapabilitiesTitle": "Capacidades do Beacon",
+
+        "beaconSandboxVersion": "Sandbox",
+
+        "beaconSheetName": "Ficha",
+
+        "beaconComputedProperties": "Propriedades Computadas",
+
+        "beaconActions": "Ações",
+
+        "beaconUnavailable": "As capacidades do Beacon não estão disponíveis neste sandbox ou ficha.",
+
+        "beaconActionDescription": "Executar uma ação documentada da ficha Beacon em um personagem 2024 selecionado para diagnóstico.",
+
+        "beaconActionUsage": "Uso: {command} beacon-action [[tokenId]|[characterId]] \"nome da ação\" [arg ...].",
+
+        "beaconActionTitle": "Ação Beacon",
+
+        "beaconActionOnly2024": "Ações Beacon exigem um personagem D&D 5e 2024 Beacon.",
+
+        "beaconActionUnsupported": "Essa ação Beacon não está listada por Campaign().actionSummary: {action}",
+
+        "beaconActionFailed": "A ação Beacon falhou: {error}",
+
+        "beaconActionResult": "Ação {action} concluída.",
+
+        "distanceDescription": "Medir dois tokens e desenhar guias temporárias de medição.",
+
+        "attack2014Description": "Criar um ataque independente de Força com 1d4 de dano Perfurante em uma ficha 2014.",
+
+        "attack2014Usage": "Uso: {command} 2014-attack [[tokenId]|[characterId]] \"nome do ataque\".",
+
+        "attack2014Only": "Este diagnóstico suporta apenas a ficha D&D 5e 2014.",
+
+        "attack2014Success": "{attackName} foi criado em {characterName} como ataque [{attackId}] (1d4 + Força Perfurante).",
+
+        "blueprintAddDescription": "Reconstruir um blueprint 2024 em uma ficha 2024 selecionada ou em uma ficha 2014 compatível.",
+
+        "blueprintGetDescription": "Exportar um item atual do inventário 2014 ou 2024 como JSON compacto de blueprint.",
+
+        "barrierInfoDescription": "Inspecionar todas as propriedades documentadas de uma Porta, Janela ou Cortina selecionada.",
+
+        "barrierInfoUsage": "Selecione exatamente uma Porta, Janela ou Cortina e use: {command} barrier-info.",
+
+        "barrierTitle": "Ferramentas T&T: {type}",
+
+        "barrierMissing": "T&T não conseguiu encontrar um objeto {type} com ID {id}.",
+
+        "barrierSelectionRequired": "Selecione exatamente uma Porta, Janela ou Cortina no tabletop e execute o comando novamente.",
+
+        "barrierSelectionMultiple": "Selecione apenas uma Porta, Janela ou Cortina antes de executar este comando.",
+
+        "barrierSelectionWrongType": "O objeto selecionado é {actual}. Selecione um componente Porta, Janela ou Cortina.",
+
+        "barrierId": "ID",
+
+        "barrierType": "Tipo",
+
+        "barrierPageId": "ID da Página",
+
+        "barrierColor": "Cor",
+
+        "barrierX": "X",
+
+        "barrierY": "Y",
+
+        "barrierOpen": "isOpen",
+
+        "barrierLocked": "isLocked",
+
+        "barrierSecret": "isSecret",
+
+        "barrierPath": "Caminho",
+
+        "barrierUnavailable": "N/D",
+
+        "legacyHpDescription": "Resolver um ledger de compatibilidade HP-Max 2014 obsoleto sem alterar o PV automaticamente.",
+
+        "legacyHpUsage": "Uso: {command} legacy-hp <keep|restore> <ledgerId> [expectedCurrentMax].",
+
+        "legacyHpTitle": "Revisão de PV Legado 2014",
+
+        "legacyHpDetected": "T&T encontrou dados obsoletos de compatibilidade HP-Max 2014. Nenhum valor de PV foi alterado automaticamente.",
+
+        "legacyHpCurrent": "PV Máximo Atual",
+
+        "legacyHpModifier": "Modificador T&T legado",
+
+        "legacyHpCandidate": "Possível PV Máximo original",
+
+        "legacyHpKeep": "Manter PV Atual",
+
+        "legacyHpRestore": "Restaurar Candidato",
+
+        "legacyHpKeepHelp": "Manter o PV Máximo atual e remover apenas o ledger obsoleto do T&T.",
+
+        "legacyHpRestoreHelp": "Restaurar o candidato exibido somente se o PV Máximo não tiver mudado desde a criação deste card de revisão.",
+
+        "legacyHpResolvedKeep": "Ledger de PV obsoleto removido. O PV Máximo permaneceu inalterado.",
+
+        "legacyHpResolvedRestore": "Ledger de PV obsoleto removido depois que o PV Máximo candidato foi gravado e verificado.",
+
+        "legacyHpMissing": "Esse ledger de PV obsoleto não existe mais.",
+
+        "legacyHpChanged": "O PV Máximo mudou depois que o card de revisão foi criado. T&T não modificou o PV e manteve o ledger para revisão.",
+
+        "legacyHpUnsafe": "T&T não consegue calcular com segurança um PV Máximo candidato a partir desse ledger. Nenhum dado foi alterado.",
+
+        "legacyHpWriteFailed": "O PV Máximo candidato não pôde ser verificado. O ledger obsoleto foi preservado.",
+
+        "shopQuoteDescription": "Criar uma cotação somente leitura a partir de uma oferta ativa de loja da campanha.",
+
+        "shopQuoteUsage": "Uso: {command} shop-quote \"ID ou nome da loja\" \"ID ou nome da oferta\".",
+
+        "shopQuoteTitle": "Cotação da Loja",
+
+        "shopQuoteShop": "Estabelecimento",
+
+        "shopQuoteOffer": "Oferta",
+
+        "shopQuoteCapabilities": "Capacidades",
+
+        "shopQuoteInputs": "Entradas",
+
+        "shopQuoteOutputs": "Saídas",
+
+        "shopQuoteDuration": "Duração",
+
+        "shopQuoteStock": "Estoque",
+
+        "shopQuoteReadOnly": "Base somente leitura: nenhuma moeda, inventário, estoque ou solicitação foi alterada.",
+
+        "shopQuoteFailed": "T&T não conseguiu criar essa cotação de loja: {error}",
+
+        "shopQuoteUnresolved": "Requer contexto do comprador",
+
+        "shopQuoteReady": "Pronto",
+
+        "shopQuoteMinutes": "{count} minuto(s) do mundo",
+
+        "unsupportedLanguage": "Idioma não suportado: {language}.",
+
+        "noTargets": "Nenhum alvo",
+
+        "targets": "Alvos",
+
+        "targetCount": "{count} alvo(s)",
+
+        "targetMinimum": "{count}+ alvo(s)",
+
+        "gmOnly": "As Ferramentas T&T são restritas ao Game Master.",
+
+        "commandGmOnly": "Este comando de ferramenta é restrito ao Game Master.",
+
+        "unknownCommand": "Comando de ferramenta desconhecido: {command}. Use {rootCommand} para listar os comandos.",
+
+        "tokenIdNotFound": "ID de token não encontrado: {ids}.",
+
+        "targetIdNotFound": "ID de token ou personagem não encontrado: {ids}.",
+
+        "selectTokensOrIds": "Selecione token(s) no mapa ou forneça ID(s) de token após o comando. Uso: {usage}",
+
+        "exactTargetsRequired": "Este comando exige exatamente {count} token(s). Você forneceu {provided}. Uso: {usage}",
+
+        "minimumTargetsRequired": "Este comando exige pelo menos {count} token(s). Você forneceu {provided}. Uso: {usage}",
+
+        "noSelectedTokens": "Nenhum token selecionado detectado.",
+
+        "from": "De",
+
+        "to": "Para",
+
+        "roll20Center": "Centro do Roll20",
+
+        "roll20Edge": "Borda a borda do Roll20",
+
+        "euclideanCenter": "Centro euclidiano",
+
+        "circleEdge": "Borda a borda circular",
+
+        "boxEdge": "Borda a borda da caixa",
+
+        "controlledById": "controlledbyID",
+
+        "characterControlledById": "characterControlledByID",
+
+        "sheetType": "Tipo de ficha",
+
+        "layer": "Camada",
+
+        "characterId": "characterID",
+
+        "tooltip": "Tooltip",
+
+        "gmnotes": "Notas do GM",
+
+        "empty": "(vazio)"
+
+      },
+
+      "modules": {
+
+        "readyForImplementation": "Este módulo está pronto para implementação.",
+
+        "inventory": "Inventário e Itens",
+
+        "shops": "Sistema de Lojas",
+
+        "tokens": "Gerenciamento de Tokens",
+
+        "combat": "Assistente de Combate",
+
+        "loot": "Saque e Ferramentas do Jogador",
+
+        "npcs": "Gerenciamento de NPCs",
+
+        "campaign": "Gerenciamento de Campanha",
+
+        "dm": "Console do DM"
+
+      },
+
+      "shops": {
+
+        "title": "Lojas",
+
+        "adminTitle": "Gerenciamento de Lojas",
+
+        "editorTitle": "Editor de Loja",
+
+        "offerEditorTitle": "Editor de Oferta",
+
+        "offersTitle": "Ofertas de {shop}",
+
+        "empty": "Nenhuma loja está disponível no momento.",
+
+        "emptyAdmin": "Ainda não existem definições de lojas.",
+
+        "noOffers": "Esta loja ainda não possui ofertas.",
+
+        "commercePending": "Compra Direta, Venda estável pelo catálogo, pedidos de Workshop, aluguéis do Rental Broker, hospedagem da Pousada e operações bancárias estão disponíveis. Guilda e recursos adicionais continuam pendentes.",
+
+        "create": "Criar Loja",
+
+        "edit": "Editar",
+
+        "clone": "Clonar",
+
+        "remove": "Excluir",
+
+        "offers": "Ofertas",
+
+        "view": "Ver",
+
+        "open": "Abrir",
+
+        "close": "Fechar",
+
+        "show": "Mostrar",
+
+        "hide": "Ocultar",
+
+        "import": "Importar",
+
+        "importAll": "Importar tudo",
+
+        "importAllConfirm": "Isso sobrescreverá lojas ativas com o mesmo nome ou ID. Continuar?",
+
+        "importAllDone": "Importadas {count} loja(s) portátil(eis) com {offers} oferta(s).",
+
+        "export": "Exportar",
+
+        "createShopTooltip": "Criar Loja",
+
+        "importTooltip": "Importar Loja Portátil",
+
+        "importTitle": "Importar Loja Portátil",
+
+        "exportTitle": "Exportar Loja Ativa",
+
+        "importEmpty": "O Portable Database não possui modelos de loja para importar.",
+
+        "exportEmpty": "Não há lojas ativas para exportar.",
+
+        "deletePortable": "Excluir modelo portátil",
+
+        "deletePortableConfirm": "Excluir {name} do Portable Database? Isso não remove uma loja ativa da campanha.",
+
+        "portableRemoved": "{name} foi removida do Portable Database com {count} oferta(s).",
+
+        "overwrite": "Sobrescrever",
+
+        "importOverwriteConfirm": "{name} já existe no state ativo da campanha. Sobrescrevê-la com a versão do Portable Database?",
+
+        "exportOverwriteConfirm": "{name} já existe no Portable Database. Sobrescrevê-la com a versão ativa da campanha?",
+
+        "shopImported": "{name} foi importada para o state ativo da campanha com {count} oferta(s).",
+
+        "shopExported": "{name} foi exportada para o Portable Database com {count} oferta(s).",
+
+        "isNow": "agora está",
+
+        "openedState": "Aberta",
+
+        "closedState": "Fechada",
+
+        "hiddenState": "Oculta",
+
+        "visibleState": "Visível",
+
+        "statusTitle": "Status da Loja",
+
+        "globalSummary": "{shops} lojas",
+
+        "globalOpenSummary": "{count} aberta(s)",
+
+        "globalRequestsSummary": "{count} Solicitação(ões)",
+
+        "requestsPendingShort": "Solicitações",
+
+        "requestsPendingSuffix": "Solicitação(ões)",
+
+        "clickNameToEdit": "Clique no nome da loja para editar sua configuração.",
+
+        "scheduleEveryDay": "Todos os dias",
+
+        "scheduleLabel": "{days}, {hours}",
+
+        "activeSummaryTooltip": "{items} item(ns), {services} serviço(s), {hirelings} contratado(s), {assets} ativo(s), {training} treinamento(s), {earnings} gp ganhos, {requests} solicitação(ões) pendente(s)",
+
+        "portableSummaryTooltip": "{items} item(ns), {services} serviço(s), {hirelings} contratado(s), {assets} ativo(s), {training} treinamento(s)",
+
+        "itemsTooltipPart": "{count} item(ns)",
+
+        "servicesTooltipPart": "{count} serviço(s)",
+
+        "hirelingsTooltipPart": "{count} contratado(s)",
+
+        "assetsTooltipPart": "{count} ativo(s)",
+
+        "trainingTooltipPart": "{count} treinamento(s)",
+
+        "economyTooltipPart": "{earnings} gp ganhos, {requests} solicitação(ões) pendente(s)",
+
+        "itemCount": "{count} Itens",
+
+        "serviceCount": "{count} Serviços",
+
+        "editorHeading": "Editor de {name}",
+
+        "icon": "Ícone",
+
+        "iconPrompt": "Ícone ou emoji da loja",
+
+        "welcome": "Bem-vindo",
+
+        "visit": "Visitar",
+
+        "closed": "Fechada",
+
+        "availableRemoteShops": "Lojas remotas disponíveis",
+
+        "availableShops": "Lojas disponíveis",
+
+        "setup": "Configuração",
+
+        "identity": "Identidade",
+
+        "location": "Localização",
+
+        "interactiveArea": "Área Interativa",
+
+        "interactiveAreaPreview": "Pré-visualizar esta área de interação da loja.",
+
+        "blacklist": "Lista Negra",
+
+        "blacklistAddTooltip": "Adicionar o(s) token(s) selecionado(s) à lista negra desta loja.",
+
+        "blacklistRemoveTooltip": "Remover o(s) token(s) selecionado(s) da lista negra desta loja.",
+
+        "workingHours": "Horário de Funcionamento",
+
+        "workingDays": "Dias de Funcionamento",
+
+        "local": "Local",
+
+        "remote": "Remota",
+
+        "worldTime": "Tempo do Mundo",
+
+        "autoRestock": "Reposição Automática",
+
+        "pending": "Pendente",
+
+        "none": "Nenhum",
+
+        "mapName": "Mapa",
+
+        "tokenName": "Token",
+
+        "itemList": "Lista de Itens",
+
+        "workshopServices": "Serviços de Fabricação",
+
+        "workshopTitle": "Workshop de {shop}",
+
+        "workshopRecipes": "Receitas",
+
+        "workshopOrders": "Pedidos",
+
+        "workshopActiveOrders": "Em Andamento",
+
+        "workshopReadyOrders": "Prontos",
+
+        "workshopAttentionOrders": "Atenção",
+
+        "workshopNoRecipes": "Nenhuma receita de Workshop está configurada para esta loja.",
+
+        "workshopInvalidRecipe": "Esta receita está incompleta ou é incompatível com a fabricação do Workshop.",
+
+        "workshopMaterials": "Materiais",
+
+        "workshopDuration": "Duração",
+
+        "workshopParallelBatch": "Lote paralelo",
+
+        "workshopEach": "cada",
+
+        "workshopRecipeEditor": "Editor de Receita do Workshop",
+
+        "workshopCreateRecipe": "Criar Receita",
+
+        "workshopCreateRecipeTooltip": "Criar uma nova receita de fabricação do Workshop.",
+
+        "workshopEditRecipeTooltip": "Editar esta receita do Workshop.",
+
+        "workshopCompleteAll": "Concluir Tudo",
+
+        "workshopCompleteAllPrompt": "Concluir agora todas as solicitações ativas do Workshop?",
+
+        "workshopCompleteRequestPrompt": "Concluir agora esta solicitação do Workshop?",
+
+        "workshopOrderActionPrompt": "Pedido do Workshop",
+
+        "workshopCompleteOrder": "Concluir Pedido",
+
+        "workshopCancelOrder": "Cancelar Pedido",
+
+        "workshopDoNothing": "Não Fazer Nada",
+
+        "workshopNoActiveRequests": "Nenhuma solicitação do Workshop está em andamento.",
+
+        "workshopNoReadyRequests": "Nenhum pedido do Workshop está pronto para entrega.",
+
+        "workshopNoAttentionRequests": "Nenhum pedido do Workshop precisa de atenção.",
+
+        "workshopSend": "Enviar",
+
+        "workshopRemoveRecipe": "Remover",
+
+        "workshopRemoveRecipeConfirm": "Remover esta receita do Workshop?",
+
+        "workshopItemName": "Nome do Item",
+
+        "workshopItemNamePrompt": "Nome do Item",
+
+        "workshopItemNameRequired": "Digite o item que esta receita criará.",
+
+        "workshopImageUrl": "URL da Imagem do Item",
+
+        "workshopImageUrlPrompt": "URL da Imagem do Item",
+
+        "workshopImageUrlInvalid": "A URL da imagem do item não é suportada.",
+
+        "workshopDescriptionPrompt": "Descrição do Item",
+
+        "workshopRarityQuality": "Raridade / Qualidade",
+
+        "workshopRarityQualityPrompt": "Raridade / Qualidade",
+
+        "workshopItemType": "Tipo do Item",
+
+        "workshopItemTypePrompt": "Tipo do Item",
+
+        "workshopTypeAdventuringGear": "Equipamento de Aventura",
+
+        "workshopTypeArmor": "Armadura",
+
+        "workshopTypeShield": "Escudo",
+
+        "workshopTypeWeapon": "Arma",
+
+        "workshopArmorBaseAc": "CA Base",
+
+        "workshopArmorBaseAcPrompt": "CA Base (None desativa)",
+
+        "workshopArmorBonusAc": "Bônus de CA",
+
+        "workshopArmorBonusAcPrompt": "Bônus de CA",
+
+        "workshopUseDexModifier": "Usar Modificador de Destreza",
+
+        "workshopUseDexModifierPrompt": "Usar Modificador de Destreza",
+
+        "workshopWeight": "Peso",
+
+        "workshopWeightPrompt": "Peso",
+
+        "workshopAttackAbility": "Atributo de Ataque",
+
+        "workshopAttackAbilityPrompt": "Atributo de Ataque",
+
+        "workshopDamageFormula": "Fórmula de Dano",
+
+        "workshopDamageFormulaPrompt": "Fórmula de Dano",
+
+        "workshopDamageType": "Tipo de Dano",
+
+        "workshopDamageTypePrompt": "Tipo de Dano",
+
+        "workshopRollBonus": "Bônus de Rolagem",
+
+        "workshopRollBonusPrompt": "Bônus de Rolagem",
+
+        "workshopBlueprintBase": "Blueprint Base",
+
+        "workshopCatalogFieldLocked": "A identidade do item do catálogo é fornecida pelo Portable Database.",
+
+        "workshopMaterialNumber": "Material {number}",
+
+        "workshopMaterialNamePrompt": "Nome do Item Material",
+
+        "workshopMaterialQuantityPrompt": "Quantidade de Material",
+
+        "workshopMaterialPricePrompt": "Preço do Material por Unidade",
+
+        "workshopAddMaterial": "Adicionar Material",
+
+        "workshopRemoveMaterial": "Remover este material.",
+
+        "workshopDuplicateMaterial": "Esse material já está incluído nesta receita.",
+
+        "workshopTooManyMaterials": "Esta receita já contém o máximo de materiais suportados.",
+
+        "workshopNoMaterialsRequired": "Nenhum material necessário",
+
+        "workshopNoMaterialsTooltip": "Fazer este pedido do Workshop sem materiais.",
+
+        "workshopPricing": "Preços",
+
+        "workshopServicePrice": "Preço do Serviço",
+
+        "workshopServicePricePrompt": "Preço do Serviço por Item",
+
+        "workshopProduction": "Produção",
+
+        "workshopDurationMinutesPrompt": "Duração Base em Minutos",
+
+        "workshopOutputBatch": "Lote",
+
+        "workshopOutputBatchPrompt": "Itens Produzidos por Fabricação",
+
+        "workshopBatchRate": "Tempo Extra por Lote",
+
+        "workshopBatchRatePrompt": "Tempo adicional por lote extra solicitado (%)",
+
+        "workshopValueInvalid": "Esse valor da receita do Workshop é inválido.",
+
+        "workshopRecipeSaved": "{name} foi adicionado ao Workshop.",
+
+        "workshopQuoteTitle": "Cotação do Workshop",
+
+        "workshopRequest": "Solicitar",
+
+        "workshopRequestTooltip": "Revisar quantidade, duração, preço e opções de materiais.",
+
+        "workshopCraftingQuote": "Fabricando {quantity}x {item}",
+
+        "workshopReadyIn": "Pronto em {duration}",
+
+        "workshopShopMaterialsTooltip": "Fazer pedido com materiais fornecidos pela loja.",
+
+        "workshopShopMaterialsUnavailable": "A loja não pode fornecer todos os materiais necessários.",
+
+        "workshopCustomerMaterialsTooltip": "Fazer pedido usando os materiais necessários do seu inventário.",
+
+        "workshopCustomerMaterialsUnavailable": "Seu inventário não contém todos os materiais necessários.",
+
+        "actionInProgress": "Essa receita do Workshop já está sendo salva.",
+
+        "workshopMinutes": "{count} Min",
+
+        "workshopHour": "{count} Hr",
+
+        "workshopHours": "{count} Hrs",
+
+        "workshopHourMinute": "{time} Hrs",
+
+        "workshopDay": "{count} Dia",
+
+        "workshopDays": "{count} Dias",
+
+        "workshopShopMaterials": "Materiais da loja",
+
+        "workshopCustomerMaterials": "Seus materiais",
+
+        "workshopOrder": "Pedir",
+
+        "workshopCollect": "Coletar",
+
+        "workshopPickUp": "Retirar",
+
+        "workshopReadyLabel": "Pronto",
+
+        "workshopButtonExpired": "Este botão do Workshop expirou. Reabra a loja e tente novamente.",
+
+        "workshopCollectionReady": "Pronto para retirada",
+
+        "workshopCollected": "Pedido do Workshop Retirado",
+
+        "workshopCollectedBody": "{quantity}x {item} foi adicionado a {character}.",
+
+        "workshopNoCustomer": "Selecione um token de personagem que você controla para fazer ou retirar um pedido do Workshop.",
+
+        "workshopOrderFailed": "O pedido do Workshop falhou: {error}",
+
+        "workshopYourMaterialsOnly": "Jogador Fornece",
+
+        "enchanterServices": "Encantador",
+
+        "enchanterTitle": "Encantador de {shop}",
+
+        "enchanterRecipes": "Receitas",
+
+        "enchanterOrders": "Serviços de Encantamento",
+
+        "enchanterNoRecipes": "Nenhuma receita de Encantador está configurada para esta loja.",
+
+        "enchanterCreateRecipe": "Criar Receita",
+
+        "enchanterRecipeEditor": "Editor de Receita do Encantador",
+
+        "enchanterDefinition": "Definição",
+
+        "enchanterNamePrompt": "Nome do Encantamento",
+
+        "enchanterNameRequired": "Digite um nome para esta receita de encantamento.",
+
+        "enchanterTag": "Tag",
+
+        "enchanterTagPrompt": "Tag do Nome do Item (deixe em branco para nenhuma tag; por exemplo: de Resistência a Ácido, +1)",
+
+        "enchanterQualityUpgrade": "Melhoria de Qualidade",
+
+        "enchanterQualityOverride": "Substituição de Qualidade",
+
+        "enchanterQualityOverrideNone": "Nenhuma",
+
+        "enchanterEquipType": "Tipo de Equipamento",
+
+        "enchanterModifiers": "Modificadores",
+
+        "enchanterModifier": "Modificador",
+
+        "enchanterModifierValue": "Valor do Modificador",
+
+        "enchanterTooManyModifiers": "Esta receita já contém o máximo de modificadores suportados.",
+
+        "enchanterPricingTime": "Preço e Tempo",
+
+        "enchanterServicePrice": "Preço do Serviço de Encantamento",
+
+        "enchanterServicePricePrompt": "Preço do Serviço de Encantamento",
+
+        "enchanterTime": "Tempo de Encantamento",
+
+        "enchanterTimePrompt": "Tempo de Encantamento em Minutos",
+
+        "enchanterRemoveConfirm": "Remover esta receita do Encantador?",
+
+        "enchanterValueInvalid": "Esse valor da receita do Encantador é inválido.",
+
+        "enchanterNeedsModifier": "Adicione uma Tag ou pelo menos um Modificador antes de salvar esta receita.",
+
+        "enchanterRecipeSaved": "{name} foi adicionado ao Encantador.",
+
+        "enchanterButtonExpired": "Este botão do Encantador expirou. Reabra a loja e tente novamente.",
+
+        "enchanterNoCustomer": "Selecione um token de personagem que você controla para usar o Encantador.",
+
+        "enchanterNoEligibleItems": "Nenhum item compatível e desequipado foi encontrado no inventário deste personagem.",
+
+        "enchanterQuoteTitle": "Cotação de Encantamento",
+
+        "enchanterSuccess": "{item} foi encantado com sucesso.",
+
+        "enchanterRequestSubmitted": "{item} foi deixado com o Encantador e agora está em andamento.",
+
+        "enchanterCollected": "Encantamento Retirado",
+
+        "enchanterCollectedBody": "{item} foi devolvido a {character}.",
+
+        "enchanterActiveOrders": "Em Andamento",
+
+        "enchanterReadyOrders": "Prontos",
+
+        "enchanterCompleteAll": "Concluir Tudo",
+
+        "enchanterCompleteAllPrompt": "Concluir agora todas as solicitações ativas do Encantador?",
+
+        "enchanterOrderActionPrompt": "Pedido do Encantador",
+
+        "enchanterCompleteOrder": "Concluir Pedido",
+
+        "enchanterCancelOrder": "Cancelar Pedido",
+
+        "enchanterDoNothing": "Não Fazer Nada",
+
+        "enchanterNoActiveRequests": "Nenhuma solicitação do Encantador está em andamento.",
+
+        "enchanterNoReadyRequests": "Nenhum pedido do Encantador está pronto para retirada.",
+
+        "enchanterSend": "Enviar",
+
+        "enchanterPickUp": "Retirar",
+
+        "pickUpTitle": "Retirar",
+
+        "pickedUpVerb": "retirou",
+
+        "enchant": "Encantar",
+
+        "assetsMenu": "Ativos",
+
+        "companionsMenu": "Companheiros",
+
+        "blacksmithMenu": "Ferreiro",
+
+        "guildMenu": "Guilda",
+
+        "innMenu": "Pousada",
+
+        "bankMenu": "Banco",
+
+        "academyMenu": "Academia",
+
+        "teleporterMenu": "Teletransportador",
+
+        "save": "Salvar",
+
+        "cancel": "Cancelar",
+
+        "addItem": "Adicionar Item",
+
+        "addCustomItem": "Adicionar Item Personalizado",
+
+        "addRandomItems": "Adicionar Itens Aleatórios",
+
+        "linkShopSheet": "Vincular Ficha de Loja do Roll20",
+
+        "linkedShopSheetMissing": "A ficha de Loja do Roll20 vinculada não pôde ser localizada.",
+
+        "linkedShopSheetAuthority": "Autoridade do inventário: {sheet}",
+
+        "shopSheetNameRequired": "Digite o nome exato da ficha de Loja do Roll20.",
+
+        "shopSheetNotFound": "Nenhuma ficha de Loja do Roll20 chamada {sheet} foi encontrada.",
+
+        "shopSheetAmbiguous": "Mais de uma ficha de Loja do Roll20 se chama {sheet}. Renomeie uma delas e tente novamente.",
+
+        "shopSheetOverwriteWarning": "Esta loja atualmente possui {count} listagem(ns) de itens do T&T. Continuar substituirá essas listagens pelo inventário de {sheet}.",
+
+        "linkedSuccessfullyWith": "foi vinculada com sucesso a",
+
+        "itemsInStock": "{count} itens em estoque.",
+
+        "shopCurrency": "Moeda da Loja",
+
+        "continue": "Continuar",
+
+        "randomQuantityPrompt": "Quantidade?",
+
+        "randomCategoryPrompt": "Categoria?",
+
+        "randomRarityPrompt": "Raridade",
+
+        "randomItemsUnavailable": "Nenhum item correspondente do Portable Database está disponível para adicionar.",
+
+        "negotiable": "Negociável",
+
+        "assetUnavailable": "Indisponível",
+
+        "visibleInRotation": "Disponível atualmente nesta rotação do catálogo.",
+
+        "customItemNamePrompt": "Nome do Item",
+
+        "customItemDescriptionPrompt": "Descrição",
+
+        "customItemImagePrompt": "URL da Imagem",
+
+        "customItemInvalid": "O nome, descrição ou URL da imagem do item personalizado é inválido.",
+
+        "addService": "Adicionar Serviço",
+
+        "addTraining": "Adicionar Treinamento",
+
+        "addAsset": "Adicionar Ativo",
+
+        "enabled": "Ativado",
+
+        "disabled": "Desativado",
+
+        "visible": "Visível",
+
+        "hidden": "Oculto",
+
+        "name": "Nome",
+
+        "stableId": "ID Estável",
+
+        "description": "Descrição",
+
+        "shopkeeperSection": "Lojista",
+
+        "shopkeeperEnabled": "Lojista",
+
+        "shopkeeperSettings": "Configurações do Lojista",
+
+        "shopkeeperMessages": "Mensagens",
+
+        "shopkeeperShowOnVisit": "Mostrar na Visita",
+
+        "shopkeeperName": "Nome",
+
+        "shopkeeperImageSource": "Origem da Imagem",
+
+        "shopkeeperUseImageUrl": "Usar URL da Imagem",
+
+        "shopkeeperUseLocalToken": "Usar Token Local",
+
+        "shopkeeperImageUrl": "URL da Imagem",
+
+        "shopkeeperFirstGreeting": "Saudação da Primeira Visita",
+
+        "shopkeeperReturningGreeting": "Saudação de Retorno",
+
+        "shopkeeperFirstVisit": "Primeira Visita",
+
+        "shopkeeperReturningVisit": "Visita de Retorno",
+
+        "shopkeeperBlacklistAdded": "Adicionado à Lista Negra",
+
+        "shopkeeperBlacklistedVisit": "Visita de Bloqueado",
+
+        "shopkeeperPurchaseCompleted": "Compra / Solicitação de Serviço",
+
+        "shopkeeperSaleCompleted": "Venda / Conclusão de Serviço",
+
+        "shopkeeperReturningAfterRaffle": "Retorno após Sorteio",
+
+        "shopkeeperReturningAfterRestock": "Retorno após Reposição",
+
+        "shopkeeperDiscountGranted": "Conceder Desconto",
+
+        "shopkeeperDiscountRejected": "Desconto Rejeitado",
+
+        "shopkeeperPriceRequestReceived": "Solicitação de Preço Recebida",
+
+        "shopkeeperPriceSet": "Definir Preço",
+
+        "shopkeeperOfferUnderReview": "Oferta em Análise",
+
+        "shopkeeperOfferRejected": "Oferta Rejeitada",
+
+        "shopkeeperCraftingOrder": "Pedido de Fabricação",
+
+        "shopkeeperEnchanterOrder": "Pedido de Encantamento",
+
+        "shopkeeperInsufficientFunds": "Fundos Insuficientes",
+
+        "shopkeeperAskName": "Perguntar Nome",
+
+        "shopkeeperMessageCount": "{count} mensagem(ns)",
+
+        "shopkeeperMessagePrompt": "Mensagem do Lojista",
+
+        "shopkeeperAddMessage": "Adicionar Mensagem",
+
+        "shopkeeperRemoveMessage": "Remover esta mensagem?",
+
+        "shopkeeperNoMessages": "Nenhuma mensagem personalizada. A narrativa padrão é usada quando disponível.",
+
+        "shopkeeperKnownCharacters": "Memórias de Personagens",
+
+        "shopkeeperNoKnownCharacters": "Nenhum nome de personagem é conhecido atualmente.",
+
+        "shopkeeperClearMemories": "Limpar Memórias",
+
+        "shopkeeperClearMemoriesConfirm": "Limpar as memórias de personagens deste lojista?",
+
+        "shopkeeperMemoriesCleared": "As memórias de personagens do lojista foram limpas.",
+
+        "shopkeeperNamePrompt": "Nome do Lojista",
+
+        "shopkeeperImageUrlPrompt": "URL da Imagem do Lojista",
+
+        "shopkeeperFirstGreetingPrompt": "Saudação da Primeira Visita",
+
+        "shopkeeperReturningGreetingPrompt": "Saudação para Cliente que Retorna",
+
+        "shopkeeperDefaultName": "Lojista",
+
+        "shopkeeperCustomer": "Aventureiro",
+
+        "shopkeeperDefaultFirstGreeting": "Bem-vindo a {shop}.",
+
+        "shopkeeperDefaultReturningGreeting": "Bem-vindo de volta, {character}.",
+
+        "shopkeeperDefaultOfferUnderReview": "Interessante. Deixe-me dar uma olhada.",
+
+        "shopkeeperDefaultOfferRejected": "Não quero isso, desculpe.",
+
+        "shopkeeperDefaultCraftingOrder": "Boa escolha, {character}.\nVou fabricar isto.",
+
+        "shopkeeperDefaultEnchanterOrder": "Boa escolha, {character}.\nVou encantar isto.",
+
+        "shopkeeperDefaultInsufficientFunds": "Volte quando tiver moedas suficientes, {character}.",
+
+        "shopkeeperDefaultAskName": "Ei, Aventureiro. Você é um cliente frequente. Posso saber seu nome?",
+
+        "shopkeeperNameAccepted": "{shopkeeper} lembrará do seu nome.",
+
+        "shopkeeperNameDeclined": "{shopkeeper} continuará chamando você de Aventureiro.",
+
+        "shopkeeperNameRequestUnavailable": "Essa resposta do lojista não está mais disponível.",
+
+        "shopkeeperEnabledTooltip": "Mostrar um proprietário ou atendente quando jogadores visitarem esta loja.",
+
+        "shopkeeperShowTooltip": "Mostrar este lojista e sua saudação na visualização Visitar do jogador.",
+
+        "shopkeeperExternalTooltip": "Use uma URL externa de imagem segura, como uma imagem de item.",
+
+        "shopkeeperLocalTooltip": "Use a imagem atual do token de mapa configurado desta loja Local.",
+
+        "shopkeeperLocalUnavailable": "Usar Token Local exige uma loja Local com um token configurado na camada Objects.",
+
+        "capabilities": "Capacidades",
+
+        "tradePolicies": "Políticas Comerciais",
+
+        "buyFromPlayers": "Comprar de Jogadores",
+
+        "buyItems": "Comprar Itens",
+
+        "acceptedItems": "Itens Aceitos",
+
+        "acceptedItemsNumber": "Itens Aceitos {index}",
+
+        "acceptedItemPrompt": "Itens Aceitos {index}",
+
+        "acceptHeavyArmor": "Armadura Pesada",
+
+        "acceptMediumArmor": "Armadura Média",
+
+        "acceptLightArmor": "Armadura Leve",
+
+        "acceptArmor": "Armadura",
+
+        "acceptShield": "Escudo",
+
+        "acceptMeleeWeapon": "Arma Corpo a Corpo",
+
+        "acceptRangedWeapon": "Arma à Distância",
+
+        "acceptWeapon": "Arma",
+
+        "acceptAmmunition": "Munição",
+
+        "acceptArcaneFocus": "Foco Arcano",
+
+        "acceptArtisanTools": "Ferramentas de Artesão",
+
+        "acceptImprovisedWeapon": "Arma Improvisada",
+
+        "acceptInstruments": "Instrumentos",
+
+        "acceptMartialMeleeWeapon": "Arma Marcial Corpo a Corpo",
+
+        "acceptMartialRangedWeapon": "Arma Marcial à Distância",
+
+        "acceptMount": "Montaria",
+
+        "acceptPotion": "Poção",
+
+        "acceptRations": "Rações",
+
+        "acceptRing": "Anel",
+
+        "acceptRod": "Bastão",
+
+        "acceptSimpleMeleeWeapon": "Arma Simples Corpo a Corpo",
+
+        "acceptSimpleRangedWeapon": "Arma Simples à Distância",
+
+        "acceptStaff": "Cajado",
+
+        "acceptTools": "Ferramentas",
+
+        "acceptVehicle": "Veículo",
+
+        "acceptScroll": "Pergaminho",
+
+        "acceptWondrousItem": "Item Maravilhoso",
+
+        "acceptAdventuringGear": "Equipamento de Aventura",
+
+        "catalogItemsOnly": "Catálogo da Loja",
+
+        "allItems": "Todos os Itens do Catálogo",
+
+        "anyItems": "Qualquer Item",
+
+        "customRules": "Regras Personalizadas",
+
+        "buyPricing": "Preço de Compra",
+
+        "automaticPercentage": "% Automático",
+
+        "gmApproval": "Aprovação do GM",
+
+        "advancedPricing": "Regras Avançadas",
+
+        "buyPrice": "Preço de Compra",
+
+        "shopBuyingBudget": "Fundos da Loja",
+
+        "boughtItemHandling": "Itens Comprados",
+
+        "addToStock": "Adicionar ao Estoque se Listado",
+
+        "stockAll": "Estocar Tudo",
+
+        "holdForReview": "Reter para Análise",
+
+        "destroyItem": "Remover do Jogo",
+
+        "allowEquippedSales": "Comprar Itens Equipados",
+
+        "allowAttunedSales": "Comprar Itens Sintonizados",
+
+        "allowQuestItemSales": "Comprar Itens de Missão",
+
+        "accepted": "Aceito",
+
+        "rejected": "Rejeitado",
+
+        "tradePolicyPending": "A venda de itens de catálogo e personalizados está ativa. Mercadorias equipadas, sintonizadas e de missão permanecem indisponíveis.",
+
+        "saleSafetyNotice": "Itens equipados, sintonizados e de missão não estão disponíveis. Qualquer Item preserva mercadorias personalizadas por meio de escrow de blueprint verificado.",
+
+        "buyPolicyDisabled": "Esta loja não está comprando itens de jogadores.",
+
+        "buyQuantityLimit": "Essa venda excede o limite de transação desta loja.",
+
+        "equippedItemRejected": "Esta loja não aceita itens equipados.",
+
+        "attunedItemRejected": "Esta loja não aceita itens sintonizados.",
+
+        "questItemRejected": "Esta loja não aceita itens de missão.",
+
+        "catalogItemRequired": "Esta loja aceita apenas itens reconhecidos do catálogo.",
+
+        "itemNotAccepted": "Esta loja não aceita esse item.",
+
+        "buyPriceRequiresApproval": "O Game Master deve avaliar este item.",
+
+        "buyPriceUnavailable": "Não foi possível calcular um preço de compra para este item.",
+
+        "catalogSaleOnly": "Somente itens estáveis do catálogo podem usar a transação de venda ativa.",
+
+        "equippedSaleReserved": "A venda de itens equipados permanece reservada até que o rollback exato de equipamento esteja disponível.",
+
+        "attunedSaleReserved": "A venda de itens sintonizados permanece reservada até que o rollback exato de sintonização esteja disponível.",
+
+        "saleQuantityUnavailable": "Essa quantidade do item não está mais disponível.",
+
+        "resaleOfferMissing": "Este item não possui uma oferta de revenda compatível na loja.",
+
+        "itemNotInShopCatalog": "Este item não está listado no catálogo desta loja.",
+
+        "resaleOfferAmbiguous": "Este item corresponde a mais de uma oferta de revenda.",
+
+        "resaleStockUnsupported": "Esta oferta de revenda usa um modo de estoque que não pode receber aquisições.",
+
+        "treasuryInsufficient": "A loja não possui fundos suficientes no tesouro.",
+
+        "sellItems": "Vender Itens",
+
+        "searchItems": "Buscar",
+
+        "searchItemsTooltip": "Buscar entre os itens atualmente visíveis nesta loja.",
+
+        "searchItemsPrompt": "Nome do item",
+
+        "noSearchMatches": "Nenhum item atualmente visível corresponde a \"{query}\".",
+
+        "askDiscount": "Pedir Desc.",
+
+        "askDiscountTooltip": "Pedir ao dono da loja um desconto pessoal.",
+
+        "discountRequestBody": "pede um desconto pessoal.",
+
+        "discountRequestSent": "O dono da loja está considerando sua solicitação de desconto.",
+
+        "discountRequestUnavailable": "Esta solicitação de desconto expirou ou já foi resolvida.",
+
+        "discountRequestRejected": "O dono da loja recusou sua solicitação de desconto.",
+
+        "setDiscount": "Definir 🏷️",
+
+        "discountPrompt": "Desconto %",
+
+        "personalDiscountGranted": "{character} recebe um desconto pessoal de {percent}% por 1 dia.",
+
+        "saveShopBeforeItemList": "Salve esta loja antes de editar sua lista de itens.",
+
+        "saveShopBeforeCapability": "Salve antes de editar.",
+
+        "saleLockedItemNotice": "Itens equipados, sintonizados e de missão não estão disponíveis para venda.",
+
+        "saleTypeDebugNotice": "Visualização de debug: todos os itens do inventário são mostrados sem controles de venda, seguidos de sua classificação no Portable Database.",
+
+        "uncatalogedItem": "Item Fora do Catálogo",
+
+        "sell": "Vender",
+
+        "saleListTitle": "Vender para {shop}",
+
+        "saleEmpty": "Este personagem não possui itens no inventário para revisar.",
+
+        "saleNoEligibleItems": "Esta loja não está interessada em nenhum item elegível deste inventário.",
+
+        "saleIneligible": "Não elegível",
+
+        "saleItemChanged": "O item de inventário vinculado mudou. Reabra a lista de venda.",
+
+        "saleQuoteChanged": "A política ou cotação da loja mudou. Reabra a lista de venda.",
+
+        "saleRemovalUnconfirmed": "A ficha não confirmou a remoção da quantidade vendida.",
+
+        "saleAlreadyProcessed": "Esta venda já foi processada.",
+
+        "saleRequestSent": "O dono da loja está avaliando sua oferta.",
+
+        "saleRequestUnavailable": "Esta solicitação de venda expirou ou já foi resolvida.",
+
+        "saleRequestRejected": "A loja não está interessada neste item.",
+
+        "isSelling": "está vendendo",
+
+        "reject": "Rejeitar",
+
+        "buyFor": "Comprar por",
+
+        "totalPrice": "Preço Total",
+
+        "shopWallet": "Carteira da Loja",
+
+        "saleTitle": "Venda no Mercado",
+
+        "saleAction": "Vendeu",
+
+        "saleTo": "para",
+
+        "saleFor": "por",
+
+        "saleSellMore": "Vender Mais",
+
+        "saleDisposition": "Destino: {disposition}",
+
+        "capabilityTooltips": {
+
+          "item_shop": "Vender e comprar itens de inventário.",
+
+          "workshop": "Fabricar produtos personalizados ao longo do tempo.",
+
+          "enchanter": "Adicionar propriedades mágicas a equipamentos.",
+
+          "rental_broker": "Alugar veículos, montarias, contratados, mascotes e companheiros.",
+
+          "guild": "O suporte de Guilda está reservado para uma fase posterior de campanha/reputação.",
+
+          "inn": "Alugar quartos e gerenciar hospedagem.",
+
+          "bank": "Abrir contas, armazenar fundos e gerenciar empréstimos.",
+
+          "academy": "Treinar perícias, ferramentas e idiomas por meio de sessões programadas da Academia.",
+
+          "teleporter": "Viajar entre pads de teletransporte configurados."
+
+        },
+
+        "status": "Status",
+
+        "visibility": "Visibilidade",
+
+        "accessibility": "Acessibilidade",
+
+        "earnings": "Ganhos",
+
+        "sold": "Itens / serviços vendidos",
+
+        "productsSold": "Produtos Vendidos",
+
+        "discount": "Desconto",
+
+        "products": "Produtos",
+
+        "productsSummary": "{products} Produtos, {earnings} Ganhos, {sold} Vendidos",
+
+        "restockMode": "Método de Reposição",
+
+        "restockDate": "Data de Reposição",
+
+        "restockWeekly": "Semanal",
+
+        "restockMonthly": "Mensal",
+
+        "restockRandom": "Aleatória",
+
+        "restockDaily": "Diária",
+
+        "weekdays": {
+
+          "sun": "Domingo",
+
+          "mon": "Segunda-feira",
+
+          "tue": "Terça-feira",
+
+          "wed": "Quarta-feira",
+
+          "thu": "Quinta-feira",
+
+          "fri": "Sexta-feira",
+
+          "sat": "Sábado"
+
+        },
+
+        "enableAutoRestockHelp": "Ative Reposição Automática para editar estas configurações.",
+
+        "enableWorldTimeHelp": "Ative Tempo do Mundo para editar horários e dias de funcionamento.",
+
+        "statusManagedByWorldTime": "Tempo do Mundo controla se esta loja está aberta.",
+
+        "visibilityManagedByLocation": "Lojas locais são descobertas por meio de seu token de mapa configurado.",
+
+        "itemListTitle": "Lista de Itens de {shop}",
+
+        "soldLabel": "Vendido",
+
+        "boughtLabel": "Comprado",
+
+        "buyersLabel": "Compradores",
+
+        "clientsLabel": "Clientes",
+
+        "stolenLabel": "Roubado",
+
+        "itemsLost": "Itens Perdidos",
+
+        "rollPrices": "🎲 Preço",
+
+        "infiniteStock": "♾️ Estoque",
+
+        "rotateCatalog": "Rotacionar",
+
+        "rotateCatalogTooltip": "Mostrar um subconjunto aleatório variável dos itens de catálogo criados.",
+
+        "rollPricesTooltip": "Definir cada produto com um preço rolável que o Game Master deve decidir.",
+
+        "infiniteStockTooltip": "Definir todos os produtos criados nesta lista com estoque ilimitado.",
+
+        "bulkDiscountTooltip": "Aplicar uma porcentagem geral de desconto a todos os produtos desta lista.",
+
+        "buyItemsTooltip": "Permitir que esta loja compre itens de inventário elegíveis dos jogadores.",
+
+        "rotationItemCount": "Itens Exibidos",
+
+        "rotationCadence": "Tempo de Rotação",
+
+        "boughtItemsRotation": "Itens Comprados na Rotação",
+
+        "boughtItemsAlwaysShow": "Sempre Mostrar",
+
+        "boughtItemsRotate": "Rotacionar",
+
+        "rerollCatalog": "Sorteio",
+
+        "rerollCatalogTooltip": "Selecionar imediatamente um novo conjunto de itens para o período de rotação atual.",
+
+        "rotation": {
+
+          "daily": "Diária",
+
+          "weekly": "Semanal",
+
+          "monthly": "Mensal"
+
+        },
+
+        "invalidRotationCount": "A quantidade de itens exibidos está fora do intervalo suportado.",
+
+        "invalidRotationCadence": "Esse tempo de rotação do catálogo não é suportado.",
+
+        "confirmRollPrices": "Definir todos os produtos desta lista com preço rolável decidido pelo Game Master?",
+
+        "confirmInfiniteStock": "Definir todos os produtos desta lista com estoque infinito?",
+
+        "confirmDiscount": "Aplicar este desconto a todos os produtos desta lista?",
+
+        "itemCountLabel": "Quantidade de Itens",
+
+        "stockTooltip": "Estoque: {stock}",
+
+        "priceTooltip": "Preço: {price}",
+
+        "discountTooltip": "Desconto: {discount}%",
+
+        "rollable": "Rolável",
+
+        "infinite": "Infinito",
+
+        "finite": "Finito",
+
+        "buy": "Comprar",
+
+        "outOfStock": "Sem Estoque",
+
+        "rollablePrice": "Peça ao Game Master para decidir o preço deste item antes de comprá-lo.",
+
+        "requestPriceTooltip": "Pedir ao Game Master para definir o preço deste item.",
+
+        "priceRequestTitle": "Solicitação de Preço",
+
+        "priceRequestBody": "pede o preço de",
+
+        "priceRequestSent": "O dono da loja está avaliando o preço deste produto.",
+
+        "priceSetActorGm": "O Game Master definiu",
+
+        "priceSetActorOwner": "O Dono da Loja definiu",
+
+        "priceSetTo": "para",
+
+        "viewItemList": "Ver Lista",
+
+        "setPrice": "Definir Preço",
+
+        "setPriceTooltip": "Definir o preço deste item para esta loja.",
+
+        "coinTypePrompt": "Tipo de moeda",
+
+        "complexOfferUnavailable": "Esta oferta exige um fluxo de serviço ou solicitação governado e não pode usar Compra Direta.",
+
+        "selectBuyerToken": "Selecione um token que você controla antes de abrir esta lista de itens.",
+
+        "purchaseTitle": "Compra no Mercado",
+
+        "purchaseAction": "Comprou",
+
+        "purchaseHeld": "(tem {quantity})",
+
+        "purchaseExit": "Sair",
+
+        "purchaseBuyMore": "Comprar Mais",
+
+        "purchaseWallet": "Carteira",
+
+        "economyTitle": "📊 Economia da Loja 📊",
+
+        "economyButton": "Economia",
+
+        "economyTooltip": "Abrir estatísticas confirmadas da economia da loja.",
+
+        "ordersButton": "Pedidos",
+
+        "ordersTooltip": "Abrir pedidos ativos do Workshop, Encantador e Rental Broker.",
+
+        "economyShopCount": "Lojas",
+
+        "totalEarnings": "Receita",
+
+        "economyShopSummary": "Produtos Vendidos: {sold}, Lucros: {earnings}",
+
+        "pressToCloseShop": "Pressione para Fechar esta loja",
+
+        "pressToOpenShop": "Pressione para Abrir esta loja",
+
+        "pressToHideShop": "Pressione para Ocultar esta loja",
+
+        "pressToShowShop": "Pressione para disponibilizar esta loja",
+
+        "editShopConfigurations": "Editar as configurações desta loja",
+
+        "removeShopFromCampaign": "Remover loja desta campanha",
+
+        "interactiveAreaPreviewTooltip": "Pré-visualizar esta área de interação da loja.",
+
+        "noSoldItems": "Nenhum item vendido registrado.",
+
+        "noBoughtItems": "Nenhum item comprado de jogadores registrado.",
+
+        "noBuyers": "Nenhum comprador registrado.",
+
+        "noSellers": "Nenhum vendedor registrado.",
+
+        "noLostItems": "Nenhum item perdido registrado.",
+
+        "compactedSoldItems": "Outros produtos: {quantity} em {purchases} compra(s).",
+
+        "compactedBoughtItems": "Outros produtos adquiridos: {quantity} em {purchases} venda(s).",
+
+        "compactedSellers": "Outra atividade de vendedores: {quantity} produto(s) em {sales} venda(s).",
+
+        "compactedBuyers": "Outra atividade de clientes: {quantity} produto(s) em {purchases} compra(s).",
+
+        "compactedLostItems": "Outras perdas: {quantity} produto(s) em {events} evento(s).",
+
+        "additionalTrackedEntries": "{count} entrada(s) rastreada(s) adicional(is) omitida(s) deste tooltip.",
+
+        "analyticsTitle": "Análises da Loja",
+
+        "analyticsSoldItems": "Itens Vendidos",
+
+        "analyticsBoughtItems": "Itens Comprados",
+
+        "analyticsClients": "Clientes",
+
+        "analyticsLostItems": "Itens Perdidos",
+
+        "analyticsSellers": "Comprado de",
+
+        "discountReason": "Desconto {reason} de {percent}%",
+
+        "discountReasonGeneral": "Geral",
+
+        "discountReasonPersonal": "Pessoal",
+
+        "walletSuffix": " - Carteira",
+
+        "backToShop": "Voltar à loja",
+
+        "backToEditor": "Voltar ao editor da loja",
+
+        "purchaseUnavailable": "Essa compra não está mais disponível.",
+
+        "closedBySchedule": "Esta loja está fechada neste momento.",
+
+        "blacklisted": "Este comprador não tem permissão para usar esta loja.",
+
+        "accessDenied": "Este comprador não atende aos requisitos de acesso desta loja.",
+
+        "insufficientFundsTitle": "Fundos Insuficientes",
+
+        "insufficientFundsBody": "Você não possui fundos suficientes para esta compra.",
+
+        "insufficientFundsPaymentBody": "não possui fundos suficientes para pagar por isto.",
+
+        "insufficientFundsNpcBody": "Se você não tem as moedas, não desperdice meu tempo.",
+
+        "orderCancellationTitle": "Cancelamento do Pedido",
+
+        "orderCancellationBody": "foi cancelado. Devolvemos seus",
+
+        "orderCancellationPayment": "Pagamento",
+
+        "purchaseTargetUnavailable": "O token do comprador selecionado está ausente, foi revinculado ou você não o controla mais.",
+
+        "purchaseAlreadyProcessed": "Esse botão de compra já foi processado ou expirou.",
+
+        "insufficientStock": "A loja não possui estoque suficiente para essa compra.",
+
+        "addItemUsage": "Use {command} shop item-add <loja> <item do catálogo>.",
+
+        "itemCapabilityRequired": "Ative Item Shop para este estabelecimento antes de adicionar itens do catálogo.",
+
+        "itemEditValue": "Valor",
+
+        "invalidItemEditPayload": "Uso: !tntDM shop item-edit \"nome da loja\" \"nome do item\" <stock|price|discount|remove> <valor>.",
+
+        "itemEditNotFound": "Esse item não foi encontrado na lista de itens da loja.",
+
+        "itemEditMismatch": "O nome do item não corresponde a esse item da loja. Reabra a lista de itens e tente novamente.",
+
+        "itemEditAmbiguous": "Mais de um item da loja possui esse nome. Remova a duplicata antes de editar esta listagem.",
+
+        "simpleItemWarningTitle": "Item Simples da Loja",
+
+        "simpleItemAddedWarning": "{item} não foi encontrado no Portable Database, então foi adicionado à loja como item simples. Seu nome, quantidade, descrição e metadados válidos de imagem serão preservados.",
+
+        "itemAlreadyListedTitle": "Item Já Listado",
+
+        "itemAlreadyListed": "{item} já está listado em {shop}.",
+
+        "removeItemPrompt": "Remover Item da lista?",
+
+        "invalidStock": "O estoque deve ser -1 para estoque infinito ou um número inteiro não negativo.",
+
+        "invalidPrice": "O preço deve ser -1 para preço rolável ou um número inteiro positivo com uma moeda válida.",
+
+        "invalidDiscount": "O desconto deve ser um número de 0 a 100.",
+
+        "itemAddedToShop": "{item} foi adicionado a {shop}.",
+
+        "bulkUpdated": "{count} listagem(ns) de item foram atualizadas.",
+
+        "kind": "Tipo de Oferta",
+
+        "output": "Produto / Serviço",
+
+        "quantity": "Quantidade",
+
+        "price": "Preço",
+
+        "currency": "Moeda",
+
+        "stockMode": "Modo de Estoque",
+
+        "stockQuantity": "Quantidade em Estoque",
+
+        "duration": "Duração (minutos)",
+
+        "narrative": "Descrição / Resultado",
+
+        "createNamePrompt": "Nome da loja",
+
+        "cloneNamePrompt": "Nome da loja clonada",
+
+        "offerNamePrompt": "Nome da oferta",
+
+        "outputNamePrompt": "Nome do item do catálogo, serviço, treinamento ou ativo",
+
+        "descriptionPrompt": "Descrição",
+
+        "quantityPrompt": "Quantidade",
+
+        "pricePrompt": "Valor do preço",
+
+        "durationPrompt": "Duração em minutos do mundo",
+
+        "shopSaved": "{name} foi salva no state ativo da campanha.",
+
+        "shopSavedWithCapabilityCleanup": "{name} foi salva e {count} oferta(s) incompatível(eis) foram desvinculadas.",
+
+        "shopCloned": "{name} foi clonada com {count} oferta(s).",
+
+        "shopRemoved": "{name} e {count} oferta(s) exclusiva(s) foram removidas.",
+
+        "offerSaved": "{name} foi salva em {shop}.",
+
+        "offerRemoved": "{name} foi removida de {shop}.",
+
+        "draftExpired": "Esse editor de loja expirou. Abra-o novamente.",
+
+        "invalidDraft": "Os dados do editor de loja estão incompletos ou inválidos.",
+
+        "actionFailed": "A operação da loja falhou: {error}",
+
+        "innRoomReleased": "{character} liberou {room} em {name}.",
+
+        "bankAccountOpened": "{character} abriu uma conta em {name}.",
+
+        "removeShopConfirm": "Excluir {name}? Ofertas exclusivas também serão removidas; ofertas compartilhadas permanecerão.",
+
+        "removeOfferConfirm": "Remover {offer} de {shop}?",
+
+        "capabilityRemovalPrompt": "Remover {capability}? Ao salvar, suas {count} oferta(s) serão desvinculadas.",
+
+        "capabilityRemovalPending": "{count} oferta(s) incompatível(eis) serão desvinculadas quando esta loja for salva.",
+
+        "createUsage": "Uso: {command} shop create \"Nome da Loja\".",
+
+        "editUsage": "Uso: {command} shop edit \"ID ou nome da loja\".",
+
+        "offerUsage": "Uso: {command} shop offer-create \"ID ou nome da loja\" item|service|training|asset \"Nome da Oferta\".",
+
+        "unknownAdminAction": "Ação de gerenciamento de loja desconhecida: {action}.",
+
+        "itemShop": "Itens",
+
+        "workshop": "Workshop",
+
+        "enchanter": "Encantador",
+
+        "rentalBroker": "Rental Broker",
+
+        "assetRaffleVisible": "Visível no sorteio atual",
+
+        "rentalBrokerLobby": "Rental\nBroker",
+
+        "assetAdd": "Adicionar Ativo",
+
+        "assetCount": "Ativos: {count}",
+
+        "assetCountLabel": "Ativos:",
+
+        "assetNone": "Nenhum ativo está disponível para aluguel no momento.",
+
+        "assetNoCustomer": "Selecione um token de personagem que você controla para alugar um ativo.",
+
+        "assetUtility": "Utilidade",
+
+        "assetDayShort": "dia",
+
+        "assetDaysPrompt": "Dias",
+
+        "assetRentTooltip": "Escolha por quantos dias alugar este ativo.",
+
+        "assetRentalQuote": "Cotação de Aluguel",
+
+        "assetRentFor": "Alugar por",
+
+        "assetRentalDays": "{count} dia(s)",
+
+        "assetConfirmRent": "Pagar e alugar este ativo.",
+
+        "assetRentalComplete": "Aluguel Iniciado",
+
+        "assetRentedFor": "Alugado por {count} dia(s).",
+
+        "assetRenewalTitle": "Renovação do Aluguel",
+
+        "assetRenewalQuestion": "Deseja estender o serviço?",
+
+        "assetRenewalDays": "{count} dia(s)",
+
+        "assetRenewalNo": "Não",
+
+        "assetRenewalExtend": "Estender",
+
+        "assetRenewalExtendFor": "Estender por",
+
+        "assetRenewalLetGo": "Dispensar",
+
+        "assetRenewalPayTooltip": "Pagar para estender este aluguel.",
+
+        "assetRenewalExtended": "Aluguel Estendido",
+
+        "assetRenewalExtendedFor": "Estendido por {count} dia(s).",
+
+        "assetRenewalGmBody": "Deve estender o aluguel de {name}",
+
+        "assetRenewalGmExtendedNotice": "O GM estendeu o aluguel por {count} dia(s).",
+
+        "assetRenewalGmExtendedConfirm": "Aluguel estendido pelo GM por {count} dia(s).",
+
+        "assetRenewalMinimumDays": "São necessários pelo menos {count} dia(s) porque o Tempo do Mundo já avançou.",
+
+        "assetRenewalEnded": "Aluguel Encerrado",
+
+        "assetRenewalEndedBody": "{name} deixou o serviço.",
+
+        "assetRenewalUnavailable": "Este aluguel não pode mais ser renovado.",
+
+        "assetRenewalStale": "Os termos de renovação do aluguel mudaram porque mais Tempo do Mundo passou. Revise as opções de renovação atualizadas.",
+
+        "assetButtonExpired": "Essa seleção do Rental Broker expirou. Abra o broker novamente.",
+
+        "assetEditorTitle": "Editor do Rental Broker",
+
+        "assetSpawn": "Spawn",
+
+        "assetRental": "Aluguel",
+
+        "assetRentOrSell": "Alugar ou Vender",
+
+        "assetRentMode": "Alugar",
+
+        "assetSellMode": "Vender",
+
+        "assetTotalPrice": "Preço Total",
+
+        "assetKind": "Utilidade",
+
+        "assetSize": "Tamanho",
+
+        "assetTokenName": "Nome do Token",
+
+        "assetFallbackHp": "PV Alternativo",
+
+        "assetAc": "CA",
+
+        "assetPlacement": "Posicionamento",
+
+        "assetActiveLimit": "Ativos Disponíveis",
+
+        "assetSheetName": "Nome da Ficha",
+
+        "assetImageUrl": "URL da Imagem do Roll20",
+
+        "assetLinkVitals": "Vincular Sinais Vitais",
+
+        "assetShowName": "Mostrar Nome",
+
+        "assetShowHp": "Mostrar PV",
+
+        "assetAllowPlayerControl": "Permitir Controle do Jogador",
+
+        "assetPricePerDay": "Preço / Dia",
+
+        "assetLossFeePercent": "Taxa por Perda %",
+
+        "assetLossFeePrompt": "Taxa por perda como % de um dia de aluguel (0 desativa)",
+
+        "assetDebtTitle": "Dívida de Aluguel",
+
+        "assetDebtBlocked": "Você possui uma dívida de aluguel pendente. Pague-a antes de alugar outro ativo.",
+
+        "assetDebtLossBody": "Você possui uma dívida pendente pela perda de {name}.",
+
+        "assetDebtMultipleLosses": "{count} taxa(s) por perda estão incluídas nesta dívida.",
+
+        "assetDebtPayTooltip": "Pagar esta dívida de aluguel.",
+
+        "assetDebtPaid": "Dívida de Aluguel Paga",
+
+        "assetDebtPaidBody": "Sua dívida com o Rental Broker foi paga.",
+
+        "assetDebtChanged": "A dívida de aluguel mudou. Reabra o Rental Broker.",
+
+        "assetLossTitle": "Ativo Alugado Perdido",
+
+        "assetLossPlayerBody": "{name} foi perdido. Uma taxa por perda de {percent}% de um dia de aluguel foi adicionada à sua dívida.",
+
+        "assetLossPlayerNoFee": "{name} foi perdido. Nenhuma taxa por perda estava configurada para este aluguel.",
+
+        "assetLossGmBody": "{character} perdeu o aluguel {name}. Uma taxa por perda de {percent}% foi registrada.",
+
+        "assetLossGmNoFee": "{character} perdeu o aluguel {name}. Nenhuma taxa por perda estava configurada.",
+
+        "assetLevel": "Nível",
+
+        "assetShowLevel": "Mostrar Nível",
+
+        "assetNamePrompt": "Nome do ativo",
+
+        "assetDescriptionPrompt": "Utilidade / descrição do ativo",
+
+        "assetSheetPrompt": "Nome da ficha de personagem",
+
+        "assetImagePrompt": "URL da imagem do Roll20",
+
+        "assetTokenNamePrompt": "Nome do token criado",
+
+        "assetFallbackHpPrompt": "PV alternativo",
+
+        "assetAcPrompt": "Classe de Armadura",
+
+        "assetActiveLimitPrompt": "Ativos disponíveis neste pool do Rental Broker",
+
+        "assetPricePrompt": "Preço por dia",
+
+        "assetLevelPrompt": "Nível (deixe em branco para nenhum)",
+
+        "assetNameRequired": "O nome do ativo é obrigatório.",
+
+        "assetNeedsSource": "O ativo exige um nome de Ficha de Personagem ou uma URL de imagem válida.",
+
+        "assetInvalid": "A configuração do Rental Broker é inválida.",
+
+        "assetSaved": "{name} foi salvo como aluguel do Rental Broker.",
+
+        "assetRemove": "Remover",
+
+        "assetRemoveConfirm": "Remover este aluguel de ativo?",
+
+        "guild": "Guilda",
+
+        "guildUnavailable": "Os serviços de Guilda ainda não estão disponíveis.",
+
+        "inn": "Pousada",
+
+        "bank": "Banco",
+
+        "academy": "Academia",
+
+        "academyCourses": "Cursos",
+
+        "academyClasses": "Aulas",
+
+        "academyCoursesInProgress": "Cursos em Andamento",
+
+        "academyTrainingAction": "Ação de Treinamento",
+
+        "academyCompleteTraining": "Concluir Treinamento",
+
+        "academyCancelTraining": "Cancelar Treinamento",
+
+        "academyManageTraining": "Gerenciar treinamento da Academia",
+
+        "academyTrainingRecordMissing": "Esse registro de treinamento da Academia não existe mais.",
+
+        "academyTrainingNoLongerInProgress": "Esse registro de treinamento da Academia não está mais em andamento.",
+
+        "academyTrainingActionInvalid": "Escolha Concluir Treinamento ou Cancelar Treinamento.",
+
+        "academyTrainingSnapshotMissing": "Esse snapshot de treinamento da Academia está ausente.",
+
+        "academyTrainingRewardFailed": "A recompensa do treinamento da Academia não pôde ser concedida.",
+
+        "academyCompletedTrainingCannotCancel": "Um treinamento concluído da Academia não pode ser cancelado.",
+
+        "academyStudentMissing": "O personagem estudante da Academia não existe mais.",
+
+        "academyTrainingActionFailed": "A ação de treinamento da Academia falhou.",
+
+        "academyComplete": "Concluir",
+
+        "academyNoCourses": "Nenhum curso da Academia está configurado.",
+
+        "academyAddCourse": "Adicionar Curso da Academia",
+
+        "academyCourseName": "Nome do Curso",
+
+        "academyCourseDescription": "Descrição da Tarefa",
+
+        "academyProficiencyKind": "Tipo de Treinamento",
+
+        "academyProficiency": "Proficiência",
+
+        "academySessions": "Sessões",
+
+        "academyDuration": "Duração da Sessão",
+
+        "academyCooldown": "Recarga (Dias)",
+
+        "academySessionPrice": "Preço da Sessão",
+
+        "academyProgress": "Progresso: {completed} / {required}",
+
+        "academyTrain": "Treinar",
+
+        "academyReady": "Pronto",
+
+        "academyTrainingActive": "Treinamento - restam {time}",
+
+        "academyCooldownActive": "Recarga - restam {time}",
+
+        "academyCompleted": "Concluído",
+
+        "academyAlreadyProficient": "Já proficiente",
+
+        "academyOtherTrainingActive": "Outra sessão da Academia está ativa",
+
+        "academyUnavailableTraining": "O treinamento da Academia não está disponível para este curso no momento.",
+
+        "academySelectBuyer": "Selecione um token de personagem que você controla para treinar na Academia.",
+
+        "academySessionStarted": "O treinamento de {name} começou. A sessão termina em {due}.",
+
+        "academyCourseMissing": "Esse curso da Academia não existe mais.",
+
+        "academyCourseLimit": "O limite de cursos da Academia foi atingido.",
+
+        "academyCourseInvalid": "Esse valor do curso da Academia é inválido.",
+
+        "academyRemoveCourseConfirm": "Remover este curso da Academia?",
+
+        "academyCourseActive": "Este curso possui uma sessão de treinamento ativa. Deixe-a terminar antes de remover o curso.",
+
+        "academyCapabilityActive": "A Academia possui uma sessão de treinamento ativa. Deixe-a terminar antes de remover a capacidade.",
+
+        "teleporter": "Teletransportador",
+
+        "teleporterUnavailable": "Este Teletransportador não está pronto para uso.",
+
+        "teleporterSettings": "Configurações",
+
+        "teleporterOriginPad": "Pad de Teletransporte de Origem",
+
+        "teleporterAnimated": "Teletransporte Animado",
+
+        "teleporterShowMapName": "Mostrar Nome do Mapa",
+
+        "teleporterAssignDestinationPad": "Atribuir Pad de Destino",
+
+        "teleporterLocations": "Locais",
+
+        "teleporterAddLocation": "Adicionar Local de Teletransporte",
+
+        "teleporterDestinationPad": "Pad de Teletransporte de Destino",
+
+        "teleporterNoDestinationAssigned": "Nenhum destino atribuído",
+
+        "teleporterFare": "Tarifa de Teletransporte",
+
+        "teleporterSelectOrigin": "Escolha um token de referência para posicionar o Pad de Teletransporte de Origem.",
+
+        "teleporterSelectDestination": "Escolha um token de referência para posicionar o Pad de Teletransporte de Destino.",
+
+        "teleporterPlace": "Posicionar",
+
+        "teleporterPadUrlMissing": "Defina Teleport Pad Token Roll20 URL em Shop Settings antes de posicionar um pad.",
+
+        "teleporterNoOrigin": "Atribua um Pad de Teletransporte de Origem antes de usar este destino.",
+
+        "teleporterNoTravelers": "Nenhum token elegível está sobre o Pad de Teletransporte de Origem.",
+
+        "teleporterArrived": "Teletransporte concluído: {name}."
+
+      },
+
+      "navigation": {
+
+        "inventory": "Inventário",
+
+        "shops": "Lojas",
+
+        "tokens": "Tokens",
+
+        "combat": "Combate",
+
+        "loot": "Saque",
+
+        "npcs": "NPCs",
+
+        "campaign": "Campanha",
+
+        "dm": "Console do DM"
+
+      },
+
+      "handouts": {
+
+        "setupTitle": "Configuração de Handouts do T&T",
+
+        "duplicateTitle": "Aviso de Handout do T&T",
+
+        "missingCreated": "Mestre, parece que você ainda não tinha um banco de dados portátil ou blueprints, então criei o que estava faltando para que você possa começar do zero. Se já tiver dados, você pode importá-los ou baixar os arquivos de {developer}.",
+
+        "copyInstructions": "Copie o conteúdo de cada arquivo para o handout correspondente.",
+
+        "setupBlocked": "A configuração de dados do T&T não foi concluída com segurança. Repare o handout do Portable Database ou de Blueprint e execute {command}.",
+
+        "setupBlockedCause": "Causa: {error}",
+
+        "duplicateWarning": "Foram encontrados handouts repetidos para {name}. Carregarei o mais recente pelo timestamp.",
+
+        "databaseButton": "Banco de Dados",
+
+        "blueprintsButton": "Blueprints"
+
+      },
+
+      "mapInteractions": {
+
+        "invalidAction": "Essa interação com o mundo é inválida ou não suportada.",
+
+        "keyUsageFailed": "Falha no Uso da Chave",
+
+        "windowSecretUnsupported": "Janelas do Roll20 não suportam Ocultar / Revelar. O item não foi consumido.",
+
+        "objectMissing": "Essa Porta, Janela ou Cortina não existe mais. O item não foi consumido.",
+
+        "samePageRequired": "O usuário e a Porta, Janela ou Cortina devem estar no mesmo mapa.",
+
+        "outOfRange": "A Porta, Janela ou Cortina está a {distance} {unit}. O alcance máximo é {maximum} {unit}.",
+
+        "noKeyholeNearby": "Não há nada suficientemente próximo com uma fechadura para esta chave.",
+
+        "keyDoesNotFit": "A chave não parece encaixar em nenhuma fechadura próxima.",
+
+        "writeFailed": "O Roll20 não confirmou a alteração da Porta, Janela ou Cortina. O item não foi consumido.",
+
+        "actionChanged": "A definição da chave mudou enquanto ela estava sendo usada. Abra o inventário novamente.",
+
+        "focusFailed": "O Roll20 não conseguiu focar esse objeto do mapa.",
+
+        "pageMissing": "Esse mapa não pôde ser encontrado.",
+
+        "pageAmbiguous": "Mais de um mapa possui esse nome. Use o ID da página.",
+
+        "mapAssetsTitle": "Recursos de {map}",
+
+        "gatewaysTitle": "Passagens",
+
+        "mapPinsTitle": "Pins de {map}",
+
+        "mapRemoteControlTitle": "Controle Remoto do Mapa",
+
+        "doors": "Portas",
+
+        "pins": "Pins",
+
+        "windows": "Janelas",
+
+        "curtains": "Cortinas",
+
+        "noDoors": "Nenhuma Porta, Janela ou Cortina foi encontrada neste mapa.",
+
+        "noPins": "Nenhum Map Pin nativo do Roll20 foi encontrado neste mapa.",
+
+        "unnamedPin": "Pin Sem Nome",
+
+        "pinFocusTooltip": "Focar este pin no mapa.",
+
+        "door": "porta",
+
+        "window": "janela",
+
+        "curtain": "cortina",
+
+        "open": "Aberta",
+
+        "closed": "Fechada",
+
+        "locked": "Trancada",
+
+        "unlocked": "Destrancada",
+
+        "hidden": "Oculta",
+
+        "revealed": "Revelada",
+
+        "key": "Chave",
+
+        "focus": "Focar este objeto no mapa",
+
+        "keyTooltip": "Criar uma chave temporária no inventário para este objeto.",
+
+        "keyAdded": "{item} foi adicionado a {character}.",
+
+        "keyFailed": "A chave não pôde ser adicionada a esse inventário.",
+
+        "stateChanged": "{object} agora está {state}.",
+
+        "remoteStateChanged": "{object} na posição [{x}, {y}] agora está {state}.",
+
+        "listUsage": "Use !tntCampaign map-doors [nome ou ID do mapa].",
+
+        "pinListUsage": "Use !tntCampaign map-pins [nome ou ID do mapa]."
+
+      },
+
+      "time": {
+
+        "statusTitle": "Hora do Dia",
+
+        "helpTitle": "Ajuda de Tempo",
+
+        "dayPhasesTitle": "Fases do Dia",
+
+        "moonCycleTitle": "Ciclo Lunar",
+
+        "moonCycleLength": "O ciclo lunar completo dura {days} dias. Cada uma de suas oito fases dura cerca de {phaseDays} dias.",
+
+        "moonCycleAdvance": "A lua avança automaticamente com o relógio lógico do mundo. Definir uma fase lunar alinha o ciclo ao horário atual; isso não para nem reinicia o tempo.",
+
+        "timedEffectsTitle": "Efeitos Temporizados",
+
+        "timedEffectsExpired": "{count} efeito(s) temporizado(s) da campanha expirou/expiraram.",
+
+        "timedEffectExpiredNarrative": "{item} de {token}: {effect} terminou após {duration}.",
+
+        "timedEffectDefenseName": "{damage} {defense}",
+
+        "timedEffectAttributeAddName": "{attribute} {value}",
+
+        "timedEffectAttributeSetName": "{attribute} = {value}",
+
+        "timedEffectSizeName": "Tamanho: {size}",
+
+        "timedEffectShapeName": "Mudança de Forma",
+
+        "timedEffectGenericName": "Efeito Temporizado",
+
+        "timedEffectsConflict": "{count} recurso(s) de efeito de token foram alterados fora do T&T. A restauração pendente foi cancelada sem sobrescrever o token.",
+
+        "timedEffectsFailed": "{count} recurso(s) de efeito temporizado não puderam ser restaurados e permanecem pendentes.",
+
+        "durationMinute": "{count} minuto",
+
+        "durationMinutes": "{count} minutos",
+
+        "durationHour": "{count} hora",
+
+        "durationHours": "{count} horas",
+
+        "durationDay": "{count} dia",
+
+        "durationDays": "{count} dias",
+
+        "shortDurationMinute": "{count} Min",
+
+        "shortDurationMinutes": "{count} Min",
+
+        "shortDurationHour": "{count} Hr",
+
+        "shortDurationHours": "{count} Hrs",
+
+        "shortDurationHourMinute": "{time} Hrs",
+
+        "shortDurationDay": "{count} Dia",
+
+        "shortDurationDays": "{count} Dias",
+
+        "clock": "Hora",
+
+        "dayPhase": "Fase do Dia",
+
+        "light": "Luz do Dia",
+
+        "playerViewDisabled": "Os jogadores não têm permissão para ver o status atual do mundo.",
+
+        "invalidTime": "Horário inválido. Use HH:MM, AM/PM opcional ou uma fase do dia nomeada.",
+
+        "invalidAdvance": "Avanço inválido. Use HH:MM ou um intervalo de dia, semana, mês ou ano.",
+
+        "invalidDate": "Essa data não existe no calendário ativo.",
+
+        "schedulerTaskLimit": "O agendador do mundo atingiu o limite de tarefas configurado.",
+
+        "schedulerStateBudget": "Essa tarefa agendada excederia os limites de armazenamento de state persistente do T&T.",
+
+        "usage": "Use !tntTime get, !tntTime set <hora|fase> ou !tntTime advance <HH:MM|day|week|month|year>.",
+
+        "campaignUsage": "Use !tntCampaign worldtime ou !tntCampaign map-doors [nome ou ID do mapa].",
+
+        "phases": {
+
+          "midnight": "Meia-noite",
+
+          "late_night": "Madrugada",
+
+          "before_dawn": "Antes do Amanhecer",
+
+          "early_morning": "Início da Manhã",
+
+          "morning": "Manhã",
+
+          "late_morning": "Fim da Manhã",
+
+          "noon": "Meio-dia",
+
+          "afternoon": "Tarde",
+
+          "late_afternoon": "Fim da Tarde",
+
+          "evening": "Entardecer",
+
+          "early_night": "Início da Noite",
+
+          "night": "Noite"
+
+        },
+
+        "weekdays": {
+
+          "mon": "Segunda-feira",
+
+          "tue": "Terça-feira",
+
+          "wed": "Quarta-feira",
+
+          "thu": "Quinta-feira",
+
+          "fri": "Sexta-feira",
+
+          "sat": "Sábado",
+
+          "sun": "Domingo"
+
+        },
+
+        "calendars": {
+
+          "gregorian": "Gregoriano",
+
+          "harptos": "Calendário de Harptos",
+
+          "cotsworth": "Cotsworth"
+
+        },
+
+        "months": {
+
+          "january": "Janeiro",
+
+          "february": "Fevereiro",
+
+          "march": "Março",
+
+          "april": "Abril",
+
+          "may": "Maio",
+
+          "june": "Junho",
+
+          "july": "Julho",
+
+          "august": "Agosto",
+
+          "september": "Setembro",
+
+          "october": "Outubro",
+
+          "november": "Novembro",
+
+          "december": "Dezembro",
+
+          "sol": "Sol",
+
+          "hammer": "Hammer",
+
+          "alturiak": "Alturiak",
+
+          "ches": "Ches",
+
+          "tarsakh": "Tarsakh",
+
+          "mirtul": "Mirtul",
+
+          "kythorn": "Kythorn",
+
+          "flamerule": "Flamerule",
+
+          "eleasis": "Eleasis",
+
+          "eleint": "Eleint",
+
+          "marpenoth": "Marpenoth",
+
+          "uktar": "Uktar",
+
+          "nightal": "Nightal"
+
+        },
+
+        "special": {
+
+          "midwinter": "Meio do Inverno",
+
+          "greengrass": "Greengrass",
+
+          "midsummer": "Meio do Verão",
+
+          "shieldmeet": "Shieldmeet",
+
+          "highharvestide": "Highharvestide",
+
+          "feast_of_the_moon": "Festa da Lua",
+
+          "leap_day": "Dia Bissexto",
+
+          "year_day": "Dia do Ano"
+
+        }
+
+      },
+
+      "weather": {
+
+        "title": "Clima",
+
+        "current": "Clima",
+
+        "invalid": "Tipo de clima desconhecido.",
+
+        "invalidAssetUrl": "Imagens de clima devem ficar em branco ou usar uma URL https://files.d20.io/.",
+
+        "invalidOverlay": "A sobreposição de clima deve ser um número de 0 a 100.",
+
+        "types": {
+
+          "sunny": "Ensolarado",
+
+          "partly_cloudy": "Parcialmente Nublado",
+
+          "cloudy": "Nublado",
+
+          "sun_showers": "Chuva com Sol",
+
+          "rainy": "Chuvoso",
+
+          "thunderstorm": "Tempestade",
+
+          "snowy": "Nevando",
+
+          "cold": "Frio",
+
+          "windy": "Ventoso",
+
+          "hurricane": "Furacão",
+
+          "tornado": "Tornado",
+
+          "foggy": "Nebuloso"
+
+        }
+
+      },
+
+      "moon": {
+
+        "title": "Fase da Lua",
+
+        "current": "Lua",
+
+        "invalid": "Fase lunar desconhecida.",
+
+        "phases": {
+
+          "new_moon": "Lua Nova",
+
+          "waxing_crescent": "Lua Crescente",
+
+          "first_quarter": "Quarto Crescente",
+
+          "waxing_gibbous": "Gibosa Crescente",
+
+          "full_moon": "Lua Cheia",
+
+          "waning_gibbous": "Gibosa Minguante",
+
+          "last_quarter": "Quarto Minguante",
+
+          "waning_crescent": "Lua Minguante"
+
+        }
+
+      },
+
+      "date": {
+
+        "title": "Data",
+
+        "date": "Data",
+
+        "calendar": "Calendário",
+
+        "full": "{day} de {month} de {year}",
+
+        "yearValue": "Ano {year}"
+
+      },
+
+      "dm": {
+
+        "title": "🐉 Menu do DM T&T 🐉",
+
+        "settingsTitle": "⚙️ Configurações do DM T&T ⚙️",
+
+        "settingsImport": "Importar Configurações",
+
+        "settingsExport": "Exportar Configurações",
+
+        "settingsImportConfirm": "Sobrescrever as configurações desta campanha com as configurações do Portable Database?",
+
+        "settingsExportConfirm": "Sobrescrever as configurações do Portable Database com as configurações desta campanha?",
+
+        "settingsImported": "As configurações foram importadas do Portable Database.",
+
+        "settingsExported": "As configurações foram exportadas para o Portable Database.",
+
+        "settingsSectionGeneral": "Geral",
+
+        "adjustDistancesToMapScale": "Ajustar Distâncias à Escala do Mapa",
+
+        "adjustDistancesToMapScaleTooltip": "Escalar as distâncias configuradas de Follow, Transferência de Item e Área Interativa de Loja local da grade padrão de 5 ft para a escala da página ativa. Exemplo: 5 ft configurados tornam-se 30 ft em uma página de 30 ft por quadrado.",
+
+        "settingsSectionDebug": "Debug",
+
+        "guideTitle": "Guia do Roll20",
+
+        "settingsButton": "Configurações",
+
+        "itemsSection": "Itens",
+
+        "tokensSection": "Tokens",
+
+        "timeWeatherSection": "Tempo / Clima",
+
+        "toolsSection": "Ferramentas",
+
+        "tokenInfoButton": "Info do\nToken",
+
+        "tokenFollowButton": "Token\nSeguir",
+
+        "tokenEditButton": "Token\nObter/Alterar",
+
+        "tokenSetupButton": "Config.\nToken",
+
+        "tokenExtraButton": "Extra",
+
+        "tokenInfoTooltip": "Inspecionar o token selecionado ou IDs explícitos de token.",
+
+        "tokenFollowTooltip": "Ordenar ao token selecionado Follow, Fast Follow, Slow Follow ou cancelar Follow.",
+
+        "tokenEditTooltip": "Ler ou definir um campo de token suportado nos tokens selecionados.",
+
+        "tokenSetupTooltip": "Aplicar ou gerenciar receitas de Token Setup para tokens selecionados.",
+
+        "tokenExtraTooltip": "Reservado para futuras ferramentas de token.",
+
+        "shopExtraTooltip": "Reservado para futuras ferramentas de loja.",
+
+        "tokenFieldPrompt": "Campo do Token",
+
+        "tokenSetValuePrompt": "Valor (somente Set)",
+
+        "tokenEditActionPrompt": "Ação Obter/Alterar Token",
+
+        "tokenFollowActionPrompt": "Seguir",
+
+        "tokenFollowDistancePrompt": "Distância",
+
+        "timeGetButton": "Tempo do\nMundo",
+
+        "timeAdvanceButton": "Tempo",
+
+        "weatherButton": "Clima",
+
+        "moonButton": "Fase da\nLua",
+
+        "dateButton": "Data",
+
+        "timeGetTooltip": "Mostra a data, hora, lua, clima e status de luz do dia completos do mundo.",
+
+        "worldTimeVisibilityPrompt": "Mostrar Tempo do Mundo",
+
+        "timeAdvanceTooltip": "Avança o relógio lógico ou define uma hora ou fase do dia específica.",
+
+        "weatherTooltip": "Define o estado informativo atual do clima.",
+
+        "moonTooltip": "Define a fase lunar atual sem interromper seu ciclo contínuo.",
+
+        "dateTooltip": "Define a data atual no calendário ativo.",
+
+        "itemMenuTitle": "🗂️ Ferramentas de Item T&T 🗂️",
+
+        "itemInventoryButton": "Inventário",
+
+        "itemListButton": "Lista",
+
+        "itemSearchButton": "Buscar",
+
+        "itemCreateButton": "Criar",
+
+        "itemWalletButton": "Carteira",
+
+        "itemExtraButton": "Extra",
+
+        "itemImportButton": "Importar",
+
+        "itemImportHandoutButton": "Importar HO",
+
+        "itemShareButton": "Compartilhar",
+
+        "itemMergeButton": "Mesclar",
+
+        "itemRawListButton": "Lista Bruta",
+
+        "itemStatusButton": "Status DB",
+
+        "itemBlueprintGetButton": "BP Get",
+
+        "itemBlueprintAddButton": "BP Add",
+
+        "itemReloadButton": "Recarregar",
+
+        "itemInventoryTooltip": "Abrir o inventário de cada token selecionado.",
+
+        "itemInventoryPrompt": "Use List, Category, Name-Sword ou Type-Weapon:",
+
+        "itemInventoryDefault": "Padrão",
+
+        "itemInventoryCategory": "Categoria",
+
+        "itemListTooltip": "Navegar por todos os itens ou filtrar o catálogo portátil pelas categorias atuais de itens.",
+
+        "itemListPrompt": "Categoria do Item",
+
+        "itemSearchTooltip": "Buscar no catálogo por nome do item ou por tipo.",
+
+        "itemCreateTooltip": "Criar um novo item personalizado.",
+
+        "itemWalletTooltip": "Dar, retirar ou remover silenciosamente moeda de cada personagem selecionado.",
+
+        "itemExtraTooltip": "Abrir ferramentas avançadas de itens e banco de dados.",
+
+        "itemImportTooltip": "Importar um código de item compartilhado TNTITEM1.",
+
+        "itemImportHandoutTooltip": "Importar um pacote TNTITEM1 armazenado em um handout.",
+
+        "itemShareTooltip": "Compartilhar um item armazenado no Portable Database.",
+
+        "itemMergeTooltip": "Mesclar outro handout T&T Portable Database nesta campanha.",
+
+        "itemRawListTooltip": "Escolher todos, base ou personalizados e exibi-los como uma lista plana paginada.",
+
+        "itemRawListPrompt": "Lista Bruta",
+
+        "itemStatusTooltip": "Inspecionar o tamanho do Portable Database e as quantidades de itens.",
+
+        "itemBlueprintGetTooltip": "Ler um item atual do inventário como JSON compacto de blueprint. Selecione exatamente um token primeiro.",
+
+        "itemBlueprintAddTooltip": "Adicionar um blueprint armazenado a um token selecionado.",
+
+        "itemReloadTooltip": "Forçar T&T a descartar o cache do Portable Database e recarregar o handout imediatamente.",
+
+        "itemSearchPrompt": "Buscar itens: digite um nome ou use type-weapon para filtrar por tipo",
+
+        "itemWalletActionPrompt": "Ação da carteira",
+
+        "itemWalletAmountPrompt": "Valor",
+
+        "itemWalletCurrencyPrompt": "Moeda",
+
+        "itemSharePrompt": "Nome exato do item do catálogo ou ID",
+
+        "itemImportPrompt": "Cole o código TNTITEM1",
+
+        "itemImportHandoutPrompt": "Nome do handout de compartilhamento de item",
+
+        "itemMergePrompt": "Nome do handout Portable Database a mesclar",
+
+        "itemBlueprintItemPrompt": "Nome ou ID do item do inventário",
+
+        "itemBlueprintReferencePrompt": "ID do Blueprint ou nome exato em T&T Item Blueprints",
+
+        "itemStatusTitle": "Status do Portable Database",
+
+        "itemStatusItems": "Itens Base",
+
+        "itemStatusBaseBlueprints": "Blueprints Base",
+
+        "itemStatusCustomItems": "Itens Personalizados",
+
+        "itemStatusCustomBlueprints": "Blueprints Personalizados",
+
+        "itemStatusSize": "Tamanho do Banco de Dados",
+
+        "itemStatusCapacity": "{used} / {maximum} ({percent}%)",
+
+        "inventorySettingsButton": "Configurações de Inventário",
+
+        "inventorySettingsTitle": "Configurações de Inventário T&T",
+
+        "shopsSettingsButton": "Configurações de Lojas",
+
+        "shopsSettingsTitle": "Configurações de Lojas T&T",
+
+        "shopItemListSection": "Lista de Itens",
+
+        "shopSortItemsBy": "Ordenar Itens Por",
+
+        "shopViewItemsBy": "Visualizar Itens Como",
+
+        "shopViewList": "Lista",
+
+        "shopViewIcons": "Ícones",
+
+        "shopSortQuality": "Qualidade",
+
+        "shopSortDate": "Data",
+
+        "shopSortStock": "Estoque",
+
+        "shopSortPrice": "Preço",
+
+        "shopBehaviorSection": "Comportamento",
+
+        "shopDefaultsSection": "Padrões",
+
+        "shopReopenAfterTransaction": "Reabrir Após a Transação",
+
+        "shopAllowPriceRequests": "Permitir Solicitações de Preço",
+
+        "shopAllowDiscountRequests": "Permitir Solicitações de Desconto",
+
+        "shopAskCustomerNameAfter": "Perguntar o Nome do Cliente Após",
+
+        "shopPurchasesCount": "{count} compras",
+
+        "shopNever": "Nunca",
+
+        "shopRentalPlayerControlDefault": "Controle do Jogador em Aluguéis por Padrão",
+
+        "shopDefaultInteractionRange": "Alcance Padrão de Interação da Loja",
+
+        "shopDefaultIcon": "Ícone Padrão da Loja",
+
+        "shopDefaultIconInvalid": "O Ícone Padrão da Loja deve conter texto visível e ter no máximo 16 caracteres.",
+
+        "shopAssignedTokenMarker": "Marcador do Token Atribuído à Loja",
+
+        "shopAssignedTokenMarkerInvalid": "O Marcador do Token Atribuído à Loja deve usar de 1 a 40 letras minúsculas, números, sublinhados ou hífens.",
+
+        "teleportPadTokenRoll20Url": "URL Roll20 do Token da Plataforma de Teleporte",
+
+        "teleportPadTokenRoll20UrlInvalid": "A URL Roll20 do Token da Plataforma de Teleporte deve ser uma URL direta de imagem do files.d20.io.",
+
+        "shopAskCustomerNameAfterInvalid": "Perguntar o Nome do Cliente Após deve ser um número inteiro de 0 a 1000. Use 0 para Nunca.",
+
+        "shopDefaultInteractionRangeInvalid": "O Alcance Padrão de Interação da Loja deve estar entre 0 e 1000 ft.",
+
+        "tokenManagerSettingsButton": "Configurações de Token",
+
+        "tokenManagerSettingsTitle": "Configurações de Token T&T",
+
+        "advancedMode": "Modo Avançado",
+
+        "advancedModeUsage": "Use {rootCommand} advancemode yes ou {rootCommand} advancemode no.",
+
+        "tokenFollowSettingsSection": "Configurações de Follow",
+
+        "tokenFollowLoopProtection": "Proteção contra Loop",
+
+        "tokenFollowLoopProtectionTooltip": "Proteção principal de segurança para os limites de planejamento do Follow. OFF mantém o envelope finito de busca, mas desativa os limites de waypoints, nós, heap, tempo de planejamento, replanejamentos e transições de Porta para diagnóstico em campo.",
+
+        "tokenFollowDefaultDistance": "Distância Padrão de Follow",
+
+        "tokenFollowDefaultDistanceTooltip": "Distância padrão de Follow, de borda a borda, quando um comando não fornece uma distância.",
+
+        "tokenFollowDefaultDistancePrompt": "Distância padrão de Follow em ft",
+
+        "tokenFollowSearchResolution": "Resolução da Busca",
+
+        "tokenFollowSearchResolutionTooltip": "Percentual da área do token seguidor usado como passo da busca em malha livre. 100% corresponde à v2.2.20; valores menores fazem uma busca mais precisa e podem resolver layouts estreitos com maior custo de CPU.",
+
+        "tokenFollowSearchResolutionPrompt": "Percentual de resolução da busca (25-100)",
+
+        "tokenFollowSearchPadding": "Margem da Busca",
+
+        "tokenFollowSearchPaddingTooltip": "Células extras de busca de rota além da caixa delimitadora entre origem e destino. Aumente quando um labirinto exigir um desvio amplo.",
+
+        "tokenFollowSearchPaddingPrompt": "Células de margem da busca (2-200)",
+
+        "tokenFollowMaxWaypoints": "Máx. de Waypoints",
+
+        "tokenFollowMaxWaypointsPrompt": "Máximo de waypoints (1-5000)",
+
+        "tokenFollowMaxSearchNodes": "Máx. de Nós de Busca",
+
+        "tokenFollowMaxSearchNodesPrompt": "Máximo de nós de busca (100-250000)",
+
+        "tokenFollowMaxHeapEntries": "Máx. de Entradas no Heap",
+
+        "tokenFollowMaxHeapEntriesPrompt": "Máximo de entradas no heap (256-750000)",
+
+        "tokenFollowMaxPlanningTime": "Tempo Máx. de Planejamento",
+
+        "tokenFollowMaxPlanningTimePrompt": "Tempo máximo de planejamento em ms (5-10000)",
+
+        "tokenFollowMaxReplans": "Máx. de Replanejamentos / Dreno",
+
+        "tokenFollowMaxReplansPrompt": "Máximo de replanejamentos por dreno (1-100)",
+
+        "tokenFollowMaxDoorTransitions": "Máx. de Transições de Porta",
+
+        "tokenFollowMaxDoorTransitionsPrompt": "Máximo de transições por Porta (1-50)",
+
+        "tokenFollowLimitTooltip": "Este limite é aplicado somente enquanto a Proteção contra Loop estiver ON.",
+
+        "tokenFollowDoorDelay": "Atraso da Animação da Porta",
+
+        "tokenFollowDoorDelayTooltip": "Pausa usada pelo Follow quando ele para diante de uma Porta destrancada, abre-a e então atravessa.",
+
+        "tokenFollowDoorDelayPrompt": "Atraso da animação da porta em ms (0-3000)",
+
+        "tokenFollowDoorHoldSteps": "Passos de Retenção da Porta",
+
+        "tokenFollowDoorHoldStepsTooltip": "Quantos passos planejados da rota manter uma Porta aberta automaticamente após o passo de travessia antes de fechá-la.",
+
+        "tokenFollowDoorHoldStepsPrompt": "Passos de retenção da porta (0-10)",
+
+        "tokenFollowNumericInvalid": "{setting} deve estar entre {minimum} e {maximum}.",
+
+        "tokenSetupSettingsSection": "Configuração de Token",
+
+        "allowPlayerTokenSetup": "Permitir Token Setup do Jogador",
+
+        "allowPlayerTokenSetupTooltip": "Permite que jogadores listem e apliquem receitas de Token Setup cuja opção Uso Público esteja ON a tokens que eles controlam.",
+
+        "allowPlayerShape": "Permitir que o Jogador use Shape",
+
+        "allowPlayerShapeTooltip": "Permite que jogadores abram e apliquem Shapes pessoais quando o personagem não estiver sob um efeito ativo de transformação.",
+
+        "allowPlayerFollow": "Permitir que o Jogador use Follow",
+
+        "allowPlayerFollowTooltip": "Permite que jogadores iniciem a automação Follow em tokens que controlam. O Follow de Companions continua disponível em Controles de Companion.",
+
+        "tokenCompanionsSection": "Companions",
+
+        "tokenFollowSnapToGrid": "Ajustar Movimento à Grade",
+
+        "tokenFollowSnapToGridTooltip": "Mantém o movimento automático do companion alinhado aos quadrados da grade em vez de parar em uma posição livre do mapa.",
+
+        "tokenAvoidBarriers": "Evitar Barreiras",
+
+        "tokenAvoidBarriersTooltip": "Roteia o movimento automático do companion ao redor de paredes, portas e janelas fechadas.",
+
+        "tokenShowWaypointsWhileMoving": "Mostrar Waypoints Durante o Movimento",
+
+        "tokenShowWaypointsWhileMovingTooltip": "Mostra o caminho de waypoints percorrido enquanto o movimento automático do companion está em execução. Coloque em OFF para mover sem desenhar a rota.",
+
+        "tokenInstantMovement": "Movimento Instantâneo",
+
+        "tokenInstantMovementTooltip": "Percorre a rota totalmente planejada o mais rápido possível. Quando OFF, usa a Frequência de Movimento entre os passos de waypoint.",
+
+        "tokenMovementFrequency": "Frequência de Movimento",
+
+        "tokenMovementFrequencyTooltip": "Atraso em milissegundos entre passos de waypoint quando Movimento Instantâneo está OFF.",
+
+        "tokenMovementFrequencyPrompt": "Frequência de movimento em ms",
+
+        "tokenMovementFrequencyInvalid": "A Frequência de Movimento deve ser um número inteiro de 100 a 10000 ms.",
+
+        "tokenFollowMarker": "Marcador de Follow do Token",
+
+        "tokenFollowMarkerTooltip": "Marcador de status exibido em um token enquanto ele possui uma instrução Follow ativa.",
+
+        "tokenFollowMarkerPrompt": "Nome do marcador de status Follow",
+
+        "tokenFollowMarkerInvalid": "O Marcador de Follow do Token deve usar somente letras, números, hífens ou sublinhados.",
+
+        "tokenAllowMovementIntoOccupiedSpaces": "Permitir Passar por Espaços Ocupados",
+
+        "tokenAllowMovementIntoOccupiedSpacesTooltip": "Permite que a posição final automática de Follow/Move sobreponha um espaço ocupado por outro token visível. Quando OFF, T&T ainda pode atravessar tokens, a menos que Tokens Bloqueiam Movimento esteja ON, mas não terminará sobre uma área ocupada.",
+
+        "tokenTokensBlockMovement": "Tokens Bloqueiam Movimento",
+
+        "tokenTokensBlockMovementTooltip": "Trata as áreas de outros tokens visíveis na camada de objetos como obstáculos de navegação, para que o Follow automático contorne-os em vez de atravessá-los.",
+
+        "tokenOpenUnlockedDoors": "Permitir que o Token Abra Portas Destrancadas",
+
+        "tokenOpenUnlockedDoorsTooltip": "Permite que o movimento automático de Follow abra uma Porta do Roll20 fechada e destrancada quando a rota planejada a atravessar. Portas trancadas nunca são abertas automaticamente.",
+
+        "tokenAllowSpawnOverTokens": "Permitir Spawn Sobre Tokens",
+
+        "tokenAllowSpawnOverTokensTooltip": "Permite que spawns de Summon/Rental usem sua posição definida mesmo quando ela se sobrepõe a outro token ou a uma parede que bloqueia movimento. Quando OFF, T&T procura uma área livre próxima.",
+
+        "tokenSpawnNoSpace": "Não há espaço livre suficiente perto do alvo para posicionar este spawn.",
+
+        "tokenAllowCompanionAutoRecall": "Permitir Auto Recall de Companion",
+
+        "tokenAllowCompanionAutoRecallTooltip": "Permite que jogadores chamem imediatamente um companion ativo para perto do contratante. Quando OFF, Recall requer aprovação do Game Master.",
+
+        "combatAssistantSettingsButton": "Combat Assistant",
+
+        "combatAssistantSettingsTitle": "Combat Assistant T&T",
+
+        "timeSettingsButton": "Configurações de Tempo",
+
+        "timeSettingsTitle": "Configurações de Tempo T&T",
+
+        "timeSettingsSection": "Tempo",
+
+        "weatherSettingsSection": "Clima",
+
+        "timeFormat": "Formato da Hora",
+
+        "calendarType": "Calendário",
+
+        "playerCanViewWorldStatus": "Jogadores Podem Usar Time Get",
+
+        "publicWorldTimeUpdates": "Atualizações Públicas do Tempo do Mundo",
+
+        "publicWorldTimeUpdatesTooltip": "Envia o cartão público de Tempo do Mundo sempre que a hora, data, fase da lua ou clima mudar.",
+
+        "adjustMapLight": "Ajustar Luz do Dia Automaticamente",
+
+        "smoothMapLightTransition": "Transição Suave da Luz do Dia",
+
+        "mapLightTransitionSpeed": "Velocidade da Transição",
+
+        "mapLightTransitionSpeedValue": "{count} ms",
+
+        "invalidMapLightTransitionSpeed": "A velocidade da transição deve estar entre {minimum} e {maximum} ms.",
+
+        "weatherImageUrl": "URL do GIF de {weather}",
+
+        "weatherOverlay": "Overlay de {weather}",
+
+        "invalidTimeFormat": "O formato da hora deve ser 12h ou 24h.",
+
+        "invalidCalendar": "Tipo de calendário desconhecido.",
+
+        "weatherAssetChanged": "A aparência climática de {weather} foi atualizada.",
+
+        "combatAssistantGeneral": "Geral",
+
+        "combatAssistantEffects": "Efeitos",
+
+        "combatAssistantAreaVisualization": "Visualização de Área",
+
+        "concentrationTracker": "Rastreador de Concentração",
+
+        "useTntRollCards": "Usar Cartões de Rolagem T&T",
+
+        "combatHpBar": "Barra de HP",
+
+        "combatAcBar": "Barra de AC",
+
+        "combatTempHpBar": "Barra de HP Temp",
+
+        "readSheetResistances": "Ler Defesas da Ficha",
+
+        "revealTokenNamesInLog": "Revelar Nomes dos Tokens no Log",
+
+        "damageRoundUp": "Arredondar Dano para Cima",
+
+        "markDefeatedNpcs": "Marcar NPCs Derrotados",
+
+        "markDefeatedNpcsTooltip": "Aplica o marcador de status dead quando o dano reduz uma barra de token NPC não vinculada de HP positivo para 0.",
+
+        "verifiedBeaconHealthSync": "Sincronização Verificada de Vida",
+
+        "verifiedBeaconHealthSyncTooltip": "ON confirma as gravações de HP e HP Temp do Beacon antes do sucesso. OFF usa gravações otimistas mais rápidas e confia na barra do token.",
+
+        "combatVisualEffects": "Efeitos Visuais de Combate",
+
+        "healingEffectName": "Nome do Efeito de Cura",
+
+        "projectileEffectName": "Nome do Efeito de Projétil",
+
+        "directHitEffectName": "Nome do Efeito de Impacto Direto",
+
+        "areaHitEffectName": "Nome do Efeito de Impacto em Área",
+
+        "lineAoeEffectName": "Nome do Efeito AOE em Linha",
+
+        "coneAoeEffectName": "Nome do Efeito AOE em Cone",
+
+        "radiusAoeEffectName": "Nome do Efeito AOE em Raio",
+
+        "selfAoeEffectName": "Nome do Efeito AOE Próprio",
+
+        "projectileFxCodeButton": "Código ProjectileFX",
+
+        "projectileFxCodeTitle": "Código ProjectileFX",
+
+        "projectileFxCodeTooltip": "Mostra o código de efeito personalizado do Roll20 para ProjectileFX.",
+
+        "projectileFxCodeInstructions": "No menu Effects, escolha Add Custom Effect, nomeie-o ProjectileFX, substitua as informações pelo código abaixo e salve.",
+
+        "phase3Pending": "Disponível na Fase 3.",
+
+        "futureSettingsPending": "Este módulo de configurações ainda não está disponível.",
+
+        "invalidEffectName": "Os nomes de efeitos não podem conter caracteres de controle e devem ter no máximo 120 caracteres.",
+
+        "showAoeArea": "Mostrar Área AOE",
+
+        "invalidCombatBar": "As barras do Combat Assistant devem ser Barra 1, Barra 2, Barra 3 ou Barra 4.",
+
+        "combatBarLinkConflict": "A Barra {bar} configurada está vinculada a outro atributo. Escolha uma barra não vinculada ou a barra vinculada a {attribute}.",
+
+        "inventorySettingsTransfers": "Transferências",
+
+        "inventorySettingsInventory": "Inventário",
+
+        "inventorySettingsNotifications": "Notificações",
+
+        "inventorySettingsAppearance": "Aparência",
+
+        "allowPlayerItemAdd": "Permitir que o Jogador Adicione Itens",
+
+        "allowPlayerItemTransfers": "Permitir Transferências de Itens por Jogadores",
+
+        "gmIgnoresTransferDistance": "GM Ignora Distância de Transferência",
+
+        "autoStackItems": "Empilhar Itens Automaticamente",
+
+        "strictStackMatching": "Correspondência Estrita de Pilhas",
+
+        "reopenInventoryAfterItemActions": "Reabrir Inventário após U,G,D.",
+
+        "hideDetailsPrice": "Ocultar Preço nos Detalhes",
+
+        "blockPlayerItemSearch": "Bloquear Busca de Itens para Jogadores",
+
+        "defaultInventorySort": "Ordenação Padrão do Inventário",
+
+        "inventorySortName": "Nome",
+
+        "inventorySortType": "Tipo",
+
+        "inventorySortRarity": "Raridade",
+
+        "inventorySortWeight": "Peso",
+
+        "itemUseVisibility": "Visibilidade do Uso de Item",
+
+        "itemUseVisibilityPublic": "Público",
+
+        "itemUseVisibilityParticipants": "Participantes",
+
+        "itemUseVisibilityGm": "Somente GM",
+
+        "gmGiveNotifications": "Notificações de Give ao GM",
+
+        "transferNotifications": "Notificações de Transferência",
+
+        "defaultItemImageUrl": "URL Roll20 Padrão do Item",
+
+        "phase4Preview": "Experimental",
+
+        "itemPickupEnabled": "Coleta de Item",
+
+        "dropItemOnMap": "Soltar Item no Mapa",
+
+        "useRoll20DropItemImage": "Usar Imagem do Roll20 ao Soltar",
+
+        "droppedItemRoll20Url": "URL Roll20 do Item Solto",
+
+        "droppedItemTooltip": "Tooltip do Item Solto",
+
+        "droppedItemTokenSize": "Tamanho do Token do Item Solto",
+
+        "droppedItemTooltipGmOnly": "Tooltip do Item Solto Somente para GM",
+
+        "droppedItemRoll20UrlChanged": "A imagem alternativa do item solto foi atualizada.",
+
+        "droppedItemTokenSizeChanged": "O tamanho do token do item solto foi atualizado para {size}.",
+
+        "invalidDroppedItemTokenSize": "Tamanho inválido do token do item solto. Use um valor como 35x35 ou 70x70.",
+
+        "invalidDroppedItemRoll20Url": "URL Roll20 inválida para o item solto. Use uma URL direta de imagem do files.d20.io.",
+
+        "defaultKeyImageUrl": "URL Roll20 Padrão da Chave",
+
+        "inventorySortChanged": "A ordenação padrão do inventário agora é {sort}.",
+
+        "itemUseVisibilityChanged": "A visibilidade do uso de item agora é {visibility}.",
+
+        "defaultItemImageChanged": "A imagem padrão do item foi atualizada.",
+
+        "defaultKeyImageChanged": "A imagem padrão da chave foi atualizada.",
+
+        "invalidDefaultItemImageUrl": "URL Roll20 padrão do item inválida. Use uma URL direta de imagem do files.d20.io.",
+
+        "invalidDefaultKeyImageUrl": "URL Roll20 padrão da chave inválida. Use uma URL direta de imagem do files.d20.io.",
+
+        "itemDropPreviewDisabled": "O recurso experimental Soltar Item está desativado. Ative Soltar Item no Mapa.",
+
+        "itemPickupPreviewDisabled": "O recurso experimental Coleta de Item está desativado. Ative Coleta de Item.",
+
+        "itemDropReferenceRequired": "É necessário um token no mapa como referência para posicionar o item solto.",
+
+        "itemDropSpawnFailed": "T&T não conseguiu criar o token do item solto. O item não foi removido do inventário.",
+
+        "itemDropRollbackFailed": "T&T não conseguiu remover o item do inventário após criá-lo no mapa. O token criado foi removido para evitar duplicação.",
+
+        "itemDropSuccess": "{quantity}x {item} foi solto no mapa.",
+
+        "itemPickupInvalid": "Esse token não contém um pacote válido de item solto do T&T.",
+
+        "itemPickupReceiverRequired": "Selecione exatamente um token receptor controlado antes de usar Coleta de Item.",
+
+        "itemPickupFailed": "T&T não conseguiu reconstruir o item solto. O token no mapa permaneceu inalterado.",
+
+        "itemPickupOutOfRange": "O item solto está a {distance} {unit}. A distância máxima de coleta é {maximum} {unit}.",
+
+        "itemPickupSuccess": "{quantity}x {item} foi coletado por {character}.",
+
+        "itemPickupBusy": "Esse item solto já está sendo coletado.",
+
+        "debug": "Debug",
+
+        "rawChatDebug": "Whisper Bruto do Chat",
+
+        "spawnDebug": "Debug de Spawn",
+
+        "eventLog": "Registrar Eventos",
+
+        "debugReport": "Relatório de Debug",
+
+        "debugReportOpen": "Abrir",
+
+        "debugReportClear": "Limpar Debug",
+
+        "debugReportDisabled": "Debug está OFF. Ative Debug para coletar entradas estruturadas de rastreamento.",
+
+        "debugReportEmpty": "Não há entradas estruturadas de rastreamento de debug disponíveis para esta sessão do sandbox.",
+
+        "debugReportSummary": "Sessão: {session} | Entradas: {total} | Info: {info} | Aviso: {warn} | Erro: {error}",
+
+        "debugReportTitle": "Relatório de Debug T&T",
+
+        "debugReportRecent": "Entradas Recentes de Rastreamento",
+
+        "debugReportCleared": "O histórico estruturado de rastreamento de debug foi limpo.",
+
+        "language": "Idioma",
+
+        "backgroundImageUrl": "URL da Imagem de Fundo",
+
+        "transferMaxDistance": "Distância Máxima de Transferência de Item",
+
+        "debugChanged": "Debug agora está {state}.",
+
+        "settingChanged": "{setting} agora está {state}.",
+
+        "experimentalProtection": "Proteção Sandbox v1.5",
+
+        "experimentalProtectionChanged": "A proteção Sandbox v1.5 agora está {state}.",
+
+        "softResetDone": "Soft reset concluído. Trinkets & Trackers recarregou suas verificações de inicialização.",
+
+        "hardResetDone": "Hard reset concluído. O estado de Trinkets & Trackers foi limpo e reconstruído.",
+
+        "hardResetForcedDone": "Hard reset forçado concluído. O estado do T&T foi limpo imediatamente, sem verificações de recuperação nem limpeza externa.",
+
+        "hardResetTitle": "Hard Reset T&T",
+
+        "hardResetWarning": "Isso interromperá novas ações do T&T, aguardará as gravações já em andamento, removerá com segurança efeitos temporizados e objetos de mapa pertencentes ao T&T, invalidará botões pendentes e então reconstruirá o estado do T&T.",
+
+        "hardResetSummary": "Efeitos rastreados: {effects} | Objetos temporários do mapa: {objects} | Estado: {bytes} bytes",
+
+        "hardResetConfirm": "CONFIRMAR RESET",
+
+        "hardResetCleaning": "T&T está encerrando o trabalho ativo e restaurando alterações temporárias sob sua responsabilidade. Não reinicie o sandbox durante esta limpeza.",
+
+        "hardResetConfirmationExpired": "Essa confirmação de hard reset é inválida ou expirou. Execute !tntDM hardreset novamente.",
+
+        "hardResetInterruptedTransactions": "O hard reset foi interrompido porque {count} registro(s) de transação interrompida ou não reconciliada ainda exigem investigação.",
+
+        "transactionRecoveryTitle": "Aviso de Recuperação T&T",
+
+        "transactionRecoveryWarning": "A inicialização recuperou {recovered} operação(ões) interrompida(s), mas {remaining} operação(ões) ainda exigem investigação do GM. T&T preservou seus registros de recuperação.",
+
+        "hardResetBusy": "O hard reset foi interrompido porque {count} operação(ões) de gravação não terminaram a tempo.",
+
+        "hardResetEffectConflict": "O hard reset foi interrompido com segurança: {conflicts} conflito(s) de efeito e {failed} falha(s) de limpeza exigem atenção. O estado do T&T foi preservado.",
+
+        "hardResetMapFailure": "O hard reset foi interrompido porque {count} objeto(s) temporário(s) do mapa não puderam ser removidos. O estado do T&T foi preservado.",
+
+        "hardResetFailed": "O hard reset não pôde ser concluído com segurança. O estado do T&T foi preservado.",
+
+        "shutdownInProgress": "T&T está concluindo um desligamento controlado. Novos comandos estão temporariamente desativados.",
+
+        "settingPersistenceFailed": "A configuração não foi confirmada no T&T Portable Database, então a alteração em memória foi revertida.",
+
+        "storageDiagnosticsTitle": "Armazenamento de Estado T&T",
+
+        "storageDiagnosticsSummary": "Atual: {bytes} | Aviso: {warning} | Máximo: {maximum}",
+
+        "shopStorageTitle": "Estado da Loja",
+
+        "shopStorageDefinitions": "Definições",
+
+        "shopStorageStock": "Estoque",
+
+        "shopStorageAnalytics": "Análises",
+
+        "shopStorageRequests": "Solicitações",
+
+        "shopStorageContracts": "Contratos",
+
+        "shopStorageBuyerLimits": "Limites de compradores",
+
+        "shopStorageTreasury": "Tesouraria",
+
+        "shopStorageHeldItems": "Itens retidos",
+
+        "languageChanged": "Idioma alterado para {language}.",
+
+        "backgroundChanged": "A imagem de fundo foi atualizada.",
+
+        "transferMaxDistanceChanged": "A distância máxima de transferência de item foi alterada para {distance}.",
+
+        "invalidTransferMaxDistance": "A distância máxima de transferência de item deve ser um número de 5 a 1000.",
+
+        "invalidBackgroundUrl": "URL da imagem de fundo inválida. Use uma URL direta de imagem http ou https.",
+
+        "unknownCommand": "Comando DM desconhecido: {command}. Use {rootCommand} menu.",
+
+        "languagePortableMissing": "T&T Portable Language não foi encontrado. O idioma não foi alterado.",
+
+        "languagePortableNoCustom": "T&T Portable Language não contém um idioma personalizado. O idioma não foi alterado.",
+
+        "languagePortableInvalid": "Não foi possível carregar T&T Portable Language. O idioma não foi alterado.",
+
+        "languageCustomChooseTitle": "Idioma Personalizado",
+
+        "languageCustomChooseBody": "Escolha um idioma de T&T Portable Language.",
+
+        "tokenSetupRecipesTitle": "Receitas de Configuração de Token",
+
+        "tokenSetupTitle": "Configuração de Token",
+
+        "tokenSetupRecipesCount": "Receitas",
+
+        "tokenSetupNoRecipes": "Nenhuma receita de configuração de token está disponível.",
+
+        "tokenSetupNoConfiguredRecipes": "Nenhuma receita configurada.",
+
+        "tokenSetupCreateTooltip": "Criar uma receita de configuração de token.",
+
+        "tokenSetupNamePrompt": "Nome da Configuração",
+
+        "tokenSetupNewName": "Nova Configuração",
+
+        "tokenSetupPublic": "Pública",
+
+        "tokenSetupPrivate": "Privada",
+
+        "tokenSetupSetDefault": "Definir Padrão",
+
+        "tokenSetupAutoSize": "Tamanho Auto",
+
+        "tokenSetupMacros": "Macros",
+
+        "tokenSetupNoDisplayOptions": "Nenhuma opção ativa de exibição do token",
+
+        "tokenSetupMacroTooltip": "Macro visível de ação de token aplicada aos personagens representados.",
+
+        "tokenSetupName": "Nome",
+
+        "tokenSetupNameTooltip": "Nome da receita.",
+
+        "tokenSetupApply": "Aplicar Configuração de Token",
+
+        "tokenSetupApplyTooltip": "ON aplica a configuração do token/ficha abaixo. OFF ignora as alterações do token e da ficha e aplica somente as macros da receita.",
+
+        "tokenSetupPublicUsage": "Uso Público",
+
+        "tokenSetupPublicUsageTooltip": "Permite que jogadores apliquem esta receita aos tokens que controlam. Continua disponível mesmo quando Aplicar Configuração de Token está OFF.",
+
+        "tokenSetupType": "Tipo",
+
+        "tokenSetupTypeTooltip": "Função de token do T&T armazenada no atributo tnt_data do personagem representado.",
+
+        "tokenSetupShowNameGm": "Mostrar Nome ao GM",
+
+        "tokenSetupShowNameGmTooltip": "Mostrar a placa de nome do token ao GM.",
+
+        "tokenSetupShowNamePlayers": "Mostrar Nome aos Jogadores",
+
+        "tokenSetupShowNamePlayersTooltip": "Permitir que jogadores vejam a placa de nome do token.",
+
+        "tokenSetupPublicRolls": "Definir Rolagens Públicas",
+
+        "tokenSetupPublicRollsTooltip": "Configura as rolagens da ficha como públicas; OFF usa rolagens privadas/GM.",
+
+        "tokenSetupAlwaysDamage": "Sempre Rolar Dano",
+
+        "tokenSetupAlwaysDamageTooltip": "Configura a ficha para incluir dano automaticamente com rolagens de ataque.",
+
+        "tokenSetupDexTie": "Usar Desempate por DES",
+
+        "tokenSetupDexTieTooltip": "Usar Destreza como desempate de iniciativa na ficha representada.",
+
+        "tokenSetupShowTooltip": "Mostrar Tooltip",
+
+        "tokenSetupShowTooltipTooltip": "Mostrar o tooltip do token.",
+
+        "tokenSetupAutoSizeTooltip": "Ler o tamanho da criatura na ficha e redimensionar o token automaticamente.",
+
+        "tokenSetupSetDefaultLabel": "Definir como Padrão",
+
+        "tokenSetupSetDefaultTooltip": "Salvar o token configurado como token padrão do personagem representado.",
+
+        "tokenSetupLootable": "Saqueável",
+
+        "tokenSetupLootableTooltip": "Armazenar a marca de saqueável em tnt_data para futuras regras de saque.",
+
+        "tokenSetupHasVision": "Tem Visão",
+
+        "tokenSetupHasVisionTooltip": "Habilitar a visão do jogador para o token.",
+
+        "tokenSetupApplyDarkVision": "Aplicar Visão no Escuro se Disponível",
+
+        "tokenSetupApplyDarkVisionTooltip": "Ler Darkvision ativa da ficha e aplicar sua distância quando disponível.",
+
+        "tokenSetupDarkVisionMode": "Modo de Visão no Escuro",
+
+        "tokenSetupDarkVisionModeTooltip": "Efeito de Night Vision.",
+
+        "tokenSetupVisionDimming": "Atenuação de Visão %",
+
+        "tokenSetupVisionDimmingTooltip": "Porcentagem da distância de Night Vision onde o efeito Dimming começa.",
+
+        "tokenSetupBlindVisible": "Token Visível para Personagem Cego",
+
+        "tokenSetupBlindVisibleTooltip": "Se a ficha representada não tiver Darkvision, aplique 0,5 ft de Night Vision para manter a visão do token habilitada e preservar uma distância explícita diferente de zero no Token Padrão.",
+
+        "tokenSetupDarkVisionTint": "Tonalidade da Visão no Escuro",
+
+        "tokenSetupDarkVisionTintTooltip": "none, #AABBCC ou #AABBCCDD.",
+
+        "tokenSetupShowBar": "Mostrar Barra{n} aos Jogadores",
+
+        "tokenSetupShowBarTooltip": "Permitir que jogadores vejam a Barra {n}.",
+
+        "tokenSetupBarLinked": "Barra{n} Vinculada a",
+
+        "tokenSetupBarLinkedTooltip": "Nome exato do atributo da ficha ou None.",
+
+        "tokenSetupBarValue": "Valor da Barra{n}",
+
+        "tokenSetupBarValueTooltip": "Valor atual estático ou uma chave da ficha como {hp} quando a barra não estiver vinculada.",
+
+        "tokenSetupBarMax": "Máx. Barra{n}",
+
+        "tokenSetupBarMaxTooltip": "Valor máximo estático ou uma chave como {hp_max} quando a barra não estiver vinculada.",
+
+        "tokenSetupShowAura": "Mostrar Aura{n} aos Jogadores",
+
+        "tokenSetupShowAuraTooltip": "Permitir que jogadores vejam a Aura {n}.",
+
+        "tokenSetupAuraRadius": "Raio da Aura{n}",
+
+        "tokenSetupAuraRadiusTooltip": "Raio da aura em unidades de distância da página.",
+
+        "tokenSetupAuraShape": "Forma da Aura{n}",
+
+        "tokenSetupAuraShapeTooltip": "Geometria da aura.",
+
+        "tokenSetupAuraTint": "Tonalidade da Aura{n}",
+
+        "tokenSetupAuraTintTooltip": "none ou #AABBCCDD.",
+
+        "tokenSetupMacroNamePrompt": "Nome da Macro",
+
+        "tokenSetupMacroFunctionPrompt": "Função da Macro - use @* / %* / ?* antes das chaves",
+
+        "tokenSetupAddMacroTooltip": "Adicionar macro de ação de token.",
+
+        "tokenSetupBack": "Voltar",
+
+        "tokenSetupRemove": "Remover",
+
+        "tokenSetupSave": "Salvar",
+
+        "tokenSetupRemovePrompt": "Remover {name}?",
+
+        "tokenSetupGeneralSection": "Geral",
+
+        "tokenSetupVisionSection": "Visão",
+
+        "tokenSetupBarsSection": "Barras",
+
+        "tokenSetupAuraSection": "Aura",
+
+        "tokenSetupMacroSection": "Macro",
+
+        "tokenSetupRecipeNotFound": "Receita de configuração de token não encontrada.",
+
+        "tokenSetupPrivateRecipe": "Esta receita de configuração de token é privada.",
+
+        "tokenSetupSelectToken": "Selecione pelo menos um token.",
+
+        "tokenSetupSelectControlledToken": "Selecione pelo menos um token que você controla.",
+
+        "tokenSetupRemoved": "Receita de configuração de token removida.",
+
+        "tokenSetupRemoveFailed": "Falha ao remover a receita de configuração de token.",
+
+        "tokenSetupSaved": "Receita de configuração de token salva: {name}.",
+
+        "tokenSetupSaveFailed": "Falha ao salvar a receita de configuração de token.",
+
+        "tokenSetupTypePlayer": "Jogador",
+
+        "tokenSetupTypeNpc": "NPC",
+
+        "tokenSetupTypeUniqueNpc": "NPC Único",
+
+        "tokenSetupTypeBoss": "Chefe",
+
+        "tokenSetupTypeTreasure": "Tesouro",
+
+        "tokenSetupTypeMount": "Montaria",
+
+        "tokenSetupTypeVehicle": "Veículo",
+
+        "tokenSetupTypeShop": "Loja",
+
+        "tokenSetupVisionDefault": "Padrão",
+
+        "tokenSetupVisionNocturnal": "Noturno",
+
+        "tokenSetupVisionDimmingMode": "Atenuação",
+
+        "tokenSetupAuraCircle": "Círculo",
+
+        "tokenSetupAuraSquare": "Quadrado",
+
+        "tokenSetupAuraHex": "Hexágono",
+
+        "tokenSetupAuraCircleBorder": "Borda Circular",
+
+        "tokenSetupAuraSquareBorder": "Borda Quadrada",
+
+        "tokenSetupAuraHexBorder": "Borda Hexagonal",
+
+        "tokenSetupResultToken": "Token",
+
+        "tokenSetupResultFailure": "Falha",
+
+        "tokenSetupMacroApplied": "{count} Macro Aplicada",
+
+        "tokenSetupMacrosApplied": "{count} Macros Aplicadas"
+
+      }
+
+    }
+
+  }
+
+}
+
